@@ -27,10 +27,10 @@ public class ArticleController {
 			}
 		}*/
 		Response response = new Response();
-		response.setStatuscode("1");
-		response.setStatusmsg("ok");
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(response);
+		response.setStatuscode(""+id);
+		response.setStatusmsg("received "+id);
+		
+		return response.toString();
 	}
 	
 }
