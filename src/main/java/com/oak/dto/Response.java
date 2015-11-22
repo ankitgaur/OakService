@@ -7,6 +7,7 @@ public class Response {
 	
 	private String statuscode;
 	private String statusmsg;
+	private Object result;
 	
 	public String getStatuscode() {
 		return statuscode;
@@ -30,6 +31,12 @@ public class Response {
 			e.printStackTrace();
 		}
 		return resp;
+	}
+	public Object getResult() {
+		return result;
+	}
+	public void setResult(Object result) {
+		this.result = result;
 	}
 	
 	
