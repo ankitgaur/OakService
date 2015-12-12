@@ -19,31 +19,19 @@ public class ArticleController {
 
 	@Autowired
 	ArticleRepo articleRepo;
-	
-	
-	//@RolesAllowed(value = { "ADMIN", "FILEMOVER_READ" })
+
 	@RequestMapping(value = "/article/{id}", produces = "application/json", method = RequestMethod.GET)
 	public @ResponseBody
 	String getBasicJob(@PathVariable Long id) throws JsonProcessingException {
 
-		//Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		//username = authentication.getName();
-
-		/*for (GrantedAuthority auth : authentication.getAuthorities()) {
-			if (auth.getAuthority().equals("ROLE_ADMIN")) {
-				isAdmin = true;
-			}
-		}*/
-		
 		List<Article> articles = articleRepo.getArticleById(id.toString());
-		
-		//System.out.println("article : "+article);
+
 		Response response = new Response();
-		response.setStatuscode(""+id);
-		response.setStatusmsg("received "+id);
+		response.setStatuscode("" + id);
+		response.setStatusmsg("received " + id);
 		response.setResult(articles);
-		
+
 		return response.toString();
 	}
-	
+
 }

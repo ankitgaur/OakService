@@ -16,51 +16,52 @@ import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
-//@PropertySource(value = { "classpath:cassandra.properties" })
+@EnableWebMvc
 @EnableCassandraRepositories(basePackages = { "com.oak.repositories" })
 public class CassandraConfig {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(CassandraConfig.class);
 
-  private static final Logger LOG = LoggerFactory.getLogger(CassandraConfig.class);
+	@Autowired
+	private Environment env;
 
-  @Autowired
-  private Environment env;
+	@Bean
+	public CassandraClusterFactoryBean cluster() {
 
-  @Bean
-  public CassandraClusterFactoryBean cluster() {
+		CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
+		cluster.setContactPoints("127.0.0.1");
+		cluster.setPort(9042);
+		return cluster;
+	}
 
-    CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
-    cluster.setContactPoints("127.0.0.1");
-    cluster.setPort(9042);
+	@Bean
+	public CassandraMappingContext mappingContext() {
+		return new BasicCassandraMappingContext();
+	}
 
-    return cluster;
-  }
+	@Bean
+	public CassandraConverter converter() {
+		return new MappingCassandraConverter(mappingContext());
+	}
 
-  @Bean
-  public CassandraMappingContext mappingContext() {
-    return new BasicCassandraMappingContext();
-  }
+	@Bean
+	public CassandraSessionFactoryBean session() throws Exception {
 
-  @Bean
-  public CassandraConverter converter() {
-    return new MappingCassandraConverter(mappingContext());
-  }
+		CassandraSessionFactoryBean session = new CassandraSessionFactoryBean();
+		session.setCluster(cluster().getObject());
+		session.setKeyspaceName("oak");
+		session.setConverter(converter());
+		session.setSchemaAction(SchemaAction.NONE);
+		LOG.debug("cassendra session is created successfully");
+		return session;
+	}
 
-  @Bean
-  public CassandraSessionFactoryBean session() throws Exception {
+	@Bean
+	public CassandraOperations cassandraTemplate() throws Exception {
+		return new CassandraTemplate(session().getObject());
+	}
 
-    CassandraSessionFactoryBean session = new CassandraSessionFactoryBean();
-    session.setCluster(cluster().getObject());
-    session.setKeyspaceName("oak");
-    session.setConverter(converter());
-    session.setSchemaAction(SchemaAction.NONE);
-
-    return session;
-  }
-
-  @Bean
-  public CassandraOperations cassandraTemplate() throws Exception {
-    return new CassandraTemplate(session().getObject());
-  }
 }
