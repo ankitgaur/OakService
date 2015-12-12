@@ -50,7 +50,7 @@ public class BlogsController {
 	}
 
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Blog> deleteUser(@PathVariable("id") long id) {
+	public ResponseEntity<Blog> deleteBlog(@PathVariable("id") long id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
 		Blog blog = blogsRepo.getBlogsById(id);
@@ -81,7 +81,7 @@ public class BlogsController {
 	}
 
 	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<Blog> updateUser(@PathVariable("id") long id,
+	public ResponseEntity<Blog> updateBlog(@PathVariable("id") long id,
 			@RequestBody Blog blog) {
 
 		System.out.println("Updating User " + id);
