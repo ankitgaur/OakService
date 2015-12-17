@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oak.entities.Incident;
-import com.oak.repositories.IncidentRepo;
+import com.oak.service.IncidentService;
 
 @RestController
 public class IncidentController {
 
 	@Autowired
-	IncidentRepo incidentRepo;
+	IncidentService incidentService;
 
 	@RequestMapping(value = "/incidents", produces = "application/json", method = RequestMethod.GET)
 	public List<Incident> getIncidents() throws JsonGenerationException,
 			JsonMappingException, IOException {
-		List<Incident> incidents = incidentRepo.getIncidents();
+		List<Incident> incidents = incidentService.getIncidents();
 		if (incidents == null || incidents.isEmpty()) {
 			return null;
 		}
@@ -42,7 +42,7 @@ public class IncidentController {
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.GET)
 	public Incident getIncidentById(@PathVariable("incidentID") long incidentID)
 			throws JsonParseException, JsonMappingException, IOException {
-		Incident incident = incidentRepo.getIncidentById(incidentID);
+		Incident incident = incidentService.getIncidentById(incidentID);
 		if (incident == null) {
 			return null;
 		}
@@ -52,7 +52,7 @@ public class IncidentController {
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncident(@RequestBody Incident incident)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		incidentRepo.createIncident(incident);
+		incidentService.createIncident(incident);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -61,13 +61,13 @@ public class IncidentController {
 	public ResponseEntity<Incident> updateIncident(
 			@RequestBody Incident incident) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		incidentRepo.updateIncident(incident);
+		incidentService.updateIncident(incident);
 		return new ResponseEntity<Incident>(incident, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/incidents/{id}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable long id) {
-		incidentRepo.deleteIncidentById(id);
+		incidentService.deleteIncidentById(id);
 	}
 
 	@ExceptionHandler(Exception.class)

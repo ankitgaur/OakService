@@ -6,46 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.oak.dto.Response;
 import com.oak.entities.Blog;
-import com.oak.repositories.BlogsRepo;
+import com.oak.service.BlogService;
 
 @RestController
 public class BlogsController {
 
 	@Autowired
-	BlogsRepo blogsRepo;
+	BlogService blogsService;
 
 	@RequestMapping(value = "/blogs/{id}", produces = "application/json", method = RequestMethod.GET)
-	public @ResponseBody
-	String getBlogByID(@PathVariable("id") long ID)
+	public Blog getBlogByID(@PathVariable("id") long ID)
 			throws JsonProcessingException {
-
-		Blog blogs = blogsRepo.getBlogsById(ID);
-		Response response = new Response();
-		response.setStatuscode("Long  " + ID);
-		response.setStatusmsg("Received " + ID);
-		response.setResult(blogs);
-		return response.toString();
+		Blog blogs = blogsService.getBlogsById(ID);
+		return blogs;
 
 	}
 
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
-	public @ResponseBody
-	String getBlogs() throws JsonProcessingException {
-		List<Blog> blogs = blogsRepo.getBlogs();
-		Response response = new Response();
-		response.setResult(blogs);
-		return response.toString();
+	public List<Blog> getBlogs() throws JsonProcessingException {
+		List<Blog> blogs = blogsService.getBlogs();
+		return blogs;
 
 	}
 
@@ -53,14 +45,14 @@ public class BlogsController {
 	public ResponseEntity<Blog> deleteBlog(@PathVariable("id") long id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
-		Blog blog = blogsRepo.getBlogsById(id);
+		Blog blog = blogsService.getBlogsById(id);
 		if (blog == null) {
 			System.out.println("Unable to delete. User with id " + id
 					+ " not found");
 			return new ResponseEntity<Blog>(HttpStatus.NOT_FOUND);
 		}
 
-		blogsRepo.deleteBlogsById(id);
+		blogsService.deleteBlogsById(id);
 
 		return new ResponseEntity<Blog>(HttpStatus.NO_CONTENT);
 	}
@@ -69,11 +61,11 @@ public class BlogsController {
 	public ResponseEntity<Void> createBlog(@RequestBody Blog blog,
 			UriComponentsBuilder ucBuilder) {
 
-		if (blogsRepo.isBlogExist(blog)) {
+		if (blogsService.isBlogExist(blog)) {
 			System.out.println("A User with name " + blog.getBlog_id()
 					+ " already exist");
 		}
-		blogsRepo.saveBlogs(blog);
+		blogsService.createBlogs(blog);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/blogs/{id}")
 				.buildAndExpand(blog.getBlog_id()).toUri());
@@ -85,15 +77,27 @@ public class BlogsController {
 			@RequestBody Blog blog) {
 
 		System.out.println("Updating User " + id);
-		Blog currentBlog = blogsRepo.getBlogsById(id);
+		Blog currentBlog = blogsService.getBlogsById(id);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");
 		}
 		currentBlog.setTitle(blog.getTitle());
 		currentBlog.setContent(blog.getContent());
 		currentBlog.setCreatedBy(blog.getCreatedBy());
-		blogsRepo.updateBlog(currentBlog);
+		blogsService.updateBlog(currentBlog);
 		return new ResponseEntity<Blog>(currentBlog, HttpStatus.OK);
 
+	}
+
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody
+	String handleException(Exception ex) {
+		if (ex.getMessage().contains("UNIQUE KEY"))
+			return "The submitted item already exists.";
+		else
+			System.out.println(this.getClass() + ": need handleException for: "
+					+ ex.getMessage());
+		return ex.getMessage();
 	}
 }

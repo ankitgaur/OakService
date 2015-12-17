@@ -3,45 +3,44 @@ package com.oak.repositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.States;
+import com.oak.utils.OakCassandraTemplate;
 
 @Transactional
 @Repository("stateRepo")
 public class StateRepo {
 
 	@Autowired
-	private CassandraOperations cassandraTemplate;
+	private OakCassandraTemplate oakCassandraTemplate;
 
 	public List<States> getStates() {
-		List<States> states = cassandraTemplate.select("Select * from states",
-				States.class);
+		List<States> states = oakCassandraTemplate.findAll(States.class);
 		return states;
 	}
 
 	public States getStateById(long id) {
-		States state = cassandraTemplate.selectOneById(States.class, id);
+		States state = oakCassandraTemplate.findById(id, States.class);
 		return state;
 	}
 
 	public void createState(States state) {
 
-		cassandraTemplate.insert(state);
+		oakCassandraTemplate.create(state, States.class);
 
 	}
 
 	public void updateState(States state) {
 
-		cassandraTemplate.update(state);
+		oakCassandraTemplate.update(state, States.class);
 
 	}
 
 	public void deleteStateById(long id) {
 
-		cassandraTemplate.deleteById(States.class, id);
+		oakCassandraTemplate.deleteById(id, States.class);
 
 	}
 

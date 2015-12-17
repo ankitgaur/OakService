@@ -1,16 +1,9 @@
 package com.oak.entities;
 
-import java.io.IOException;
 import java.util.Date;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
-
-import com.oak.vo.IncidentVO;
 
 @Table("incidents")
 public class Incident {
@@ -32,26 +25,21 @@ public class Incident {
 
 	}
 
-	public Incident(IncidentVO incidentVO) throws JsonGenerationException,
-			JsonMappingException, IOException {
-		id = incidentVO.getId();
-		type = incidentVO.getType();
-
-		state = incidentVO.getState();
-		govt = incidentVO.getGovt();
-		description = incidentVO.getDescription();
-		status = incidentVO.getStatus();
-		reportDate = incidentVO.getReportDate();
-		createdBy = incidentVO.getCreatedBy();
-		createdOn = incidentVO.getCreatedOn();
-
-		if (incidentVO.getQuestions() != null
-				&& !incidentVO.getQuestions().isEmpty()) {
-
-			ObjectWriter writer = new ObjectMapper().writer();
-			questions = writer.writeValueAsString(incidentVO.getQuestions());
-		}
-
+	public Incident(long id, String type, String image, String state,
+			String govt, String description, String questions, String status,
+			Date reportDate, String createdBy, Date createdOn) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.image = image;
+		this.state = state;
+		this.govt = govt;
+		this.description = description;
+		this.questions = questions;
+		this.status = status;
+		this.reportDate = reportDate;
+		this.createdBy = createdBy;
+		this.createdOn = createdOn;
 	}
 
 	public long getId() {

@@ -3,56 +3,44 @@ package com.oak.repositories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Article;
+import com.oak.utils.OakCassandraTemplate;
 
 @Repository("articleRepo")
+@Transactional
 public class ArticleRepo {
 
 	@Autowired
-	private CassandraOperations cassandraTemplate;
+	private OakCassandraTemplate oakCassendraTemplate;
 
 	public List<Article> getArticles() {
-		List<Article> articles = cassandraTemplate.select(
-				"Select * from articles", Article.class);
+		List<Article> articles = oakCassendraTemplate.findAll(Article.class);
 		return articles;
 	}
 
 	public Article getArticleById(long id) {
-		Article article = cassandraTemplate.selectOneById(Article.class, id);
+		Article article = oakCassendraTemplate.findById(id, Article.class);
 		return article;
 	}
 
 	public void deleteArticleById(long id) {
 
-		cassandraTemplate.deleteById(Article.class, id);
+		oakCassendraTemplate.deleteById(id, Article.class);
 
 	}
 
-	public void saveArticle(Article article) {
+	public void createArticle(Article article) {
 
-		cassandraTemplate.insert(article);
+		oakCassendraTemplate.create(article, Article.class);
 
 	}
 
 	public void updateArticle(Article article) {
 
-		cassandraTemplate.update(article);
-
-	}
-
-	public boolean isArticleExist(Article article) {
-
-		List<Article> articles = getArticles();
-
-		for (Article articleTmp : articles) {
-			if (articleTmp.getId() == article.getId()) {
-				return true;
-			}
-		}
-		return false;
+		oakCassendraTemplate.update(article, Article.class);
 
 	}
 
