@@ -1,21 +1,13 @@
-package com.oak.entities;
+package com.oak.vo;
 
 import java.util.Date;
 
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import com.oak.entities.Article;
 
-import com.oak.vo.ArticleVO;
+public class ArticleVO {
 
-@Table(value = "articles")
-public class Article {
-
-	/*
-	 * @PrimaryKey private Long id;
-	 */
-
-	@PrimaryKey
-	private ArticleKey pk;
+	private String category;
+	private Date updatedOn;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -28,39 +20,45 @@ public class Article {
 	private Integer rating;
 	private Long hits;
 
-	public Article() {
+	public ArticleVO() {
 
 	}
 
-	public Article(ArticleVO articleVO) {
+	public ArticleVO(Article article) {
 		super();
-		ArticleKey aqrticleKey = new ArticleKey();
-		aqrticleKey.setCategory(articleVO.getCategory());
-		aqrticleKey.setUpdatedOn(articleVO.getUpdatedOn());
-		this.pk = aqrticleKey;
-		this.title = articleVO.getTitle();
-		this.content = articleVO.getContent();
-		this.displayImage = articleVO.getDisplayImage();
-		this.approved = articleVO.getApproved();
-		this.approvedBy = articleVO.getApprovedBy();
-		this.approvedOn = articleVO.getApprovedOn();
-		this.createdOn = articleVO.getCreatedOn();
-		this.createdBy = articleVO.getCreatedBy();
-		this.updatedBy = articleVO.getUpdatedBy();
-		this.rating = articleVO.getRating();
-		this.hits = articleVO.getHits();
+		this.category = article.getPk().getCategory();
+		this.updatedOn = article.getPk().getUpdatedOn();
+		this.title = article.getTitle();
+		this.content = article.getContent();
+		this.displayImage = article.getDisplayImage();
+		this.approved = article.getApproved();
+		this.approvedBy = article.getApprovedBy();
+		this.approvedOn = article.getApprovedOn();
+		this.createdOn = article.getCreatedOn();
+		this.createdBy = article.getCreatedBy();
+		this.updatedBy = article.getUpdatedBy();
+		this.rating = article.getRating();
+		this.hits = article.getHits();
 	}
 
-	public ArticleKey getPk() {
-		return pk;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setPk(ArticleKey pk) {
-		this.pk = pk;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public String getTitle() {
 		return title;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	public void setTitle(String title) {

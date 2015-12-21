@@ -1,5 +1,7 @@
 package com.oak.controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.Article;
+import com.oak.entities.ArticleKey;
 import com.oak.service.ArticleService;
+import com.oak.vo.ArticleVO;
 
 @RestController
 public class ArticleController {
@@ -25,62 +29,75 @@ public class ArticleController {
 	ArticleService articleService;
 
 	@RequestMapping(value = "/articles/{id}", produces = "application/json", method = RequestMethod.GET)
-	public Article getBasicJob(@PathVariable Long id)
+	public ArticleVO getBasicJob(@PathVariable String id)
 			throws JsonProcessingException {
 
-		Article article = articleService.getArticleById(id);
-
-		return article;
+		String articleKey[] = id.split("_");
+		ArticleKey key = new ArticleKey();
+		key.setCategory(articleKey[0]);
+		Date date = new Date(Long.parseLong(articleKey[1]));
+		key.setUpdatedOn(date);
+		Article article = articleService.getArticleById(key);
+		return new ArticleVO(article);
 	}
 
 	@RequestMapping(value = "/articles", produces = "application/json", method = RequestMethod.GET)
-	public List<Article> getArticle() throws JsonProcessingException {
+	public List<ArticleVO> getArticle() throws JsonProcessingException {
 		List<Article> articles = articleService.getArticles();
-		return articles;
+
+		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
+		for (Article article : articles) {
+			articleVO.add(new ArticleVO(article));
+		}
+		return articleVO;
 
 	}
 
 	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Article> deleteBlog(@PathVariable("id") long id) {
+	public ResponseEntity<ArticleVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
-		Article article = articleService.getArticleById(id);
-		if (article == null) {
-			System.out.println("Unable to delete. User with id " + id
-					+ " not found");
-			return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
-		}
+		String articleKey[] = id.split("_");
+		ArticleKey key = new ArticleKey();
+		key.setCategory(articleKey[0]);
+		Date date = new Date(Long.parseLong(articleKey[1]));
+		key.setUpdatedOn(date);
+		articleService.deleteArticleById(key);
 
-		articleService.deleteArticleById(id);
-
-		return new ResponseEntity<Article>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<ArticleVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/articles", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlog(@RequestBody Article article) {
+	public ResponseEntity<Void> createArticle(@RequestBody ArticleVO articleVO) {
 
-		if (articleService.isArticleExist(article)) {
-			System.out.println("A User with name " + article.getId()
-					+ " already exist");
-		}
-		articleService.createArticle(article);
+		articleVO.setCreatedOn(new Date());
+		articleVO.setUpdatedOn(new Date());
+		articleService.createArticle(new Article(articleVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<Article> updateBlog(@PathVariable("id") long id,
-			@RequestBody Article article) {
+	public ResponseEntity<ArticleVO> updateArticle(
+			@PathVariable("id") String id, @RequestBody ArticleVO articleVO) {
 
 		System.out.println("Updating User " + id);
-		Article currentArticle = articleService.getArticleById(id);
-		if (currentArticle == null) {
+		String articleKey[] = id.split("_");
+		ArticleKey key = new ArticleKey();
+		key.setCategory(articleKey[0]);
+		Date date = new Date(Long.parseLong(articleKey[1]));
+		key.setUpdatedOn(date);
+		Article article = articleService.getArticleById(key);
+		if (article == null) {
 			System.out.println("Article with id " + id + " not found");
+			return new ResponseEntity<ArticleVO>(articleVO,
+					HttpStatus.BAD_REQUEST);
 		}
-		currentArticle.setTitle(article.getTitle());
-		currentArticle.setContent(article.getContent());
-		currentArticle.setCreatedBy(article.getCreatedBy());
-		articleService.updateArticle(currentArticle);
-		return new ResponseEntity<Article>(currentArticle, HttpStatus.OK);
+		article.setTitle(articleVO.getTitle());
+		article.setContent(articleVO.getContent());
+		article.setCreatedBy(articleVO.getCreatedBy());
+		article.setUpdatedBy(articleVO.getUpdatedBy());
+		articleService.updateArticle(article);
+		return new ResponseEntity<ArticleVO>(articleVO, HttpStatus.OK);
 
 	}
 

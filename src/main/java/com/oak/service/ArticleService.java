@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Article;
+import com.oak.entities.ArticleKey;
 import com.oak.repositories.ArticleRepo;
 
 @Service("articleService")
@@ -21,12 +22,12 @@ public class ArticleService {
 
 	}
 
-	public Article getArticleById(long articleID) {
+	public Article getArticleById(ArticleKey articleID) {
 
 		return articleRepo.getArticleById(articleID);
 	}
 
-	public void deleteArticleById(long articleID) {
+	public void deleteArticleById(ArticleKey articleID) {
 
 		articleRepo.deleteArticleById(articleID);
 	}
@@ -42,18 +43,6 @@ public class ArticleService {
 	public void updateArticle(Article article) {
 
 		articleRepo.updateArticle(article);
-	}
-
-	public boolean isArticleExist(Article article) {
-
-		List<Article> articles = getArticles();
-
-		for (Article articleTmp : articles) {
-			if (articleTmp.getId() == article.getId()) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Article;
+import com.oak.entities.ArticleKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Repository("articleRepo")
@@ -21,12 +22,12 @@ public class ArticleRepo {
 		return articles;
 	}
 
-	public Article getArticleById(long id) {
+	public Article getArticleById(ArticleKey id) {
 		Article article = oakCassendraTemplate.findById(id, Article.class);
 		return article;
 	}
 
-	public void deleteArticleById(long id) {
+	public void deleteArticleById(ArticleKey id) {
 
 		oakCassendraTemplate.deleteById(id, Article.class);
 
