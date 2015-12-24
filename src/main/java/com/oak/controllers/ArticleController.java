@@ -1,5 +1,7 @@
 package com.oak.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,74 +31,92 @@ public class ArticleController {
 	ArticleService articleService;
 
 	@RequestMapping(value = "/articles/{id}", produces = "application/json", method = RequestMethod.GET)
-	public ArticleVO getBasicJob(@PathVariable String id)
-			throws JsonProcessingException {
-
+	public ArticleVO getSticleById(@PathVariable String id)
+			throws JsonProcessingException, ParseException {
 		String articleKey[] = id.split("_");
 		ArticleKey key = new ArticleKey();
 		key.setCategory(articleKey[0]);
-		Date date = new Date(Long.parseLong(articleKey[1]));
-		key.setUpdatedOn(date);
+		key.setUpdatedOn(Long.parseLong(articleKey[1]));
 		Article article = articleService.getArticleById(key);
-		return new ArticleVO(article);
+		ArticleVO articleVO = new ArticleVO(article);
+		Date createDate = new Date(article.getCreatedOn());
+		Date updateDate = new Date(article.getPk().getUpdatedOn());
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(
+				"dd-MM-yyyy HH:mm:ss");
+		String dateCreateText = dateFormatter.format(createDate);
+		String updateCreateText = dateFormatter.format(updateDate);
+		articleVO.setCreatedOnDate(dateCreateText);
+		articleVO.setUpdatedOnDate(updateCreateText);
+		return articleVO;
 	}
 
 	@RequestMapping(value = "/articles", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticle() throws JsonProcessingException {
 		List<Article> articles = articleService.getArticles();
-
 		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
 		for (Article article : articles) {
-			articleVO.add(new ArticleVO(article));
+			ArticleVO vo = new ArticleVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			articleVO.add(vo);
 		}
 		return articleVO;
 
 	}
 
 	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<ArticleVO> deleteBlog(@PathVariable("id") String id) {
+	public ResponseEntity<ArticleVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-
 		String articleKey[] = id.split("_");
 		ArticleKey key = new ArticleKey();
 		key.setCategory(articleKey[0]);
-		Date date = new Date(Long.parseLong(articleKey[1]));
-		key.setUpdatedOn(date);
+		key.setUpdatedOn(Long.parseLong(articleKey[1]));
 		articleService.deleteArticleById(key);
-
 		return new ResponseEntity<ArticleVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/articles", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createArticle(@RequestBody ArticleVO articleVO) {
-
-		articleVO.setCreatedOn(new Date());
-		articleVO.setUpdatedOn(new Date());
+	public ResponseEntity<Void> createArticle(@RequestBody ArticleVO articleVO)
+			throws ParseException {
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));
+		articleVO.setCreatedOn(dt.getTime());
+		articleVO.setUpdatedOn(dt.getTime());
 		articleService.createArticle(new Article(articleVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ArticleVO> updateArticle(
-			@PathVariable("id") String id, @RequestBody ArticleVO articleVO) {
+			@PathVariable("id") String id, @RequestBody ArticleVO articleVO)
+			throws ParseException {
 
 		System.out.println("Updating User " + id);
 		String articleKey[] = id.split("_");
 		ArticleKey key = new ArticleKey();
 		key.setCategory(articleKey[0]);
-		Date date = new Date(Long.parseLong(articleKey[1]));
-		key.setUpdatedOn(date);
+		key.setUpdatedOn(Long.parseLong(articleKey[1]));
 		Article article = articleService.getArticleById(key);
 		if (article == null) {
 			System.out.println("Article with id " + id + " not found");
 			return new ResponseEntity<ArticleVO>(articleVO,
 					HttpStatus.BAD_REQUEST);
 		}
-		article.setTitle(articleVO.getTitle());
-		article.setContent(articleVO.getContent());
-		article.setCreatedBy(articleVO.getCreatedBy());
-		article.setUpdatedBy(articleVO.getUpdatedBy());
-		articleService.updateArticle(article);
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));
+		articleVO.setCreatedOn(article.getCreatedOn());
+		System.out.println("article.getCreatedOn() " + article.getCreatedOn());
+		System.out.println("dt.getTime() " + dt.getTime());
+		articleVO.setUpdatedOn(dt.getTime());
+		articleService.updateArticle(new Article(articleVO));
 		return new ResponseEntity<ArticleVO>(articleVO, HttpStatus.OK);
 
 	}

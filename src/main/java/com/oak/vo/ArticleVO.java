@@ -7,18 +7,20 @@ import com.oak.entities.Article;
 public class ArticleVO {
 
 	private String category;
-	private Date updatedOn;
+	private Long updatedOn;
 	private String title;
 	private String content;
 	private String displayImage;
 	private Boolean approved;
 	private String approvedBy;
 	private Date approvedOn;
-	private Date createdOn;
+	private Long createdOn;
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
+	private String createdOnDate;
+	private String updatedOnDate;
 
 	public ArticleVO() {
 
@@ -39,6 +41,9 @@ public class ArticleVO {
 		this.updatedBy = article.getUpdatedBy();
 		this.rating = article.getRating();
 		this.hits = article.getHits();
+		this.createdOnDate = createdOnDate;
+		this.updatedOnDate = updatedOnDate;
+
 	}
 
 	public String getCategory() {
@@ -53,16 +58,16 @@ public class ArticleVO {
 		return title;
 	}
 
-	public Date getUpdatedOn() {
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Long getUpdatedOn() {
 		return updatedOn;
 	}
 
-	public void setUpdatedOn(Date updatedOn) {
+	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public String getContent() {
@@ -105,16 +110,16 @@ public class ArticleVO {
 		this.approvedOn = approvedOn;
 	}
 
-	public Date getCreatedOn() {
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
 	}
 
 	public void setCreatedBy(String createdBy) {
@@ -143,6 +148,22 @@ public class ArticleVO {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getCreatedOnDate() {
+		return createdOnDate;
+	}
+
+	public void setCreatedOnDate(String createdOnDate) {
+		this.createdOnDate = createdOnDate;
+	}
+
+	public String getUpdatedOnDate() {
+		return updatedOnDate;
+	}
+
+	public void setUpdatedOnDate(String updatedOnDate) {
+		this.updatedOnDate = updatedOnDate;
 	}
 
 }

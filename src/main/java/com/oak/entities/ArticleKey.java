@@ -1,7 +1,6 @@
 package com.oak.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.springframework.cassandra.core.Ordering;
 import org.springframework.cassandra.core.PrimaryKeyType;
@@ -20,7 +19,9 @@ public class ArticleKey implements Serializable {
 	private String category;
 
 	@PrimaryKeyColumn(name = "updatedOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
-	private Date updatedOn;
+	private Long updatedOn;
+
+	// private Date updatedOn;
 
 	public String getCategory() {
 		return category;
@@ -28,14 +29,6 @@ public class ArticleKey implements Serializable {
 
 	public void setCategory(String category) {
 		this.category = category;
-	}
-
-	public Date getUpdatedOn() {
-		return updatedOn;
-	}
-
-	public void setUpdatedOn(Date updatedOn) {
-		this.updatedOn = updatedOn;
 	}
 
 	@Override
@@ -47,6 +40,14 @@ public class ArticleKey implements Serializable {
 		result = prime * result
 				+ ((category == null) ? 0 : category.hashCode());
 		return result;
+	}
+
+	public Long getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	@Override

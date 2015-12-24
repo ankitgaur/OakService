@@ -22,7 +22,7 @@ public class Article {
 	private Boolean approved;
 	private String approvedBy;
 	private Date approvedOn;
-	private Date createdOn;
+	private Long createdOn;
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
@@ -107,16 +107,16 @@ public class Article {
 		this.approvedOn = approvedOn;
 	}
 
-	public Date getCreatedOn() {
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
 	}
 
 	public void setCreatedBy(String createdBy) {
