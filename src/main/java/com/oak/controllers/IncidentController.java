@@ -97,7 +97,7 @@ public class IncidentController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/incidents", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
+	@RequestMapping(value = "/incidents/{id}", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<IncidentVO> updateIncident(
 			@RequestBody IncidentVO IncidentVO, @PathVariable("id") String id)
 			throws JsonGenerationException, JsonMappingException, IOException {
