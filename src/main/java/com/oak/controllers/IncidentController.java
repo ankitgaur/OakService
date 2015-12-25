@@ -1,6 +1,10 @@
 package com.oak.controllers;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -20,7 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oak.entities.Incident;
+import com.oak.entities.IncidentKey;
 import com.oak.service.IncidentService;
+import com.oak.vo.IncidentVO;
 
 @RestController
 public class IncidentController {
@@ -29,45 +35,95 @@ public class IncidentController {
 	IncidentService incidentService;
 
 	@RequestMapping(value = "/incidents", produces = "application/json", method = RequestMethod.GET)
-	public List<Incident> getIncidents() throws JsonGenerationException,
+	public List<IncidentVO> getIncidents() throws JsonGenerationException,
 			JsonMappingException, IOException {
 		List<Incident> incidents = incidentService.getIncidents();
-		if (incidents == null || incidents.isEmpty()) {
-			return null;
+
+		List<IncidentVO> incidentVO = new ArrayList<IncidentVO>();
+		for (Incident incident : incidents) {
+			IncidentVO vo = new IncidentVO(incident);
+			Date createOn = new Date(incident.getIncidentKey().getCreatedOn());
+			Date reportDate = new Date(incident.getReportDate());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String createDateText = dateFormatter.format(createOn);
+			String reportDateText = dateFormatter.format(reportDate);
+			vo.setCreatedOnDate(createDateText);
+			vo.setReportDateStr(reportDateText);
+			incidentVO.add(vo);
 		}
 
-		return incidents;
+		return incidentVO;
 	}
 
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.GET)
-	public Incident getIncidentById(@PathVariable("incidentID") long incidentID)
+	public IncidentVO getIncidentById(
+			@PathVariable("incidentID") String incidentID)
 			throws JsonParseException, JsonMappingException, IOException {
-		Incident incident = incidentService.getIncidentById(incidentID);
+
+		String incidentKey[] = incidentID.split("_");
+		IncidentKey key = new IncidentKey();
+		key.setIncidentType(incidentKey[0]);
+		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
 		}
-		return incident;
+		IncidentVO incidentVO = new IncidentVO(incident);
+		Date createOn = new Date(incident.getIncidentKey().getCreatedOn());
+		Date reportDate = new Date(incident.getReportDate());
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(
+				"dd-MM-yyyy HH:mm:ss");
+		String createDateText = dateFormatter.format(createOn);
+		String reportDateText = dateFormatter.format(reportDate);
+		incidentVO.setCreatedOnDate(createDateText);
+		incidentVO.setReportDateStr(reportDateText);
+
+		return incidentVO;
 	}
 
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createIncident(@RequestBody Incident incident)
-			throws JsonGenerationException, JsonMappingException, IOException {
-		incidentService.createIncident(incident);
+	public ResponseEntity<Void> createIncident(
+			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
+			JsonMappingException, IOException, ParseException {
+
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));
+		incidentVO.setCreatedOn(dt.getTime());
+		incidentVO.setReportDate(dt.getTime());
+		incidentService.createIncident(new Incident(incidentVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/incidents", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<Incident> updateIncident(
-			@RequestBody Incident incident) throws JsonGenerationException,
-			JsonMappingException, IOException {
-		incidentService.updateIncident(incident);
-		return new ResponseEntity<Incident>(incident, HttpStatus.OK);
+	public ResponseEntity<IncidentVO> updateIncident(
+			@RequestBody IncidentVO IncidentVO, @PathVariable("id") String id)
+			throws JsonGenerationException, JsonMappingException, IOException {
+
+		System.out.println("Updating User " + id);
+		String incidentKey[] = id.split("_");
+		IncidentKey key = new IncidentKey();
+		key.setIncidentType(incidentKey[0]);
+		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		Incident incident = incidentService.getIncidentById(key);
+		if (incident == null) {
+			return null;
+		}
+		IncidentVO.setCreatedOn(Long.parseLong(incidentKey[1]));
+		IncidentVO.setIncidentType(incidentKey[0]);
+		incidentService.updateIncident(new Incident(IncidentVO));
+		return new ResponseEntity<IncidentVO>(IncidentVO, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/incidents/{id}", produces = "application/json", method = RequestMethod.DELETE)
-	public void deleteIncidentType(@PathVariable long id) {
-		incidentService.deleteIncidentById(id);
+	public void deleteIncidentType(@PathVariable String incidentID) {
+		String incidentKey[] = incidentID.split("_");
+		IncidentKey key = new IncidentKey();
+		key.setIncidentType(incidentKey[0]);
+		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		incidentService.deleteIncidentById(key);
 	}
 
 	@ExceptionHandler(Exception.class)

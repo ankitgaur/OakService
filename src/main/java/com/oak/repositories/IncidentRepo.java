@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Incident;
+import com.oak.entities.IncidentKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Transactional
@@ -21,7 +22,7 @@ public class IncidentRepo {
 		return incidents;
 	}
 
-	public Incident getIncidentById(long id) {
+	public Incident getIncidentById(IncidentKey id) {
 		Incident incident = oakCassendraTemplate.findById(id, Incident.class);
 		return incident;
 	}
@@ -38,7 +39,7 @@ public class IncidentRepo {
 
 	}
 
-	public void deleteIncidentById(long id) {
+	public void deleteIncidentById(IncidentKey id) {
 
 		oakCassendraTemplate.deleteById(id, Incident.class);
 

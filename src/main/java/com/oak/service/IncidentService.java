@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oak.entities.Incident;
+import com.oak.entities.IncidentKey;
 import com.oak.repositories.IncidentRepo;
 
 @Service("incidentService")
@@ -18,7 +19,7 @@ public class IncidentService {
 		return incidentRepo.getIncidents();
 	}
 
-	public Incident getIncidentById(long id) {
+	public Incident getIncidentById(IncidentKey id) {
 		return incidentRepo.getIncidentById(id);
 	}
 
@@ -34,7 +35,7 @@ public class IncidentService {
 
 	}
 
-	public void deleteIncidentById(long id) {
+	public void deleteIncidentById(IncidentKey id) {
 
 		incidentRepo.deleteIncidentById(id);
 

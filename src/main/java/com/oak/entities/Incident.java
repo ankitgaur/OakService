@@ -1,15 +1,15 @@
 package com.oak.entities;
 
-import java.util.Date;
-
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
+
+import com.oak.vo.IncidentVO;
 
 @Table("incidents")
 public class Incident {
 
 	@PrimaryKey
-	private long id;
+	private IncidentKey incidentKey;
 	private String type;
 	private String image;
 	private String state;
@@ -17,37 +17,36 @@ public class Incident {
 	private String description;
 	private String questions;
 	private String status;
-	private Date reportDate;
+	private Long reportDate;
 	private String createdBy;
-	private Date createdOn;
 
 	public Incident() {
 
 	}
 
-	public Incident(long id, String type, String image, String state,
-			String govt, String description, String questions, String status,
-			Date reportDate, String createdBy, Date createdOn) {
+	public Incident(IncidentVO incidentVO) {
 		super();
-		this.id = id;
-		this.type = type;
-		this.image = image;
-		this.state = state;
-		this.govt = govt;
-		this.description = description;
-		this.questions = questions;
-		this.status = status;
-		this.reportDate = reportDate;
-		this.createdBy = createdBy;
-		this.createdOn = createdOn;
+		IncidentKey key = new IncidentKey();
+		key.setCreatedOn(incidentVO.getCreatedOn());
+		key.setIncidentType(incidentVO.getIncidentType());
+		this.incidentKey = key;
+		this.type = incidentVO.getType();
+		this.state = incidentVO.getState();
+		this.govt = incidentVO.getGovt();
+		this.description = incidentVO.getDescription();
+		this.status = incidentVO.getStatus();
+		this.reportDate = incidentVO.getReportDate();
+		this.createdBy = incidentVO.getCreatedBy();
+		this.image = incidentVO.getImage();
+		this.questions = incidentVO.getQuestions();
 	}
 
-	public long getId() {
-		return id;
+	public IncidentKey getIncidentKey() {
+		return incidentKey;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setIncidentKey(IncidentKey incidentKey) {
+		this.incidentKey = incidentKey;
 	}
 
 	public String getType() {
@@ -98,14 +97,6 @@ public class Incident {
 		this.status = status;
 	}
 
-	public Date getReportDate() {
-		return reportDate;
-	}
-
-	public void setReportDate(Date reportDate) {
-		this.reportDate = reportDate;
-	}
-
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -114,20 +105,20 @@ public class Incident {
 		this.createdBy = createdBy;
 	}
 
-	public Date getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-	}
-
 	public String getImage() {
 		return image;
 	}
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public Long getReportDate() {
+		return reportDate;
+	}
+
+	public void setReportDate(Long reportDate) {
+		this.reportDate = reportDate;
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Blog;
+import com.oak.entities.BlogKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Repository("blogsRepo")
@@ -21,12 +22,12 @@ public class BlogsRepo {
 		return blogs;
 	}
 
-	public Blog getBlogsById(long id) {
+	public Blog getBlogsById(BlogKey id) {
 		Blog blog = oakCassendraTemplate.findById(id, Blog.class);
 		return blog;
 	}
 
-	public void deleteBlogsById(long id) {
+	public void deleteBlogsById(BlogKey id) {
 
 		oakCassendraTemplate.deleteById(id, Blog.class);
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oak.entities.Blog;
+import com.oak.entities.BlogKey;
 import com.oak.repositories.BlogsRepo;
 
 @Service("blogsService")
@@ -18,11 +19,11 @@ public class BlogService {
 		return blogsRepo.getBlogs();
 	}
 
-	public Blog getBlogsById(long id) {
+	public Blog getBlogsById(BlogKey id) {
 		return blogsRepo.getBlogsById(id);
 	}
 
-	public void deleteBlogsById(long id) {
+	public void deleteBlogsById(BlogKey id) {
 
 		blogsRepo.deleteBlogsById(id);
 
@@ -37,19 +38,6 @@ public class BlogService {
 	public void updateBlog(Blog blog) {
 
 		blogsRepo.updateBlog(blog);
-
-	}
-
-	public boolean isBlogExist(Blog blog) {
-
-		List<Blog> blogs = getBlogs();
-
-		for (Blog blogTemp : blogs) {
-			if (blogTemp.getBlog_id() == blog.getBlog_id()) {
-				return true;
-			}
-		}
-		return false;
 
 	}
 

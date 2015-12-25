@@ -113,8 +113,6 @@ public class ArticleController {
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		articleVO.setCreatedOn(article.getCreatedOn());
-		System.out.println("article.getCreatedOn() " + article.getCreatedOn());
-		System.out.println("dt.getTime() " + dt.getTime());
 		articleVO.setUpdatedOn(dt.getTime());
 		articleService.updateArticle(new Article(articleVO));
 		return new ResponseEntity<ArticleVO>(articleVO, HttpStatus.OK);

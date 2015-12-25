@@ -8,7 +8,7 @@ import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 @PrimaryKeyClass
-public class ArticleKey implements Serializable {
+public class BlogKey implements Serializable {
 
 	/**
 	 * 
@@ -21,14 +21,20 @@ public class ArticleKey implements Serializable {
 	@PrimaryKeyColumn(name = "updatedOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long updatedOn;
 
-	// private Date updatedOn;
-
 	public String getCategory() {
 		return category;
 	}
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public Long getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	@Override
@@ -50,26 +56,18 @@ public class ArticleKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ArticleKey other = (ArticleKey) obj;
+		BlogKey blogsKey = (BlogKey) obj;
 		if (updatedOn == null) {
-			if (other.updatedOn != null)
+			if (blogsKey.updatedOn != null)
 				return false;
-		} else if (!updatedOn.equals(other.updatedOn))
+		} else if (!updatedOn.equals(blogsKey.updatedOn))
 			return false;
 		if (category == null) {
-			if (other.category != null)
+			if (blogsKey.category != null)
 				return false;
-		} else if (!category.equals(other.category))
+		} else if (!category.equals(blogsKey.category))
 			return false;
 		return true;
-	}
-
-	public Long getUpdatedOn() {
-		return updatedOn;
-	}
-
-	public void setUpdatedOn(Long updatedOn) {
-		this.updatedOn = updatedOn;
 	}
 
 }

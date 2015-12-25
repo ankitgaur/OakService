@@ -1,15 +1,10 @@
-package com.oak.entities;
+package com.oak.vo;
 
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import com.oak.entities.Blog;
 
-import com.oak.vo.BlogVO;
+public class BlogVO {
 
-@Table("blogs")
-public class Blog {
-
-	@PrimaryKey
-	private BlogKey blogKey;
+	private String category;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -17,40 +12,43 @@ public class Blog {
 	private String approvedBy;
 	private Long approvedOn;
 	private Long createdOn;
+	private Long updatedOn;
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
+	private String createdOnDate;
+	private String updatedOnDate;
 
-	public Blog() {
+	public BlogVO() {
+
+	}
+
+	public BlogVO(Blog blog) {
 		super();
+		this.category = blog.getBlogKey().getCategory();
+		this.updatedOn = blog.getBlogKey().getUpdatedOn();
+		this.title = blog.getTitle();
+		this.content = blog.getContent();
+		this.displayImage = blog.getDisplayImage();
+		this.approved = blog.getApproved();
+		this.approvedBy = blog.getApprovedBy();
+		this.approvedOn = blog.getApprovedOn();
+		this.createdOn = blog.getCreatedOn();
+		this.createdBy = blog.getCreatedBy();
+		this.updatedBy = blog.getUpdatedBy();
+		this.rating = blog.getRating();
+		this.hits = blog.getHits();
+		this.createdOnDate = createdOnDate;
+		this.updatedOnDate = updatedOnDate;
 	}
 
-	public Blog(BlogVO blogVO) {
-		super();
-		BlogKey key = new BlogKey();
-		key.setCategory(blogVO.getCategory());
-		key.setUpdatedOn(blogVO.getUpdatedOn());
-		this.blogKey = key;
-		this.title = blogVO.getTitle();
-		this.content = blogVO.getContent();
-		this.displayImage = blogVO.getDisplayImage();
-		this.approved = blogVO.getApproved();
-		this.approvedBy = blogVO.getApprovedBy();
-		this.approvedOn = blogVO.getApprovedOn();
-		this.createdOn = blogVO.getCreatedOn();
-		this.createdBy = blogVO.getCreatedBy();
-		this.updatedBy = blogVO.getUpdatedBy();
-		this.rating = blogVO.getRating();
-		this.hits = blogVO.getHits();
+	public String getCategory() {
+		return category;
 	}
 
-	public BlogKey getBlogKey() {
-		return blogKey;
-	}
-
-	public void setBlogKey(BlogKey blogKey) {
-		this.blogKey = blogKey;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public String getTitle() {
@@ -109,6 +107,14 @@ public class Blog {
 		this.createdOn = createdOn;
 	}
 
+	public Long getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -139,6 +145,22 @@ public class Blog {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getCreatedOnDate() {
+		return createdOnDate;
+	}
+
+	public void setCreatedOnDate(String createdOnDate) {
+		this.createdOnDate = createdOnDate;
+	}
+
+	public String getUpdatedOnDate() {
+		return updatedOnDate;
+	}
+
+	public void setUpdatedOnDate(String updatedOnDate) {
+		this.updatedOnDate = updatedOnDate;
 	}
 
 }

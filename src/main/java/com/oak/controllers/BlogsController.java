@@ -1,5 +1,9 @@
 package com.oak.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.Blog;
+import com.oak.entities.BlogKey;
 import com.oak.service.BlogService;
+import com.oak.vo.BlogVO;
 
 @RestController
 public class BlogsController {
@@ -27,65 +32,94 @@ public class BlogsController {
 	BlogService blogsService;
 
 	@RequestMapping(value = "/blogs/{id}", produces = "application/json", method = RequestMethod.GET)
-	public Blog getBlogByID(@PathVariable("id") long ID)
+	public BlogVO getBlogByID(@PathVariable("id") String id)
 			throws JsonProcessingException {
-		Blog blogs = blogsService.getBlogsById(ID);
-		return blogs;
+		String blogKey[] = id.split("_");
+		BlogKey key = new BlogKey();
+		key.setCategory(blogKey[0]);
+		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		Blog blog = blogsService.getBlogsById(key);
+		BlogVO blogVO = new BlogVO(blog);
+		Date createDate = new Date(blog.getCreatedOn());
+		Date updateDate = new Date(blog.getBlogKey().getUpdatedOn());
+		SimpleDateFormat dateFormatter = new SimpleDateFormat(
+				"dd-MM-yyyy HH:mm:ss");
+		String dateCreateText = dateFormatter.format(createDate);
+		String updateCreateText = dateFormatter.format(updateDate);
+		blogVO.setCreatedOnDate(dateCreateText);
+		blogVO.setUpdatedOnDate(updateCreateText);
+		return blogVO;
 
 	}
 
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
-	public List<Blog> getBlogs() throws JsonProcessingException {
+	public List<BlogVO> getBlogs() throws JsonProcessingException {
+
 		List<Blog> blogs = blogsService.getBlogs();
-		return blogs;
+
+		List<BlogVO> blogVO = new ArrayList<BlogVO>();
+		for (Blog article : blogs) {
+			BlogVO vo = new BlogVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			blogVO.add(vo);
+		}
+
+		return blogVO;
 
 	}
 
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Blog> deleteBlog(@PathVariable("id") long id) {
+	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-
-		Blog blog = blogsService.getBlogsById(id);
-		if (blog == null) {
-			System.out.println("Unable to delete. User with id " + id
-					+ " not found");
-			return new ResponseEntity<Blog>(HttpStatus.NOT_FOUND);
-		}
-
-		blogsService.deleteBlogsById(id);
-
-		return new ResponseEntity<Blog>(HttpStatus.NO_CONTENT);
+		String blogKey[] = id.split("_");
+		BlogKey key = new BlogKey();
+		key.setCategory(blogKey[0]);
+		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		blogsService.deleteBlogsById(key);
+		return new ResponseEntity<BlogVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/blogs", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlog(@RequestBody Blog blog,
-			UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Void> createBlog(@RequestBody BlogVO blogVO)
+			throws ParseException {
 
-		if (blogsService.isBlogExist(blog)) {
-			System.out.println("A User with name " + blog.getBlog_id()
-					+ " already exist");
-		}
-		blogsService.createBlogs(blog);
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));
+		blogVO.setCreatedOn(dt.getTime());
+		blogVO.setUpdatedOn(dt.getTime());
+		blogsService.createBlogs(new Blog(blogVO));
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/blogs/{id}")
-				.buildAndExpand(blog.getBlog_id()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<Blog> updateBlog(@PathVariable("id") long id,
-			@RequestBody Blog blog) {
+	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id,
+			@RequestBody BlogVO blogVO) throws ParseException {
 
 		System.out.println("Updating User " + id);
-		Blog currentBlog = blogsService.getBlogsById(id);
+		String blogKey[] = id.split("_");
+		BlogKey key = new BlogKey();
+		key.setCategory(blogKey[0]);
+		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		Blog currentBlog = blogsService.getBlogsById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");
 		}
-		currentBlog.setTitle(blog.getTitle());
-		currentBlog.setContent(blog.getContent());
-		currentBlog.setCreatedBy(blog.getCreatedBy());
-		blogsService.updateBlog(currentBlog);
-		return new ResponseEntity<Blog>(currentBlog, HttpStatus.OK);
+		Date dNow = new Date();
+		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));
+		blogVO.setCreatedOn(currentBlog.getCreatedOn());
+		blogVO.setUpdatedOn(dt.getTime());
+		blogsService.updateBlog(new Blog(blogVO));
+		return new ResponseEntity<BlogVO>(blogVO, HttpStatus.OK);
 
 	}
 
