@@ -14,6 +14,7 @@ public class Incident {
 	private String image;
 	private String state;
 	private String govt;
+	private String category;
 	private String description;
 	private String questions;
 	private String status;
@@ -39,6 +40,7 @@ public class Incident {
 		this.createdBy = incidentVO.getCreatedBy();
 		this.image = incidentVO.getImage();
 		this.questions = incidentVO.getQuestions();
+		this.category = incidentVO.getCategory();
 	}
 
 	public IncidentKey getIncidentKey() {
@@ -120,5 +122,12 @@ public class Incident {
 	public void setReportDate(Long reportDate) {
 		this.reportDate = reportDate;
 	}
+	
+	public String getCategory() {
+		return category;
+	}
 
+	public void setCategory(String category) {
+		this.category = category;
+	}
 }

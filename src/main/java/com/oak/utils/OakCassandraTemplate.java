@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.stereotype.Component;
 
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+
 /**
  * Utility class for handling all CRUD Operations.
  * 
@@ -181,5 +183,9 @@ public class OakCassandraTemplate {
 	public <T> boolean exists(Object id, Class<T> claz) {
 		return cassandraTemplate.exists(claz, id);
 	}
+	
+	public void executeQuery(String sql){
+		cassandraTemplate.execute(sql);		
+	}	
 
 }
