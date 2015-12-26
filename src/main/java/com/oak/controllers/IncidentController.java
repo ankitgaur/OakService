@@ -56,15 +56,63 @@ public class IncidentController {
 		return incidentVO;
 	}
 
+	@RequestMapping(value = "/incidents/{incidentype}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<IncidentVO> getTopIncidentsByIncTypes(
+			@PathVariable("incidentype") String incidentype,
+			@PathVariable("limit") int limit) throws JsonGenerationException,
+			JsonMappingException, IOException {
+		List<Incident> incidents = incidentService
+				.getTopIncidentsByIncidentsTypes(incidentype, limit);
+
+		List<IncidentVO> incidentVO = new ArrayList<IncidentVO>();
+		for (Incident incident : incidents) {
+			IncidentVO vo = new IncidentVO(incident);
+			Date createOn = new Date(incident.getIncidentKey().getCreatedOn());
+			Date reportDate = new Date(incident.getReportDate());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String createDateText = dateFormatter.format(createOn);
+			String reportDateText = dateFormatter.format(reportDate);
+			vo.setCreatedOnDate(createDateText);
+			vo.setReportDateStr(reportDateText);
+			incidentVO.add(vo);
+		}
+
+		return incidentVO;
+	}
+
+	@RequestMapping(value = "/incidents/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<IncidentVO> getTopIncidentsByLimit(
+			@PathVariable("limit") int limit) throws JsonGenerationException,
+			JsonMappingException, IOException {
+		List<Incident> incidents = incidentService
+				.getTopIncidentsByLimit(limit);
+
+		List<IncidentVO> incidentVO = new ArrayList<IncidentVO>();
+		for (Incident incident : incidents) {
+			IncidentVO vo = new IncidentVO(incident);
+			Date createOn = new Date(incident.getIncidentKey().getCreatedOn());
+			Date reportDate = new Date(incident.getReportDate());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String createDateText = dateFormatter.format(createOn);
+			String reportDateText = dateFormatter.format(reportDate);
+			vo.setCreatedOnDate(createDateText);
+			vo.setReportDateStr(reportDateText);
+			incidentVO.add(vo);
+		}
+
+		return incidentVO;
+	}
+
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.GET)
 	public IncidentVO getIncidentById(
 			@PathVariable("incidentID") String incidentID)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		String incidentKey[] = incidentID.split("_");
-		IncidentKey key = new IncidentKey();
-		key.setIncidentType(incidentKey[0]);
-		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		IncidentKey key = new IncidentKey(incidentKey[0],
+				Long.parseLong(incidentKey[1]));
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
@@ -104,9 +152,8 @@ public class IncidentController {
 
 		System.out.println("Updating User " + id);
 		String incidentKey[] = id.split("_");
-		IncidentKey key = new IncidentKey();
-		key.setIncidentType(incidentKey[0]);
-		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		IncidentKey key = new IncidentKey(incidentKey[0],
+				Long.parseLong(incidentKey[1]));
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
@@ -120,9 +167,8 @@ public class IncidentController {
 	@RequestMapping(value = "/incidents/{id}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable String incidentID) {
 		String incidentKey[] = incidentID.split("_");
-		IncidentKey key = new IncidentKey();
-		key.setIncidentType(incidentKey[0]);
-		key.setCreatedOn(Long.parseLong(incidentKey[1]));
+		IncidentKey key = new IncidentKey(incidentKey[0],
+				Long.parseLong(incidentKey[1]));
 		incidentService.deleteIncidentById(key);
 	}
 

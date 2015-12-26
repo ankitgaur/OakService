@@ -19,6 +19,19 @@ public class IncidentService {
 		return incidentRepo.getIncidents();
 	}
 
+	public List<Incident> getTopIncidentsByIncidentsTypes(String incidentype,
+			int limit) {
+
+		return incidentRepo.getTopIncidentsByIncidentsTypes(incidentype, limit);
+
+	}
+
+	public List<Incident> getTopIncidentsByLimit(int limit) {
+
+		return incidentRepo.getTopIncidentsByLimit(limit);
+
+	}
+
 	public Incident getIncidentById(IncidentKey id) {
 		return incidentRepo.getIncidentById(id);
 	}
