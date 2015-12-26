@@ -22,6 +22,27 @@ public class ArticleRepo {
 		return articles;
 	}
 
+	public List<Article> getTopArticlesByCategory(String category, int limit) {
+		String ARTICLE_BY_CATEGORY_QRY = "SELECT * FROM articles WHERE category=";
+		ARTICLE_BY_CATEGORY_QRY = ARTICLE_BY_CATEGORY_QRY + "'" + category
+				+ "'" + " LIMIT " + limit;
+		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
+				+ ARTICLE_BY_CATEGORY_QRY);
+		List<Article> articles = oakCassendraTemplate.findByPartitionKey(
+				ARTICLE_BY_CATEGORY_QRY, Article.class);
+		return articles;
+	}
+
+	public List<Article> getTopArticlesByLimit(int limit) {
+		String ARTICLE_BY_CATEGORY_QRY = "SELECT * FROM articles LIMIT ";
+		ARTICLE_BY_CATEGORY_QRY = ARTICLE_BY_CATEGORY_QRY + limit;
+		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
+				+ ARTICLE_BY_CATEGORY_QRY);
+		List<Article> articles = oakCassendraTemplate.findByLimit(
+				ARTICLE_BY_CATEGORY_QRY, Article.class);
+		return articles;
+	}
+
 	public Article getArticleById(ArticleKey id) {
 		Article article = oakCassendraTemplate.findById(id, Article.class);
 		return article;

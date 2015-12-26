@@ -37,6 +37,16 @@ public class BlogKey implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
+	public BlogKey() {
+		super();
+	}
+
+	public BlogKey(String category, Long updatedOn) {
+		super();
+		this.category = category;
+		this.updatedOn = updatedOn;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

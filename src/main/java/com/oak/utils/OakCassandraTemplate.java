@@ -142,6 +142,26 @@ public class OakCassandraTemplate {
 	}
 
 	/**
+	 * Getting the all entities by PARTITION KEY.
+	 * 
+	 * @param claz
+	 * @return List of entities
+	 */
+	public <T> List<T> findByPartitionKey(String sqlQry, Class<T> claz) {
+		return (List<T>) cassandraTemplate.select(sqlQry, claz);
+	}
+
+	/**
+	 * Getting the all entities by LIMIT
+	 * 
+	 * @param claz
+	 * @return List of entities
+	 */
+	public <T> List<T> findByLimit(String sqlQry, Class<T> claz) {
+		return (List<T>) cassandraTemplate.select(sqlQry, claz);
+	}
+
+	/**
 	 * Getting the all entity values using specific id's data.
 	 * 
 	 * @param ids

@@ -37,6 +37,16 @@ public class IncidentKey implements Serializable {
 		this.incidentType = incidentType;
 	}
 
+	public IncidentKey() {
+
+	}
+
+	public IncidentKey(String incidentType, Long createdOn) {
+		super();
+		this.incidentType = incidentType;
+		this.createdOn = createdOn;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

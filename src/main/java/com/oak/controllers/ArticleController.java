@@ -34,9 +34,8 @@ public class ArticleController {
 	public ArticleVO getSticleById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
 		String articleKey[] = id.split("_");
-		ArticleKey key = new ArticleKey();
-		key.setCategory(articleKey[0]);
-		key.setUpdatedOn(Long.parseLong(articleKey[1]));
+		ArticleKey key = new ArticleKey(articleKey[0],
+				Long.parseLong(articleKey[1]));
 		Article article = articleService.getArticleById(key);
 		ArticleVO articleVO = new ArticleVO(article);
 		Date createDate = new Date(article.getCreatedOn());
@@ -70,13 +69,58 @@ public class ArticleController {
 
 	}
 
+	@RequestMapping(value = "/articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<ArticleVO> getArticleByCategory(
+			@PathVariable("category") String category,
+			@PathVariable("limit") int limit) throws JsonProcessingException {
+
+		List<Article> articles = articleService.getTopArticlesByCategory(
+				category, limit);
+		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
+		for (Article article : articles) {
+			ArticleVO vo = new ArticleVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			articleVO.add(vo);
+		}
+		return articleVO;
+
+	}
+
+	@RequestMapping(value = "/articles/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<ArticleVO> getArticleByLimit(@PathVariable("limit") int limit)
+			throws JsonProcessingException {
+
+		List<Article> articles = articleService.getTopArticlesByLimit(limit);
+		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
+		for (Article article : articles) {
+			ArticleVO vo = new ArticleVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			articleVO.add(vo);
+		}
+		return articleVO;
+
+	}
+
 	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ArticleVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String articleKey[] = id.split("_");
-		ArticleKey key = new ArticleKey();
-		key.setCategory(articleKey[0]);
-		key.setUpdatedOn(Long.parseLong(articleKey[1]));
+		ArticleKey key = new ArticleKey(articleKey[0],
+				Long.parseLong(articleKey[1]));
 		articleService.deleteArticleById(key);
 		return new ResponseEntity<ArticleVO>(HttpStatus.NO_CONTENT);
 	}
@@ -95,17 +139,16 @@ public class ArticleController {
 
 	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ArticleVO> updateArticle(
-			@PathVariable("id") String id, @RequestBody ArticleVO articleVO)
-			throws ParseException {
+			@PathVariable("id") String articleID,
+			@RequestBody ArticleVO articleVO) throws ParseException {
 
-		System.out.println("Updating User " + id);
-		String articleKey[] = id.split("_");
-		ArticleKey key = new ArticleKey();
-		key.setCategory(articleKey[0]);
-		key.setUpdatedOn(Long.parseLong(articleKey[1]));
+		System.out.println("Updating User " + articleID);
+		String articleKey[] = articleID.split("_");
+		ArticleKey key = new ArticleKey(articleKey[0],
+				Long.parseLong(articleKey[1]));
 		Article article = articleService.getArticleById(key);
 		if (article == null) {
-			System.out.println("Article with id " + id + " not found");
+			System.out.println("Article with id " + articleID + " not found");
 			return new ResponseEntity<ArticleVO>(articleVO,
 					HttpStatus.BAD_REQUEST);
 		}

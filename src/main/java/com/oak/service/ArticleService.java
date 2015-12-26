@@ -22,6 +22,18 @@ public class ArticleService {
 
 	}
 
+	public List<Article> getTopArticlesByCategory(String category, int limit) {
+
+		return articleRepo.getTopArticlesByCategory(category, limit);
+
+	}
+
+	public List<Article> getTopArticlesByLimit(int limit) {
+
+		return articleRepo.getTopArticlesByLimit(limit);
+
+	}
+
 	public Article getArticleById(ArticleKey articleID) {
 
 		return articleRepo.getArticleById(articleID);
