@@ -22,6 +22,27 @@ public class BlogsRepo {
 		return blogs;
 	}
 
+	public List<Blog> getTopBlogsByCategory(String category, int limit) {
+		String blogs_by_category_qry = "SELECT * FROM blogs WHERE category=";
+		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'"
+				+ " LIMIT " + limit;
+		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
+				+ blogs_by_category_qry);
+		List<Blog> blogs = oakCassendraTemplate.findByPartitionKey(
+				blogs_by_category_qry, Blog.class);
+		return blogs;
+	}
+
+	public List<Blog> getTopBlogsByLimit(int limit) {
+		String blogs_by_limit_qry = "SELECT * FROM blogs LIMIT ";
+		blogs_by_limit_qry = blogs_by_limit_qry + limit;
+		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
+				+ blogs_by_limit_qry);
+		List<Blog> articles = oakCassendraTemplate.findByLimit(
+				blogs_by_limit_qry, Blog.class);
+		return articles;
+	}
+
 	public Blog getBlogsById(BlogKey id) {
 		Blog blog = oakCassendraTemplate.findById(id, Blog.class);
 		return blog;

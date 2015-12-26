@@ -35,9 +35,7 @@ public class BlogsController {
 	public BlogVO getBlogByID(@PathVariable("id") String id)
 			throws JsonProcessingException {
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey();
-		key.setCategory(blogKey[0]);
-		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
 		Blog blog = blogsService.getBlogsById(key);
 		BlogVO blogVO = new BlogVO(blog);
 		Date createDate = new Date(blog.getCreatedOn());
@@ -75,13 +73,60 @@ public class BlogsController {
 
 	}
 
+	@RequestMapping(value = "/blogs/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogVO> getBlogsByCategory(
+			@PathVariable("category") String category,
+			@PathVariable("limit") int limit) throws JsonProcessingException {
+
+		List<Blog> blogs = blogsService.getTopBlogsByCategory(category, limit);
+
+		List<BlogVO> blogVO = new ArrayList<BlogVO>();
+		for (Blog article : blogs) {
+			BlogVO vo = new BlogVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			blogVO.add(vo);
+		}
+
+		return blogVO;
+
+	}
+
+	@RequestMapping(value = "/blogs/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogVO> getBlogsByLimit(@PathVariable("limit") int limit)
+			throws JsonProcessingException {
+
+		List<Blog> blogs = blogsService.getTopBlogsByLimit(limit);
+
+		List<BlogVO> blogVO = new ArrayList<BlogVO>();
+		for (Blog article : blogs) {
+			BlogVO vo = new BlogVO(article);
+			Date createDate = new Date(article.getCreatedOn());
+			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			blogVO.add(vo);
+		}
+
+		return blogVO;
+
+	}
+
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey();
-		key.setCategory(blogKey[0]);
-		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
 		blogsService.deleteBlogsById(key);
 		return new ResponseEntity<BlogVO>(HttpStatus.NO_CONTENT);
 	}
@@ -106,9 +151,7 @@ public class BlogsController {
 
 		System.out.println("Updating User " + id);
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey();
-		key.setCategory(blogKey[0]);
-		key.setUpdatedOn(Long.parseLong(blogKey[1]));
+		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
 		Blog currentBlog = blogsService.getBlogsById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");

@@ -19,6 +19,18 @@ public class BlogService {
 		return blogsRepo.getBlogs();
 	}
 
+	public List<Blog> getTopBlogsByCategory(String category, int limit) {
+
+		return blogsRepo.getTopBlogsByCategory(category, limit);
+
+	}
+
+	public List<Blog> getTopBlogsByLimit(int limit) {
+
+		return blogsRepo.getTopBlogsByLimit(limit);
+
+	}
+
 	public Blog getBlogsById(BlogKey id) {
 		return blogsRepo.getBlogsById(id);
 	}
