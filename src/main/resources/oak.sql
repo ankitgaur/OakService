@@ -117,7 +117,7 @@ CREATE TABLE groups (
 
 
 CREATE TABLE users (
-    email text PRIMARY KEY,
+    email text,
     name text,
     username text,
     password text,
@@ -128,5 +128,6 @@ CREATE TABLE users (
     createdby text,
     updatedby text,
     createdon bigint,
-    updateon bigint
-)WITH CLUSTERING ORDER BY (email DESC);
+    updateon bigint,
+    PRIMARY KEY (email)
+);
