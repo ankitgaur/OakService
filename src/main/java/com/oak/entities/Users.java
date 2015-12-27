@@ -14,9 +14,9 @@ public class Users {
 	private String username;
 	private String password;
 	private String groups;
-	private String activated;
-	private String forgotpassword;
-	private String sendemail;
+	private boolean activated;
+	private boolean forgotpassword;
+	private boolean sendemail;
 	private String createdby;
 	private String updatedby;
 	private Long createdon;
@@ -33,9 +33,9 @@ public class Users {
 		this.username = usersVO.getUsername();
 		this.password = usersVO.getPassword();
 		this.groups = usersVO.getGroups();
-		this.activated = usersVO.getActivated();
-		this.forgotpassword = usersVO.getForgotpassword();
-		this.sendemail = usersVO.getSendemail();
+		this.activated = usersVO.isActivated();
+		this.forgotpassword = usersVO.isForgotpassword();
+		this.sendemail = usersVO.isSendemail();
 		this.createdby = usersVO.getCreatedby();
 		this.updatedby = usersVO.getUpdatedby();
 		this.createdon = usersVO.getCreatedon();
@@ -82,27 +82,27 @@ public class Users {
 		this.groups = groups;
 	}
 
-	public String getActivated() {
+	public boolean isActivated() {
 		return activated;
 	}
 
-	public void setActivated(String activated) {
+	public void setActivated(boolean activated) {
 		this.activated = activated;
 	}
 
-	public String getForgotpassword() {
+	public boolean isForgotpassword() {
 		return forgotpassword;
 	}
 
-	public void setForgotpassword(String forgotpassword) {
+	public void setForgotpassword(boolean forgotpassword) {
 		this.forgotpassword = forgotpassword;
 	}
 
-	public String getSendemail() {
+	public boolean isSendemail() {
 		return sendemail;
 	}
 
-	public void setSendemail(String sendemail) {
+	public void setSendemail(boolean sendemail) {
 		this.sendemail = sendemail;
 	}
 

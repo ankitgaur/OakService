@@ -59,6 +59,7 @@ CREATE TABLE blogs (
 
 CREATE TABLE incidents (
     incidenttype text,
+    category text,
     createdon bigint,
     createdby text,
     description text,
@@ -121,11 +122,11 @@ CREATE TABLE users (
     username text,
     password text,
     groups text,
-    activated text,
-    forgotpassword text,
-    sendemail text,
+    activated boolean,
+    forgotpassword boolean,
+    sendemail boolean,
     createdby text,
     updatedby text,
     createdon bigint,
     updateon bigint
-);
+)WITH CLUSTERING ORDER BY (email DESC);

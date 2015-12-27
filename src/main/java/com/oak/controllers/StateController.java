@@ -59,14 +59,12 @@ public class StateController {
 	}
 
 	@RequestMapping(value = "/states", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlog(@RequestBody StatesVO stateVO,
+	public ResponseEntity<Void> createState(@RequestBody StatesVO stateVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
 		stateService.createState(new States(stateVO));
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/Article/{id}")
-				.buildAndExpand(stateVO.getCreatedBy()).toUri());
+		HttpHeaders headers = new HttpHeaders();		
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
@@ -80,7 +78,7 @@ public class StateController {
 	}
 
 	@RequestMapping(value = "/states/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<StatesVO> deleteBlog(@PathVariable("id") long id) {
+	public ResponseEntity<StatesVO> deleteState(@PathVariable("id") long id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
 		States state = stateService.getStateById(id);

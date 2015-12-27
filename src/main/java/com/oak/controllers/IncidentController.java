@@ -48,7 +48,7 @@ public class IncidentController {
 					"dd-MM-yyyy HH:mm:ss");
 			String createDateText = dateFormatter.format(createOn);
 			String reportDateText = dateFormatter.format(reportDate);
-			vo.setCreatedOnDate(createDateText);
+			vo.setCreatedOnStr(createDateText);
 			vo.setReportDateStr(reportDateText);
 			incidentVO.add(vo);
 		}
@@ -73,7 +73,7 @@ public class IncidentController {
 					"dd-MM-yyyy HH:mm:ss");
 			String createDateText = dateFormatter.format(createOn);
 			String reportDateText = dateFormatter.format(reportDate);
-			vo.setCreatedOnDate(createDateText);
+			vo.setCreatedOnStr(createDateText);
 			vo.setReportDateStr(reportDateText);
 			incidentVO.add(vo);
 		}
@@ -97,7 +97,7 @@ public class IncidentController {
 					"dd-MM-yyyy HH:mm:ss");
 			String createDateText = dateFormatter.format(createOn);
 			String reportDateText = dateFormatter.format(reportDate);
-			vo.setCreatedOnDate(createDateText);
+			vo.setCreatedOnStr(createDateText);
 			vo.setReportDateStr(reportDateText);
 			incidentVO.add(vo);
 		}
@@ -124,7 +124,7 @@ public class IncidentController {
 				"dd-MM-yyyy HH:mm:ss");
 		String createDateText = dateFormatter.format(createOn);
 		String reportDateText = dateFormatter.format(reportDate);
-		incidentVO.setCreatedOnDate(createDateText);
+		incidentVO.setCreatedOnStr(createDateText);
 		incidentVO.setReportDateStr(reportDateText);
 
 		return incidentVO;
@@ -159,7 +159,7 @@ public class IncidentController {
 			return null;
 		}
 		IncidentVO.setCreatedOn(Long.parseLong(incidentKey[1]));
-		IncidentVO.setIncidentType(incidentKey[0]);
+		IncidentVO.setType(incidentKey[0]);
 		incidentService.updateIncident(new Incident(IncidentVO));
 		return new ResponseEntity<IncidentVO>(IncidentVO, HttpStatus.OK);
 	}

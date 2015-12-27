@@ -9,9 +9,9 @@ public class UsersVO {
 	private String username;
 	private String password;
 	private String groups;
-	private String activated;
-	private String forgotpassword;
-	private String sendemail;
+	private boolean activated;
+	private boolean forgotpassword;
+	private boolean sendemail;
 	private String createdby;
 	private String updatedby;
 	private Long createdon;
@@ -30,9 +30,9 @@ public class UsersVO {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.groups = user.getGroups();
-		this.activated = user.getActivated();
-		this.forgotpassword = user.getForgotpassword();
-		this.sendemail = user.getSendemail();
+		this.activated = user.isActivated();
+		this.forgotpassword = user.isForgotpassword();
+		this.sendemail = user.isSendemail();
 		this.createdby = user.getCreatedby();
 		this.updatedby = user.getUpdatedby();
 		this.createdon = user.getCreatedon();
@@ -79,20 +79,28 @@ public class UsersVO {
 		this.groups = groups;
 	}
 
-	public String getActivated() {
+	public boolean isActivated() {
 		return activated;
 	}
 
-	public void setActivated(String activated) {
+	public void setActivated(boolean activated) {
 		this.activated = activated;
 	}
 
-	public String getForgotpassword() {
+	public boolean isForgotpassword() {
 		return forgotpassword;
 	}
 
-	public void setForgotpassword(String forgotpassword) {
+	public void setForgotpassword(boolean forgotpassword) {
 		this.forgotpassword = forgotpassword;
+	}
+
+	public boolean isSendemail() {
+		return sendemail;
+	}
+
+	public void setSendemail(boolean sendemail) {
+		this.sendemail = sendemail;
 	}
 
 	public String getCreatedOnStr() {
@@ -109,14 +117,6 @@ public class UsersVO {
 
 	public void setUpdateOnStr(String updateOnStr) {
 		this.updateOnStr = updateOnStr;
-	}
-
-	public String getSendemail() {
-		return sendemail;
-	}
-
-	public void setSendemail(String sendemail) {
-		this.sendemail = sendemail;
 	}
 
 	public String getCreatedby() {

@@ -1,5 +1,11 @@
 package com.oak.entities;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -25,11 +31,11 @@ public class Incident {
 
 	}
 
-	public Incident(IncidentVO incidentVO) {
+	public Incident(IncidentVO incidentVO) throws JsonGenerationException, JsonMappingException, IOException {
 		super();
 		IncidentKey key = new IncidentKey();
 		key.setCreatedOn(incidentVO.getCreatedOn());
-		key.setIncidentType(incidentVO.getIncidentType());
+		key.setIncidentType(incidentVO.getType());
 		this.incidentKey = key;
 		this.type = incidentVO.getType();
 		this.state = incidentVO.getState();
@@ -38,9 +44,14 @@ public class Incident {
 		this.status = incidentVO.getStatus();
 		this.reportDate = incidentVO.getReportDate();
 		this.createdBy = incidentVO.getCreatedBy();
-		this.image = incidentVO.getImage();
-		this.questions = incidentVO.getQuestions();
-		this.category = incidentVO.getCategory();
+		//this.image = incidentVO.get;
+		if (incidentVO.getQuestions() != null
+				&& !incidentVO.getQuestions().isEmpty()) {
+
+			ObjectWriter writer = new ObjectMapper().writer();
+			questions = writer.writeValueAsString(incidentVO.getQuestions());
+		}
+		//TODO: this.category = incidentVO.getCategory();
 	}
 
 	public IncidentKey getIncidentKey() {

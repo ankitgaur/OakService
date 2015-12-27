@@ -1,76 +1,77 @@
 package com.oak.vo;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import com.oak.entities.Incident;
 
 public class IncidentVO {
 
-	private String incidentType;
-	private Long createdOn;
+	private String id;
 	private String type;
-	private String category;
-	private String image;
 	private String state;
 	private String govt;
 	private String description;
-	private String questions;
+	private Map<String, String> questions;
 	private String status;
-	private Long reportDate;
+	private long reportDate;
 	private String createdBy;
-
-	private String createdOnDate;
+	private long createdOn;
+	private String createdOnStr;
 	private String reportDateStr;
 
+	public String getCreatedOnStr() {
+		return createdOnStr;
+	}
+
+	public void setCreatedOnStr(String createdOnStr) {
+		this.createdOnStr = createdOnStr;
+	}
+
+	public String getReportDateStr() {
+		return reportDateStr;
+	}
+
+	public void setReportDateStr(String reportDateStr) {
+		this.reportDateStr = reportDateStr;
+	}
+
 	public IncidentVO() {
-		super();
+
 	}
 
 	public IncidentVO(Incident incident) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		id = incident.getIncidentKey().getIncidentType()+"_"+incident.getIncidentKey().getCreatedOn();
+		type = incident.getType();
 
-		super();
-		this.incidentType = incident.getIncidentKey().getIncidentType();
-		this.createdOn = incident.getIncidentKey().getCreatedOn();
-		this.type = incident.getType();
-		this.state = incident.getState();
-		this.govt = incident.getGovt();
-		this.description = incident.getDescription();
-		this.status = incident.getStatus();
-		this.reportDate = incident.getReportDate();
-		this.createdBy = incident.getCreatedBy();
-		this.image = incident.getImage();
-		this.questions = incident.getQuestions();
-		this.category = incident.getCategory();
+		state = incident.getState();
+		govt = incident.getGovt();
+		description = incident.getDescription();
+		status = incident.getStatus();
+		reportDate = incident.getReportDate();
+		createdBy = incident.getCreatedBy();
+		createdOn = incident.getIncidentKey().getCreatedOn();
+
+		if (incident.getQuestions() != null
+				&& !incident.getQuestions().isEmpty()) {
+			Map<String, String> map = new HashMap<String, String>();
+			ObjectMapper mapper = new ObjectMapper();
+			map = mapper.readValue(incident.getQuestions(),
+					new TypeReference<HashMap<String, String>>() {
+					});
+			questions = map;
+		}
 
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public String getIncidentType() {
-		return incidentType;
-	}
-
-	public void setIncidentType(String incidentType) {
-		this.incidentType = incidentType;
-	}
-
-	public Long getCreatedOn() {
-		return createdOn;
-	}
-
-	public void setCreatedOn(Long createdOn) {
-		this.createdOn = createdOn;
-	}
+	
 
 	public String getType() {
 		return type;
@@ -104,11 +105,11 @@ public class IncidentVO {
 		this.description = description;
 	}
 
-	public String getQuestions() {
+	public Map<String, String> getQuestions() {
 		return questions;
 	}
 
-	public void setQuestions(String questions) {
+	public void setQuestions(Map<String, String> questions) {
 		this.questions = questions;
 	}
 
@@ -120,13 +121,7 @@ public class IncidentVO {
 		this.status = status;
 	}
 
-	public Long getReportDate() {
-		return reportDate;
-	}
 
-	public void setReportDate(Long reportDate) {
-		this.reportDate = reportDate;
-	}
 
 	public String getCreatedBy() {
 		return createdBy;
@@ -136,28 +131,28 @@ public class IncidentVO {
 		this.createdBy = createdBy;
 	}
 
-	public String getCreatedOnDate() {
-		return createdOnDate;
+	public String getId() {
+		return id;
 	}
 
-	public void setCreatedOnDate(String createdOnDate) {
-		this.createdOnDate = createdOnDate;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getReportDateStr() {
-		return reportDateStr;
+	public long getReportDate() {
+		return reportDate;
 	}
 
-	public void setReportDateStr(String reportDateStr) {
-		this.reportDateStr = reportDateStr;
+	public void setReportDate(long reportDate) {
+		this.reportDate = reportDate;
 	}
 
-	public String getCategory() {
-		return category;
+	public long getCreatedOn() {
+		return createdOn;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCreatedOn(long createdOn) {
+		this.createdOn = createdOn;
 	}
-	
+
 }
