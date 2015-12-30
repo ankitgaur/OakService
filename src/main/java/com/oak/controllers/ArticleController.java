@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ public class ArticleController {
 	@Autowired
 	ArticleService articleService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ArticleVO getSticleById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
@@ -49,6 +51,7 @@ public class ArticleController {
 		return articleVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticle() throws JsonProcessingException {
 		List<Article> articles = articleService.getArticles();
@@ -69,6 +72,7 @@ public class ArticleController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticleByCategory(
 			@PathVariable("category") String category,
@@ -93,6 +97,7 @@ public class ArticleController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticleByLimit(@PathVariable("limit") int limit)
 			throws JsonProcessingException {
@@ -115,6 +120,7 @@ public class ArticleController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ArticleVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
@@ -125,6 +131,7 @@ public class ArticleController {
 		return new ResponseEntity<ArticleVO>(HttpStatus.NO_CONTENT);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createArticle(@RequestBody ArticleVO articleVO)
 			throws ParseException {
@@ -137,6 +144,7 @@ public class ArticleController {
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ArticleVO> updateArticle(
 			@PathVariable("id") String articleID,

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ public class IncidentTypeController {
 	@Autowired
 	IncidentTypeService incidentTypeService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentType> getAllIncidentTypes() throws JsonParseException,
 			JsonMappingException, IOException {
@@ -38,6 +40,7 @@ public class IncidentTypeController {
 		return types;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes/{incidentId}", produces = "application/json", method = RequestMethod.GET)
 	public IncidentType getIncidentTypeById(@PathVariable("incidentId") long id)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -48,6 +51,7 @@ public class IncidentTypeController {
 		return type;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncidentType(
 			@RequestBody IncidentType typeVO) throws JsonGenerationException,
@@ -58,6 +62,7 @@ public class IncidentTypeController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<IncidentType> updateIncidentType(
 			@RequestBody IncidentType typeVO) throws JsonGenerationException,
@@ -66,6 +71,7 @@ public class IncidentTypeController {
 		return new ResponseEntity<IncidentType>(typeVO, HttpStatus.OK);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes/{id}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable long id) {
 		incidentTypeService.deleteIncidentType(id);

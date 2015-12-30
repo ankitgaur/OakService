@@ -1,5 +1,7 @@
 package com.oak.spring.config;
 
+import javax.servlet.Filter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,12 @@ public class CassandraConfig {
 	@Bean
 	public CassandraOperations cassandraTemplate() throws Exception {
 		return new CassandraTemplate(session().getObject());
+	}
+
+	@Bean
+	public Filter corsFilter() {
+		CORSFilter corsFilter = new CORSFilter();
+		return corsFilter;
 	}
 
 	private String getKeyspaceName() {

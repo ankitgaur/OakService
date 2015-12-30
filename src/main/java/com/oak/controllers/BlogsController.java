@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class BlogsController {
 	@Autowired
 	BlogService blogsService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs/{id}", produces = "application/json", method = RequestMethod.GET)
 	public BlogVO getBlogByID(@PathVariable("id") String id)
 			throws JsonProcessingException {
@@ -50,6 +52,7 @@ public class BlogsController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogVO> getBlogs() throws JsonProcessingException {
 
@@ -73,6 +76,7 @@ public class BlogsController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogVO> getBlogsByCategory(
 			@PathVariable("category") String category,
@@ -98,6 +102,7 @@ public class BlogsController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogVO> getBlogsByLimit(@PathVariable("limit") int limit)
 			throws JsonProcessingException {
@@ -122,6 +127,7 @@ public class BlogsController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
@@ -131,6 +137,7 @@ public class BlogsController {
 		return new ResponseEntity<BlogVO>(HttpStatus.NO_CONTENT);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createBlog(@RequestBody BlogVO blogVO)
 			throws ParseException {
@@ -145,6 +152,7 @@ public class BlogsController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id,
 			@RequestBody BlogVO blogVO) throws ParseException {

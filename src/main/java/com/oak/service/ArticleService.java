@@ -24,6 +24,7 @@ public class ArticleService {
 
 	public List<Article> getTopArticlesByCategory(String category, int limit) {
 
+		System.out.println("articles by limit");
 		return articleRepo.getTopArticlesByCategory(category, limit);
 
 	}

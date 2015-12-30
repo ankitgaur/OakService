@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class GroupsController {
 	@Autowired
 	GroupsService groupService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/groups", produces = "application/json", method = RequestMethod.GET)
 	public List<GroupsVO> getAllGroups() throws JsonParseException,
 			JsonMappingException, IOException {
@@ -48,6 +50,7 @@ public class GroupsController {
 		return groupsVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/groups/{groupname}", produces = "application/json", method = RequestMethod.GET)
 	public GroupsVO getGroupById(@PathVariable("groupname") String id)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -58,6 +61,7 @@ public class GroupsController {
 		return new GroupsVO(group);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/groups", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createGroup(@RequestBody GroupsVO groupsVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -67,6 +71,7 @@ public class GroupsController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/groups/{groupname}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<GroupsVO> updateGroup(
 			@PathVariable("groupname") String id, @RequestBody GroupsVO groupsVO)
@@ -76,6 +81,7 @@ public class GroupsController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/groups/{groupname}", method = RequestMethod.DELETE)
 	public ResponseEntity<GroupsVO> deleteGroup(
 			@PathVariable("groupname") String id) {

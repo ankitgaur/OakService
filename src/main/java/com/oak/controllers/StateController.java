@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class StateController {
 	@Autowired
 	StateService stateService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/states", produces = "application/json", method = RequestMethod.GET)
 	public List<StatesVO> getAllStates() throws JsonParseException,
 			JsonMappingException, IOException {
@@ -48,6 +50,7 @@ public class StateController {
 		return statesVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/states/{stateId}", produces = "application/json", method = RequestMethod.GET)
 	public StatesVO getStateById(@PathVariable("stateId") long id)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -58,16 +61,18 @@ public class StateController {
 		return new StatesVO(state);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/states", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createState(@RequestBody StatesVO stateVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
 		stateService.createState(new States(stateVO));
-		HttpHeaders headers = new HttpHeaders();		
+		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/states/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<StatesVO> updateStates(@PathVariable("id") long id,
 			@RequestBody StatesVO stateVO) throws JsonGenerationException,
@@ -77,6 +82,7 @@ public class StateController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/states/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<StatesVO> deleteState(@PathVariable("id") long id) {
 		System.out.println("Fetching & Deleting User with id " + id);

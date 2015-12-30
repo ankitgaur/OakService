@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class UsersController {
 	@Autowired
 	UsersService userService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
 	public List<UsersVO> getAllRoles() throws JsonParseException,
 			JsonMappingException, IOException {
@@ -46,6 +48,7 @@ public class UsersController {
 		return usersVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/users/{emialID}", produces = "application/json", method = RequestMethod.GET)
 	public UsersVO getRoleById(@PathVariable("emialID") String id)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -56,6 +59,7 @@ public class UsersController {
 		return new UsersVO(user);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/users", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createRole(@RequestBody UsersVO userVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -66,6 +70,7 @@ public class UsersController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/users/{emialID}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<UsersVO> updateRole(
 			@PathVariable("emialID") String emailID,
@@ -76,6 +81,7 @@ public class UsersController {
 
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/users/{emialID}", method = RequestMethod.DELETE)
 	public ResponseEntity<UsersVO> deleteRole(
 			@PathVariable("emialID") String emailID) {

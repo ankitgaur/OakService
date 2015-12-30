@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class IncidentController {
 	@Autowired
 	IncidentService incidentService;
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getIncidents() throws JsonGenerationException,
 			JsonMappingException, IOException {
@@ -56,6 +58,7 @@ public class IncidentController {
 		return incidentVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/{incidentype}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getTopIncidentsByIncTypes(
 			@PathVariable("incidentype") String incidentype,
@@ -81,6 +84,7 @@ public class IncidentController {
 		return incidentVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getTopIncidentsByLimit(
 			@PathVariable("limit") int limit) throws JsonGenerationException,
@@ -105,6 +109,7 @@ public class IncidentController {
 		return incidentVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.GET)
 	public IncidentVO getIncidentById(
 			@PathVariable("incidentID") String incidentID)
@@ -130,6 +135,7 @@ public class IncidentController {
 		return incidentVO;
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncident(
 			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
@@ -145,6 +151,7 @@ public class IncidentController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/{id}", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<IncidentVO> updateIncident(
 			@RequestBody IncidentVO IncidentVO, @PathVariable("id") String id)
@@ -164,6 +171,7 @@ public class IncidentController {
 		return new ResponseEntity<IncidentVO>(IncidentVO, HttpStatus.OK);
 	}
 
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/{id}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable String incidentID) {
 		String incidentKey[] = incidentID.split("_");
