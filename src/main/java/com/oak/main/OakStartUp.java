@@ -28,12 +28,19 @@ public class OakStartUp {
 
 	private static ServletContextHandler getServletContextHandler(
 			WebApplicationContext context) throws IOException {
+		
+		/*FilterHolder filterHolder = new FilterHolder(CrossOriginFilter.class);
+		  filterHolder.setInitParameter("allowedOrigins", "*");
+		  filterHolder.setInitParameter("allowedMethods", "GET, POST");
+		  filterHolder.setAsyncSupported(true);*/
+		
 		ServletContextHandler contextHandler = new ServletContextHandler();
 		contextHandler.setErrorHandler(null);
 		contextHandler.setContextPath(CONTEXT_PATH);
 		contextHandler.addServlet(new ServletHolder(new DispatcherServlet(
 				context)), MAPPING_URL);
 		contextHandler.addEventListener(new ContextLoaderListener(context));
+		//contextHandler.addFilter(filterHolder, "/*", null);
 		// contextHandler.setResourceBase(new
 		// ClassPathResource("webapp").getURI().toString());
 		return contextHandler;
