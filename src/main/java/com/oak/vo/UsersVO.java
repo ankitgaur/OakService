@@ -1,5 +1,8 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.oak.entities.Users;
 
 public class UsersVO {
@@ -14,10 +17,10 @@ public class UsersVO {
 	private boolean sendemail;
 	private String createdby;
 	private String updatedby;
-	private Long createdon;
-	private Long updateon;
 	private String createdOnStr;
-	private String updateOnStr;
+	private String updatedOnStr;
+	private Long createdOn;
+	private Long updatedOn;
 
 	public UsersVO() {
 		super();
@@ -25,6 +28,7 @@ public class UsersVO {
 
 	public UsersVO(Users user) {
 		super();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		this.email = user.getEmail();
 		this.name = user.getName();
 		this.username = user.getUsername();
@@ -35,8 +39,14 @@ public class UsersVO {
 		this.sendemail = user.isSendemail();
 		this.createdby = user.getCreatedby();
 		this.updatedby = user.getUpdatedby();
-		this.createdon = user.getCreatedon();
-		this.updateon = user.getUpdateon();
+		this.createdOn = user.getCreatedon();
+		this.updatedOn = user.getUpdatedon();
+		if(user.getCreatedon()!=null){
+			this.createdOnStr = sdf.format(new Date(user.getCreatedon()));
+		}
+		if(user.getUpdatedon()!=null){
+			this.updatedOnStr = sdf.format(new Date(user.getUpdatedon()));
+		}
 	}
 
 	public String getEmail() {
@@ -111,12 +121,12 @@ public class UsersVO {
 		this.createdOnStr = createdOnStr;
 	}
 
-	public String getUpdateOnStr() {
-		return updateOnStr;
+	public String getUpdatedOnStr() {
+		return updatedOnStr;
 	}
 
-	public void setUpdateOnStr(String updateOnStr) {
-		this.updateOnStr = updateOnStr;
+	public void setUpdatedOnStr(String updatedOnStr) {
+		this.updatedOnStr = updatedOnStr;
 	}
 
 	public String getCreatedby() {
@@ -135,20 +145,21 @@ public class UsersVO {
 		this.updatedby = updatedby;
 	}
 
-	public Long getCreatedon() {
-		return createdon;
+	public Long getCreatedOn() {
+		return createdOn;
 	}
 
-	public void setCreatedon(Long createdon) {
-		this.createdon = createdon;
+	public void setCreatedOn(Long createdOn) {
+		this.createdOn = createdOn;
 	}
 
-	public Long getUpdateon() {
-		return updateon;
+	public Long getUpdatedOn() {
+		return updatedOn;
 	}
 
-	public void setUpdateon(Long updateon) {
-		this.updateon = updateon;
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
+	
 }

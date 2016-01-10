@@ -20,7 +20,7 @@ public class Users {
 	private String createdby;
 	private String updatedby;
 	private Long createdon;
-	private Long updateon;
+	private Long updatedon;
 
 	public Users() {
 		super();
@@ -38,8 +38,8 @@ public class Users {
 		this.sendemail = usersVO.isSendemail();
 		this.createdby = usersVO.getCreatedby();
 		this.updatedby = usersVO.getUpdatedby();
-		this.createdon = usersVO.getCreatedon();
-		this.updateon = usersVO.getUpdateon();
+		this.createdon = usersVO.getCreatedOn();
+		this.updatedon = usersVO.getUpdatedOn();
 	}
 
 	public String getEmail() {
@@ -130,12 +130,12 @@ public class Users {
 		this.createdon = createdon;
 	}
 
-	public Long getUpdateon() {
-		return updateon;
+	public Long getUpdatedon() {
+		return updatedon;
 	}
 
-	public void setUpdateon(Long updateon) {
-		this.updateon = updateon;
-	}
+	public void setUpdatedon(Long updatedon) {
+		this.updatedon = updatedon;
+	}	
 
 }

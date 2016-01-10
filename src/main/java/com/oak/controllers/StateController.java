@@ -2,6 +2,7 @@ package com.oak.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -67,6 +68,7 @@ public class StateController {
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
+		stateVO.setId(new Date().getTime());
 		stateService.createState(new States(stateVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);

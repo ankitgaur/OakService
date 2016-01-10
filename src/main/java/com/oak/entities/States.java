@@ -1,7 +1,6 @@
 package com.oak.entities;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -18,12 +17,13 @@ public class States {
 	@PrimaryKey
 	private long id;
 	private String name;
+	private String abbr;
 	private String currGovt;
 	private String govts;
-	private String createdBy;
-	private String updatedBy;
-	private Date createdOn;
-	private Date updatedOn;
+	private String createdby;
+	private String updatedby;
+	private Long createdon;
+	private Long updatedon;
 
 	public States() {
 
@@ -42,10 +42,11 @@ public class States {
 			govts = writer.writeValueAsString(stateVO.getGovts());
 		}
 
-		createdBy = stateVO.getCreatedBy();
-		createdOn = stateVO.getCreatedOn();
-		updatedBy = stateVO.getUpdatedBy();
-		updatedOn = stateVO.getUpdatedOn();
+		createdby = stateVO.getCreatedby();
+		createdon = stateVO.getCreatedOn();
+		updatedby = stateVO.getUpdatedby();
+		updatedon = stateVO.getUpdatedOn();
+		abbr = stateVO.getAbbr();
 	}
 
 	public long getId() {
@@ -62,6 +63,14 @@ public class States {
 
 	public void setName(String name) {
 		this.name = name;
+	}	
+	
+	public String getAbbr() {
+		return abbr;
+	}
+
+	public void setAbbr(String abbr) {
+		this.abbr = abbr;
 	}
 
 	public String getCurrGovt() {
@@ -80,36 +89,36 @@ public class States {
 		this.govts = govts;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
+	public String getCreatedby() {
+		return createdby;
 	}
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setCreatedby(String createdby) {
+		this.createdby = createdby;
 	}
 
-	public String getUpdatedBy() {
-		return updatedBy;
+	public String getUpdatedby() {
+		return updatedby;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
+	public void setUpdatedby(String updatedby) {
+		this.updatedby = updatedby;
 	}
 
-	public Date getCreatedOn() {
-		return createdOn;
+	public Long getCreatedon() {
+		return createdon;
 	}
 
-	public void setCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
+	public void setCreatedon(Long createdon) {
+		this.createdon = createdon;
 	}
 
-	public Date getUpdatedOn() {
-		return updatedOn;
+	public Long getUpdatedon() {
+		return updatedon;
 	}
 
-	public void setUpdatedOn(Date updatedOn) {
-		this.updatedOn = updatedOn;
+	public void setUpdatedon(Long updatedon) {
+		this.updatedon = updatedon;
 	}
 
 }

@@ -53,10 +53,6 @@ CREATE TABLE blogs (
     PRIMARY KEY (category, updatedon)
 )WITH CLUSTERING ORDER BY (updatedon DESC);
 
-
-
-
-
 CREATE TABLE incidents (
     incidenttype text,
     category text,
@@ -77,23 +73,24 @@ CREATE TABLE incidents (
 CREATE TABLE states (
     id bigint PRIMARY KEY,
     createdby text,
-    createdon timestamp,
+    createdon bigint,
     currgovt text,
     govts text,
     name text,
+    abbr text,
     updatedby text,
-    updatedon timestamp
+    updatedon bigint
 );
 
 
 CREATE TABLE incident_types (
     id bigint PRIMARY KEY,
     createdby text,
-    createdon timestamp,
+    createdon bigint,
     name text,
     questions text,
     updatedby text,
-    updatedon timestamp
+    updatedon bigint
 );
 
 CREATE TABLE roles (
@@ -101,7 +98,7 @@ CREATE TABLE roles (
     createdby text,
     updatedby text,
     createdon bigint,
-    updateon bigint
+    updatedon bigint
 );
 
 
@@ -112,7 +109,7 @@ CREATE TABLE groups (
     createdby text,
     updatedby text,
     createdon bigint,
-    updateon bigint
+    updatedon bigint
 );
 
 
@@ -128,6 +125,6 @@ CREATE TABLE users (
     createdby text,
     updatedby text,
     createdon bigint,
-    updateon bigint,
+    updatedon bigint,
     PRIMARY KEY (email)
 );
