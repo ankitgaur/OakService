@@ -172,8 +172,8 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/incidents/{id}", produces = "application/json", method = RequestMethod.DELETE)
-	public void deleteIncidentType(@PathVariable String incidentID) {
+	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.DELETE)
+	public void deleteIncidentType(@PathVariable("incidentID") String incidentID) {
 		String incidentKey[] = incidentID.split("_");
 		IncidentKey key = new IncidentKey(incidentKey[0],
 				Long.parseLong(incidentKey[1]));
