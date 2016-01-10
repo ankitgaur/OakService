@@ -49,7 +49,7 @@ public class UsersController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/users/{emialID}", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{emialID:.+}", produces = "application/json", method = RequestMethod.GET)
 	public UsersVO getRoleById(@PathVariable("emialID") String id)
 			throws JsonParseException, JsonMappingException, IOException {
 		Users user = userService.getUserById(id);
@@ -71,7 +71,7 @@ public class UsersController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/users/{emialID}", consumes = "application/json", method = RequestMethod.PUT)
+	@RequestMapping(value = "/users/{emialID:.+}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<UsersVO> updateRole(
 			@PathVariable("emialID") String emailID,
 			@RequestBody UsersVO usersVO) throws JsonGenerationException,
@@ -82,7 +82,7 @@ public class UsersController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/users/{emialID}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/users/{emialID:.+}", method = RequestMethod.DELETE)
 	public ResponseEntity<UsersVO> deleteRole(
 			@PathVariable("emialID") String emailID) {
 		System.out.println("Fetching & Deleting User with id " + emailID);
