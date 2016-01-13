@@ -1,7 +1,5 @@
 package com.oak.vo;
 
-import java.util.Date;
-
 import com.oak.entities.Article;
 
 public class ArticleVO {
@@ -13,7 +11,7 @@ public class ArticleVO {
 	private String displayImage;
 	private Boolean approved;
 	private String approvedBy;
-	private Date approvedOn;
+	private Long approvedOn;
 	private Long createdOn;
 	private String createdBy;
 	private String updatedBy;
@@ -102,16 +100,16 @@ public class ArticleVO {
 		this.approvedBy = approvedBy;
 	}
 
-	public Date getApprovedOn() {
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public Long getApprovedOn() {
 		return approvedOn;
 	}
 
-	public void setApprovedOn(Date approvedOn) {
+	public void setApprovedOn(Long approvedOn) {
 		this.approvedOn = approvedOn;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
 	}
 
 	public Long getCreatedOn() {

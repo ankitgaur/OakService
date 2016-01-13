@@ -1,7 +1,5 @@
 package com.oak.entities;
 
-import java.util.Date;
-
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -21,7 +19,7 @@ public class Article {
 	private String displayImage;
 	private Boolean approved;
 	private String approvedBy;
-	private Date approvedOn;
+	private Long approvedOn;
 	private Long createdOn;
 	private String createdBy;
 	private String updatedBy;
@@ -57,6 +55,14 @@ public class Article {
 
 	public void setPk(ArticleKey pk) {
 		this.pk = pk;
+	}
+
+	public Long getApprovedOn() {
+		return approvedOn;
+	}
+
+	public void setApprovedOn(Long approvedOn) {
+		this.approvedOn = approvedOn;
 	}
 
 	public String getTitle() {
@@ -97,14 +103,6 @@ public class Article {
 
 	public void setApprovedBy(String approvedBy) {
 		this.approvedBy = approvedBy;
-	}
-
-	public Date getApprovedOn() {
-		return approvedOn;
-	}
-
-	public void setApprovedOn(Date approvedOn) {
-		this.approvedOn = approvedOn;
 	}
 
 	public String getCreatedBy() {

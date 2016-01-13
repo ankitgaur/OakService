@@ -20,9 +20,9 @@ public class IncidentVO {
 	private String description;
 	private Map<String, String> questions;
 	private String status;
-	private long reportDate;
+	private Long reportDate;
 	private String createdBy;
-	private long createdOn;
+	private Long createdOn;
 	private String createdOnStr;
 	private String reportDateStr;
 
@@ -48,7 +48,8 @@ public class IncidentVO {
 
 	public IncidentVO(Incident incident) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		id = incident.getIncidentKey().getIncidentType()+"_"+incident.getIncidentKey().getCreatedOn();
+		id = incident.getIncidentKey().getIncidentType() + "_"
+				+ incident.getIncidentKey().getCreatedOn();
 		type = incident.getType();
 
 		state = incident.getState();
@@ -70,8 +71,6 @@ public class IncidentVO {
 		}
 
 	}
-
-	
 
 	public String getType() {
 		return type;
@@ -121,8 +120,6 @@ public class IncidentVO {
 		this.status = status;
 	}
 
-
-
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -139,7 +136,7 @@ public class IncidentVO {
 		this.id = id;
 	}
 
-	public long getReportDate() {
+	public Long getReportDate() {
 		return reportDate;
 	}
 
@@ -147,7 +144,7 @@ public class IncidentVO {
 		this.reportDate = reportDate;
 	}
 
-	public long getCreatedOn() {
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
