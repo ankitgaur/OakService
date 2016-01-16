@@ -11,18 +11,29 @@ DROP TABLE IF EXISTS counters;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS images;
 
 CREATE TABLE counters(
 	name text PRIMARY KEY,
 	val counter
 );
 
+CREATE TABLE images (
+  id text,  
+  name text,
+  kbsize bigint,
+  img blob, 
+  createdby text,
+  createdon bigint,
+  PRIMARY KEY (id)
+) ;
+
 CREATE TABLE articles (
     category text,
     updatedon bigint,
     approved boolean,
     approvedby text,
-    approvedon timestamp,
+    approvedon bigint,
     content text,
     createdby text,
     createdon bigint,
