@@ -12,6 +12,19 @@ DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS placements;
+
+CREATE TABLE placements(
+ id text,
+ title text,
+ intro text,
+ img text,
+ link text,
+ createdby text,
+ createdon bigint,
+ updatedby text,
+ updatedon bigint
+);
 
 CREATE TABLE counters(
 	name text PRIMARY KEY,
