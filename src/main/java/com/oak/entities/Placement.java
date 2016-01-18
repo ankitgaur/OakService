@@ -1,9 +1,14 @@
 package com.oak.entities;
 
+import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.Table;
+
 import com.oak.vo.PlacementVO;
 
+@Table("placements")
 public class Placement {
 
+	@PrimaryKey
 	private String id;
 	private String title;
 	private String intro;

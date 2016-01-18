@@ -33,11 +33,15 @@ public class PlacementController {
 	@RequestMapping(value = "/placements/{id}", produces = "application/json", method = RequestMethod.GET)
 	public PlacementVO getPlacementById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		
+
 		Placement placement = placementService.getPlacementById(id);
-		PlacementVO placementVO = new PlacementVO(placement);
-		
-		return placementVO;
+		if (null != placement) {
+			PlacementVO placementVO = new PlacementVO(placement);
+			return placementVO;
+		} else {
+			return null;
+		}
+
 	}
 
 	@CrossOrigin
@@ -55,7 +59,8 @@ public class PlacementController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/placements/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<PlacementVO> deleteRticle(@PathVariable("id") String id) {
+	public ResponseEntity<PlacementVO> deleteRticle(
+			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
 		placementService.deletePlacementById(id);
@@ -64,14 +69,14 @@ public class PlacementController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/placements", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createPlacement(@RequestBody PlacementVO placementVO)
-			throws ParseException {
-		
+	public ResponseEntity<Void> createPlacement(
+			@RequestBody PlacementVO placementVO) throws ParseException {
+
 		Placement placement = new Placement(placementVO);
-		//TODO: Get user name from session
+		// TODO: Get user name from session
 		placement.setCreatedby("plcmntctrl");
 		placement.setCreatedon(new Date().getTime());
-		
+
 		placementService.createPlacement(placement);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
@@ -82,10 +87,10 @@ public class PlacementController {
 			@PathVariable("id") String placementID,
 			@RequestBody PlacementVO placementVO) throws ParseException {
 
-		System.out.println("Updating User " + placementID);	
-		
+		System.out.println("Updating User " + placementID);
+
 		Placement placement = new Placement(placementVO);
-		//TODO: Get user name from session
+		// TODO: Get user name from session
 		placement.setCreatedby("plcmntctrl");
 		placement.setCreatedon(new Date().getTime());
 		placementService.updatePlacement(placement);

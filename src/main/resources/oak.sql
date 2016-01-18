@@ -23,7 +23,8 @@ CREATE TABLE placements(
  createdby text,
  createdon bigint,
  updatedby text,
- updatedon bigint
+ updatedon bigint,
+ PRIMARY KEY (id)
 );
 
 CREATE TABLE counters(
