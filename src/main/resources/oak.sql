@@ -15,7 +15,8 @@ DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS placements;
 
 CREATE TABLE placements(
- id text,
+ section text,
+ position int,
  title text,
  intro text,
  img text,
@@ -24,7 +25,7 @@ CREATE TABLE placements(
  createdon bigint,
  updatedby text,
  updatedon bigint,
- PRIMARY KEY (id)
+ PRIMARY KEY (section,position)
 );
 
 CREATE TABLE counters(

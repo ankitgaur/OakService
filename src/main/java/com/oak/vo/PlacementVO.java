@@ -1,10 +1,12 @@
 package com.oak.vo;
 
 import com.oak.entities.Placement;
+import com.oak.entities.PlacementKey;
 
 public class PlacementVO {
 
-	private String id;
+	private String section;
+	private int position;
 	private String title;
 	private String img;
 	private String link;
@@ -22,7 +24,9 @@ public class PlacementVO {
 
 	public PlacementVO(Placement placement) {
 
-		this.id = placement.getId();
+		PlacementKey pk = placement.getPk();
+		this.section = pk.getSection();
+		this.position = pk.getPosition();
 		this.title = placement.getTitle();
 		this.img = placement.getImg();
 		this.link = placement.getLink();
@@ -39,13 +43,21 @@ public class PlacementVO {
 		 * this.updatedOnStr = sdf.format(new Date(placement.getUpdatedon()));
 		 */
 	}
-
-	public String getId() {
-		return id;
+	
+	public String getSection() {
+		return section;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	public String getTitle() {

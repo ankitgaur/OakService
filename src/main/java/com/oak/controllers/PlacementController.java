@@ -45,6 +45,18 @@ public class PlacementController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/placements/section/{id}", produces = "application/json", method = RequestMethod.GET)
+	public List<PlacementVO> getPlacementForSection(@PathVariable String id) throws JsonProcessingException {
+		List<Placement> placements = placementService.findBySection(id);
+		List<PlacementVO> placementVO = new ArrayList<PlacementVO>();
+		for (Placement placement : placements) {
+			PlacementVO vo = new PlacementVO(placement);
+			placementVO.add(vo);
+		}
+		return placementVO;
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/placements", produces = "application/json", method = RequestMethod.GET)
 	public List<PlacementVO> getPlacement() throws JsonProcessingException {
 		List<Placement> placements = placementService.getPlacements();

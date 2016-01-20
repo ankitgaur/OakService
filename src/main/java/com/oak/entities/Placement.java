@@ -9,7 +9,7 @@ import com.oak.vo.PlacementVO;
 public class Placement {
 
 	@PrimaryKey
-	private String id;
+	private PlacementKey pk;
 	private String title;
 	private String intro;
 	private String img;
@@ -24,7 +24,15 @@ public class Placement {
 	}
 
 	public Placement(PlacementVO placementVO) {
-		this.id = placementVO.getId();
+		
+		PlacementKey pkey = new PlacementKey();
+		String section = placementVO.getSection();
+		int pos = placementVO.getPosition();
+		
+		pkey.setSection(section);
+		pkey.setPosition(pos);
+		
+		this.pk = pkey;
 		this.title = placementVO.getTitle();
 		this.intro = placementVO.getIntro();
 		this.img = placementVO.getImg();
@@ -34,13 +42,13 @@ public class Placement {
 		this.updatedon = placementVO.getUpdatedOn();
 		this.updatedby = placementVO.getUpdatedBy();
 	}
-
-	public String getId() {
-		return id;
+	
+	public PlacementKey getPk() {
+		return pk;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPk(PlacementKey pk) {
+		this.pk = pk;
 	}
 
 	public String getTitle() {

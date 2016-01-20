@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Placement;
+import com.oak.entities.PlacementKey;
 import com.oak.repositories.PlacementRepo;
 
 @Service("placementService")
@@ -20,15 +21,34 @@ public class PlacementService {
 		return placementRepo.getPlacements();
 
 	}
+	
+	public List<Placement> findBySection(String section) {
+		return placementRepo.getPlacementsBySection(section);
+	}
 
 	public Placement getPlacementById(String id) {
 
-		return placementRepo.getPlacementById(id);
+		PlacementKey pk = new PlacementKey();
+		String section = id.split("_")[0];
+		int pos = Integer.parseInt(id.split("_")[1]);
+		
+		pk.setSection(section);
+		pk.setPosition(pos);
+		
+		return placementRepo.getPlacementById(pk);
 	}
 
 	public void deletePlacementById(String id) {
 
-		placementRepo.deletePlacementById(id);
+		PlacementKey pk = new PlacementKey();
+		
+		String section = id.split("_")[0];
+		int pos = Integer.parseInt(id.split("_")[1]);
+		
+		pk.setSection(section);
+		pk.setPosition(pos);
+		
+		placementRepo.deletePlacementById(pk);
 	}
 
 	@Transactional

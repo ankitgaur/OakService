@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Placement;
+import com.oak.entities.PlacementKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Repository("placementRepo")
@@ -21,12 +22,18 @@ public class PlacementRepo {
 		return placements;
 	}
 	
-	public Placement getPlacementById(String id) {
+	public List<Placement> getPlacementsBySection(String section) {
+		String sqlQry = "select * from placements where section='"+section+"'";
+		List<Placement> placements = oakCassendraTemplate.findByPartitionKey(sqlQry, Placement.class);
+		return placements;
+	}
+	
+	public Placement getPlacementById(PlacementKey id) {
 		Placement placement = oakCassendraTemplate.findById(id, Placement.class);
 		return placement;
 	}
 
-	public void deletePlacementById(String id) {
+	public void deletePlacementById(PlacementKey id) {
 
 		oakCassendraTemplate.deleteById(id, Placement.class);
 
