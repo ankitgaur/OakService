@@ -8,9 +8,9 @@
 	<name>oakservices</name>
 
 	<properties>
-		<spring.core.version>4.2.2.RELEASE</spring.core.version>
-		<spring.web.version>4.2.2.RELEASE</spring.web.version>
-		<spring.context.version>4.2.2.RELEASE</spring.context.version>
+		<spring.core.version>4.2.4.RELEASE</spring.core.version>
+		<spring.web.version>4.2.4.RELEASE</spring.web.version>
+		<spring.context.version>4.2.4.RELEASE</spring.context.version>
 		<spring.security.version>4.0.3.RELEASE</spring.security.version>
 		<jackson.mapper.version>1.9.13</jackson.mapper.version>
 		<jdk.version>1.7</jdk.version>
