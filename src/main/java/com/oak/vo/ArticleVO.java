@@ -1,5 +1,8 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.oak.entities.Article;
 
 public class ArticleVO {
@@ -26,21 +29,22 @@ public class ArticleVO {
 
 	public ArticleVO(Article article) {
 		super();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		this.category = article.getPk().getCategory();
-		this.updatedOn = article.getPk().getUpdatedOn();
+		this.updatedOn = article.getUpdatedOn();
 		this.title = article.getTitle();
 		this.content = article.getContent();
 		this.displayImage = article.getDisplayImage();
 		this.approved = article.getApproved();
 		this.approvedBy = article.getApprovedBy();
 		this.approvedOn = article.getApprovedOn();
-		this.createdOn = article.getCreatedOn();
+		this.createdOn = article.getPk().getCreatedOn();
 		this.createdBy = article.getCreatedBy();
 		this.updatedBy = article.getUpdatedBy();
 		this.rating = article.getRating();
 		this.hits = article.getHits();
-		this.createdOnDate = createdOnDate;
-		this.updatedOnDate = updatedOnDate;
+		this.createdOnDate = sdf.format(new Date(createdOn));
+		this.updatedOnDate = sdf.format(new Date(updatedOn));
 
 	}
 

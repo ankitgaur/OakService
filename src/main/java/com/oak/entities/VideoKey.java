@@ -8,7 +8,7 @@ import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 @PrimaryKeyClass
-public class ArticleKey implements Serializable {
+public class VideoKey implements Serializable {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public class ArticleKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
-	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	@PrimaryKeyColumn(name = "createdon", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
 	// private Date createdOn;
@@ -31,11 +31,11 @@ public class ArticleKey implements Serializable {
 		this.category = category;
 	}
 
-	public ArticleKey() {
+	public VideoKey() {
 		super();
 	}
 
-	public ArticleKey(String category, Long createdOn) {
+	public VideoKey(String category, Long createdOn) {
 		super();
 		this.category = category;
 		this.createdOn = createdOn;
@@ -60,7 +60,7 @@ public class ArticleKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ArticleKey other = (ArticleKey) obj;
+		VideoKey other = (VideoKey) obj;
 		if (createdOn == null) {
 			if (other.createdOn != null)
 				return false;
@@ -80,10 +80,5 @@ public class ArticleKey implements Serializable {
 
 	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
+	}	
 }

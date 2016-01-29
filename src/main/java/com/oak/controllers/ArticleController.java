@@ -40,8 +40,8 @@ public class ArticleController {
 				Long.parseLong(articleKey[1]));
 		Article article = articleService.getArticleById(key);
 		ArticleVO articleVO = new ArticleVO(article);
-		Date createDate = new Date(article.getCreatedOn());
-		Date updateDate = new Date(article.getPk().getUpdatedOn());
+		Date createDate = new Date(article.getPk().getCreatedOn());
+		Date updateDate = new Date(article.getUpdatedOn());
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(
 				"dd-MM-yyyy HH:mm:ss");
 		String dateCreateText = dateFormatter.format(createDate);
@@ -58,8 +58,8 @@ public class ArticleController {
 		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
 		for (Article article : articles) {
 			ArticleVO vo = new ArticleVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			Date createDate = new Date(article.getPk().getCreatedOn());
+			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -83,8 +83,8 @@ public class ArticleController {
 		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
 		for (Article article : articles) {
 			ArticleVO vo = new ArticleVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			Date createDate = new Date(article.getPk().getCreatedOn());
+			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -106,8 +106,8 @@ public class ArticleController {
 		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
 		for (Article article : articles) {
 			ArticleVO vo = new ArticleVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getPk().getUpdatedOn());
+			Date createDate = new Date(article.getPk().getCreatedOn());
+			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -163,7 +163,7 @@ public class ArticleController {
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
-		articleVO.setCreatedOn(article.getCreatedOn());
+		articleVO.setCreatedOn(article.getPk().getCreatedOn());
 		articleVO.setUpdatedOn(dt.getTime());
 		articleService.updateArticle(new Article(articleVO));
 		return new ResponseEntity<ArticleVO>(articleVO, HttpStatus.OK);

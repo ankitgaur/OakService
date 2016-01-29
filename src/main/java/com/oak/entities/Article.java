@@ -20,7 +20,7 @@ public class Article {
 	private Boolean approved;
 	private String approvedBy;
 	private Long approvedOn;
-	private Long createdOn;
+	private Long updatedOn;
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
@@ -34,7 +34,7 @@ public class Article {
 		super();
 		ArticleKey aqrticleKey = new ArticleKey();
 		aqrticleKey.setCategory(articleVO.getCategory());
-		aqrticleKey.setUpdatedOn(articleVO.getUpdatedOn());
+		aqrticleKey.setCreatedOn(articleVO.getCreatedOn());
 		this.pk = aqrticleKey;
 		this.title = articleVO.getTitle();
 		this.content = articleVO.getContent();
@@ -42,7 +42,7 @@ public class Article {
 		this.approved = articleVO.getApproved();
 		this.approvedBy = articleVO.getApprovedBy();
 		this.approvedOn = articleVO.getApprovedOn();
-		this.createdOn = articleVO.getCreatedOn();
+		this.updatedOn = articleVO.getUpdatedOn();
 		this.createdBy = articleVO.getCreatedBy();
 		this.updatedBy = articleVO.getUpdatedBy();
 		this.rating = articleVO.getRating();
@@ -108,13 +108,13 @@ public class Article {
 	public String getCreatedBy() {
 		return createdBy;
 	}
-
-	public Long getCreatedOn() {
-		return createdOn;
+	
+	public Long getUpdatedOn() {
+		return updatedOn;
 	}
 
-	public void setCreatedOn(Long createdOn) {
-		this.createdOn = createdOn;
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	public void setCreatedBy(String createdBy) {

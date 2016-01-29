@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS placements;
+DROP TABLE IF EXISTS videos;
 
 CREATE TABLE placements(
  section text,
@@ -57,8 +58,8 @@ CREATE TABLE articles (
     rating int,
     title text,
     updatedby text,
-    PRIMARY KEY (category, updatedon)
-) WITH CLUSTERING ORDER BY (updatedon DESC);
+    PRIMARY KEY (category, createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
 
 
 
@@ -154,3 +155,21 @@ CREATE TABLE users (
     updatedon bigint,
     PRIMARY KEY (email)
 );
+
+CREATE TABLE videos (
+    category text,     
+    title text,
+    intro text,    
+    videourl text,
+    videoimgurl text,
+    hits bigint,
+    rating int,
+    approved boolean,
+    approvedby text,
+    approvedon bigint,
+    createdby text,
+    updatedby text,
+    createdon bigint,
+    updatedon bigint,
+    PRIMARY KEY (category, createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
