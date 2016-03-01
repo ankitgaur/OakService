@@ -1,8 +1,8 @@
 package com.oak.vo;
 
-import com.oak.entities.Blog;
+import com.oak.entities.BlogEntry;
 
-public class BlogVO {
+public class BlogEntryVO {
 
 	private String category;
 	private String title;
@@ -20,11 +20,11 @@ public class BlogVO {
 	private String createdOnDate;
 	private String updatedOnDate;
 
-	public BlogVO() {
+	public BlogEntryVO() {
 
 	}
 
-	public BlogVO(Blog blog) {
+	public BlogEntryVO(BlogEntry blog) {
 		super();
 		this.category = blog.getBlogKey().getCategory();
 		this.updatedOn = blog.getUpdatedOn();

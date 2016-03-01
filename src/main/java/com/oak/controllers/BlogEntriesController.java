@@ -21,25 +21,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.oak.entities.Blog;
+import com.oak.entities.BlogEntry;
 import com.oak.entities.BlogKey;
-import com.oak.service.BlogService;
-import com.oak.vo.BlogVO;
+import com.oak.service.BlogEntryService;
+import com.oak.vo.BlogEntryVO;
 
 @RestController
-public class BlogsController {
+public class BlogEntriesController {
 
 	@Autowired
-	BlogService blogsService;
-
+	BlogEntryService blogEntryService;
+	
 	@CrossOrigin
-	@RequestMapping(value = "/blogs/{id}", produces = "application/json", method = RequestMethod.GET)
-	public BlogVO getBlogByID(@PathVariable("id") String id)
+	@RequestMapping(value = "/blog_entries/{id}", produces = "application/json", method = RequestMethod.GET)
+	public BlogEntryVO getBlogEntryByID(@PathVariable("id") String id)
 			throws JsonProcessingException {
 		String blogKey[] = id.split("_");
 		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
-		Blog blog = blogsService.getBlogsById(key);
-		BlogVO blogVO = new BlogVO(blog);
+		BlogEntry blog = blogEntryService.getBlogEntryById(key);
+		BlogEntryVO blogVO = new BlogEntryVO(blog);
 		Date updateDate = new Date(blog.getUpdatedOn());
 		Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -52,15 +52,43 @@ public class BlogsController {
 
 	}
 
+	
+	/*@CrossOrigin
+	@RequestMapping(value = "/blog_entries/{id}", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogEntryVO> getBlogEntriesForBlog() throws JsonProcessingException {
+
+		List<BlogEntry> blogs = blogsService.getBlogs();
+
+		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
+		for (BlogEntry blog : blogs) {
+			BlogEntryVO vo = new BlogEntryVO(blog);
+			Date updateDate = new Date(blog.getUpdatedOn());
+			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			blogVO.add(vo);
+		}
+
+		return blogVO;
+
+	}*/
+
+	//TODO : update code to get blog entries for a blog
 	@CrossOrigin
-	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
-	public List<BlogVO> getBlogs() throws JsonProcessingException {
+	@RequestMapping(value = "/blog_entries/{blog}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogEntryVO> getBlogEntriesForBlog(
+			@PathVariable("category") String category) throws JsonProcessingException {
 
-		List<Blog> blogs = blogsService.getBlogs();
+		int limit = 500;
+		List<BlogEntry> blogs = blogEntryService.getTopBlogEntriesByBlog(category, limit);
 
-		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog blog : blogs) {
-			BlogVO vo = new BlogVO(blog);
+		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
+		for (BlogEntry blog : blogs) {
+			BlogEntryVO vo = new BlogEntryVO(blog);
 			Date updateDate = new Date(blog.getUpdatedOn());
 			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -77,41 +105,16 @@ public class BlogsController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blogs/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
-	public List<BlogVO> getBlogsByCategory(
-			@PathVariable("category") String category,
-			@PathVariable("limit") int limit) throws JsonProcessingException {
-
-		List<Blog> blogs = blogsService.getTopBlogsByCategory(category, limit);
-
-		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog blog : blogs) {
-			BlogVO vo = new BlogVO(blog);
-			Date updateDate = new Date(blog.getUpdatedOn());
-			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
-			blogVO.add(vo);
-		}
-
-		return blogVO;
-
-	}
-
-	@CrossOrigin
-	@RequestMapping(value = "/blogs/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
-	public List<BlogVO> getBlogsByLimit(@PathVariable("limit") int limit)
+	@RequestMapping(value = "/blog_entries", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogEntryVO> getBlogEntries()
 			throws JsonProcessingException {
 
-		List<Blog> blogs = blogsService.getTopBlogsByLimit(limit);
+		int limit = 100;
+		List<BlogEntry> blogs = blogEntryService.getTopBlogEntriesByLimit(limit);
 
-		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog blog : blogs) {
-			BlogVO vo = new BlogVO(blog);
+		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
+		for (BlogEntry blog : blogs) {
+			BlogEntryVO vo = new BlogEntryVO(blog);
 			Date updateDate = new Date(blog.getUpdatedOn());
 			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -128,18 +131,18 @@ public class BlogsController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
+	@RequestMapping(value = "/blog_entries/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<BlogEntryVO> deleteBlogEntry(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String blogKey[] = id.split("_");
 		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
-		blogsService.deleteBlogsById(key);
-		return new ResponseEntity<BlogVO>(HttpStatus.NO_CONTENT);
+		blogEntryService.deleteBlogEntryById(key);
+		return new ResponseEntity<BlogEntryVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blogs", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlog(@RequestBody BlogVO blogVO)
+	@RequestMapping(value = "/blog_entries", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createBlogEntry(@RequestBody BlogEntryVO blogVO)
 			throws ParseException {
 
 		Date dNow = new Date();
@@ -147,20 +150,20 @@ public class BlogsController {
 		Date dt = ft.parse(ft.format(dNow));
 		blogVO.setCreatedOn(dt.getTime());
 		blogVO.setUpdatedOn(dt.getTime());
-		blogsService.createBlogs(new Blog(blogVO));
+		blogEntryService.createBlogEntry(new BlogEntry(blogVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id,
-			@RequestBody BlogVO blogVO) throws ParseException {
+	@RequestMapping(value = "/blog_entries/{id}", consumes = "application/json", method = RequestMethod.PUT)
+	public ResponseEntity<BlogEntryVO> updateBlogEntry(@PathVariable("id") String id,
+			@RequestBody BlogEntryVO blogVO) throws ParseException {
 
 		System.out.println("Updating User " + id);
 		String blogKey[] = id.split("_");
 		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
-		Blog currentBlog = blogsService.getBlogsById(key);
+		BlogEntry currentBlog = blogEntryService.getBlogEntryById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");
 		}
@@ -169,8 +172,8 @@ public class BlogsController {
 		Date dt = ft.parse(ft.format(dNow));
 		blogVO.setCreatedOn(currentBlog.getBlogKey().getCreatedOn());
 		blogVO.setUpdatedOn(dt.getTime());
-		blogsService.updateBlog(new Blog(blogVO));
-		return new ResponseEntity<BlogVO>(blogVO, HttpStatus.OK);
+		blogEntryService.updateBlogEntry(new BlogEntry(blogVO));
+		return new ResponseEntity<BlogEntryVO>(blogVO, HttpStatus.OK);
 
 	}
 

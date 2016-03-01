@@ -3,10 +3,10 @@ package com.oak.entities;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import com.oak.vo.BlogVO;
+import com.oak.vo.BlogEntryVO;
 
 @Table("blogs")
-public class Blog {
+public class BlogEntry {
 
 	@PrimaryKey
 	private BlogKey blogKey;
@@ -22,11 +22,11 @@ public class Blog {
 	private Integer rating;
 	private Long hits;
 
-	public Blog() {
+	public BlogEntry() {
 		super();
 	}
 
-	public Blog(BlogVO blogVO) {
+	public BlogEntry(BlogEntryVO blogVO) {
 		super();
 		BlogKey key = new BlogKey();
 		key.setCategory(blogVO.getCategory());
