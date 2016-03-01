@@ -3,7 +3,9 @@ use oak;
 --DROP TABLE IF EXISTS keyspace_name.table_name;
 
 DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS blog_entries;
 DROP TABLE IF EXISTS blogs;
+DROP TABLE IF EXISTS blog_categories;
 DROP TABLE IF EXISTS states;
 DROP TABLE IF EXISTS incidents;
 DROP TABLE IF EXISTS incident_types;
@@ -61,10 +63,34 @@ CREATE TABLE articles (
     PRIMARY KEY (category, createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
-
+CREATE TABLE blog_categories(
+	id bigint PRIMARY KEY,
+    name text,
+    createdon bigint,
+    description text,
+    createdby text,
+    updatedby text,
+    updatedon bigint,
+    displayimage text      
+);
 
 CREATE TABLE blogs (
     category text,
+    createdon bigint,
+    title text,
+    description text,
+    createdby text,
+    updatedby text,
+    updatedon bigint,
+    displayimage text,
+    hits counter,
+    rating int,      
+    PRIMARY KEY (category, createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
+
+
+CREATE TABLE blog_entries (
+    blog text,
     updatedon bigint,
     approved boolean,
     approvedby text,
@@ -73,7 +99,7 @@ CREATE TABLE blogs (
     createdby text,
     createdon bigint,
     displayimage text,
-    hits bigint,
+    hits counter,
     rating int,
     title text,
     updatedby text,
