@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.BlogEntry;
-import com.oak.entities.BlogKey;
+import com.oak.entities.BlogEntryKey;
 import com.oak.service.BlogEntryService;
 import com.oak.vo.BlogEntryVO;
 
@@ -37,7 +37,7 @@ public class BlogEntriesController {
 	public BlogEntryVO getBlogEntryByID(@PathVariable("id") String id)
 			throws JsonProcessingException {
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
+		BlogEntryKey key = new BlogEntryKey(blogKey[0], Long.parseLong(blogKey[1]));
 		BlogEntry blog = blogEntryService.getBlogEntryById(key);
 		BlogEntryVO blogVO = new BlogEntryVO(blog);
 		Date updateDate = new Date(blog.getUpdatedOn());
@@ -135,7 +135,7 @@ public class BlogEntriesController {
 	public ResponseEntity<BlogEntryVO> deleteBlogEntry(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
+		BlogEntryKey key = new BlogEntryKey(blogKey[0], Long.parseLong(blogKey[1]));
 		blogEntryService.deleteBlogEntryById(key);
 		return new ResponseEntity<BlogEntryVO>(HttpStatus.NO_CONTENT);
 	}
@@ -162,7 +162,7 @@ public class BlogEntriesController {
 
 		System.out.println("Updating User " + id);
 		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
+		BlogEntryKey key = new BlogEntryKey(blogKey[0], Long.parseLong(blogKey[1]));
 		BlogEntry currentBlog = blogEntryService.getBlogEntryById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");

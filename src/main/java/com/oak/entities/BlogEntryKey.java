@@ -8,25 +8,25 @@ import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 @PrimaryKeyClass
-public class BlogKey implements Serializable {
+public class BlogEntryKey implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-	private String category;
+	@PrimaryKeyColumn(name = "blog", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String blog;
 
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
-	public String getCategory() {
-		return category;
+	public String getBlog() {
+		return blog;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setBlog(String blog) {
+		this.blog = blog;
 	}
 
 	public Long getCreatedOn() {
@@ -37,13 +37,13 @@ public class BlogKey implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public BlogKey() {
+	public BlogEntryKey() {
 		super();
 	}
 
-	public BlogKey(String category, Long createdOn) {
+	public BlogEntryKey(String category, Long createdOn) {
 		super();
-		this.category = category;
+		this.blog = category;
 		this.createdOn = createdOn;
 	}
 
@@ -54,7 +54,7 @@ public class BlogKey implements Serializable {
 		result = prime * result
 				+ ((createdOn == null) ? 0 : createdOn.hashCode());
 		result = prime * result
-				+ ((category == null) ? 0 : category.hashCode());
+				+ ((blog == null) ? 0 : blog.hashCode());
 		return result;
 	}
 
@@ -66,16 +66,16 @@ public class BlogKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BlogKey blogsKey = (BlogKey) obj;
+		BlogEntryKey blogsKey = (BlogEntryKey) obj;
 		if (createdOn == null) {
 			if (blogsKey.createdOn != null)
 				return false;
 		} else if (!createdOn.equals(blogsKey.createdOn))
 			return false;
-		if (category == null) {
-			if (blogsKey.category != null)
+		if (blog == null) {
+			if (blogsKey.blog != null)
 				return false;
-		} else if (!category.equals(blogsKey.category))
+		} else if (!blog.equals(blogsKey.blog))
 			return false;
 		return true;
 	}

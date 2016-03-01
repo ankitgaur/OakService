@@ -5,11 +5,11 @@ import org.springframework.data.cassandra.mapping.Table;
 
 import com.oak.vo.BlogEntryVO;
 
-@Table("blogs")
+@Table("blog_entries")
 public class BlogEntry {
 
 	@PrimaryKey
-	private BlogKey blogKey;
+	private BlogEntryKey blogKey;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -28,8 +28,8 @@ public class BlogEntry {
 
 	public BlogEntry(BlogEntryVO blogVO) {
 		super();
-		BlogKey key = new BlogKey();
-		key.setCategory(blogVO.getCategory());
+		BlogEntryKey key = new BlogEntryKey();
+		key.setBlog(blogVO.getCategory());
 		key.setCreatedOn(blogVO.getCreatedOn());
 		this.blogKey = key;
 		this.title = blogVO.getTitle();
@@ -45,11 +45,11 @@ public class BlogEntry {
 		this.hits = blogVO.getHits();
 	}
 
-	public BlogKey getBlogKey() {
+	public BlogEntryKey getBlogKey() {
 		return blogKey;
 	}
 
-	public void setBlogKey(BlogKey blogKey) {
+	public void setBlogKey(BlogEntryKey blogKey) {
 		this.blogKey = blogKey;
 	}
 

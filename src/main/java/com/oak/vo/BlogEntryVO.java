@@ -1,5 +1,8 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.oak.entities.BlogEntry;
 
 public class BlogEntryVO {
@@ -17,8 +20,8 @@ public class BlogEntryVO {
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
-	private String createdOnDate;
-	private String updatedOnDate;
+	private String createdOnStr;
+	private String updatedOnStr;
 
 	public BlogEntryVO() {
 
@@ -26,7 +29,8 @@ public class BlogEntryVO {
 
 	public BlogEntryVO(BlogEntry blog) {
 		super();
-		this.category = blog.getBlogKey().getCategory();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		this.category = blog.getBlogKey().getBlog();
 		this.updatedOn = blog.getUpdatedOn();
 		this.title = blog.getTitle();
 		this.content = blog.getContent();
@@ -39,8 +43,8 @@ public class BlogEntryVO {
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();
 		this.hits = blog.getHits();
-		this.createdOnDate = createdOnDate;
-		this.updatedOnDate = updatedOnDate;
+		this.createdOnStr = sdf.format(new Date(createdOn));
+		this.updatedOnStr = sdf.format(new Date(updatedOn));
 	}
 
 	public String getCategory() {
@@ -148,19 +152,19 @@ public class BlogEntryVO {
 	}
 
 	public String getCreatedOnDate() {
-		return createdOnDate;
+		return createdOnStr;
 	}
 
 	public void setCreatedOnDate(String createdOnDate) {
-		this.createdOnDate = createdOnDate;
+		this.createdOnStr = createdOnDate;
 	}
 
 	public String getUpdatedOnDate() {
-		return updatedOnDate;
+		return updatedOnStr;
 	}
 
 	public void setUpdatedOnDate(String updatedOnDate) {
-		this.updatedOnDate = updatedOnDate;
+		this.updatedOnStr = updatedOnDate;
 	}
 
 }

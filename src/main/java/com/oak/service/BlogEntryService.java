@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oak.entities.BlogEntry;
-import com.oak.entities.BlogKey;
+import com.oak.entities.BlogEntryKey;
 import com.oak.repositories.BlogEntryRepo;
 
 @Service("blogEntryService")
@@ -31,11 +31,11 @@ public class BlogEntryService {
 
 	}
 
-	public BlogEntry getBlogEntryById(BlogKey id) {
+	public BlogEntry getBlogEntryById(BlogEntryKey id) {
 		return blogEntryRepo.getBlogEntryById(id);
 	}
 
-	public void deleteBlogEntryById(BlogKey id) {
+	public void deleteBlogEntryById(BlogEntryKey id) {
 		
 		blogEntryRepo.deleteBlogEntryById(id);;
 
