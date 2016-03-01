@@ -40,8 +40,8 @@ public class BlogsController {
 		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
 		Blog blog = blogsService.getBlogsById(key);
 		BlogVO blogVO = new BlogVO(blog);
-		Date createDate = new Date(blog.getCreatedOn());
-		Date updateDate = new Date(blog.getBlogKey().getUpdatedOn());
+		Date updateDate = new Date(blog.getUpdatedOn());
+		Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(
 				"dd-MM-yyyy HH:mm:ss");
 		String dateCreateText = dateFormatter.format(createDate);
@@ -59,10 +59,10 @@ public class BlogsController {
 		List<Blog> blogs = blogsService.getBlogs();
 
 		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog article : blogs) {
-			BlogVO vo = new BlogVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+		for (Blog blog : blogs) {
+			BlogVO vo = new BlogVO(blog);
+			Date updateDate = new Date(blog.getUpdatedOn());
+			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -85,10 +85,10 @@ public class BlogsController {
 		List<Blog> blogs = blogsService.getTopBlogsByCategory(category, limit);
 
 		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog article : blogs) {
-			BlogVO vo = new BlogVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+		for (Blog blog : blogs) {
+			BlogVO vo = new BlogVO(blog);
+			Date updateDate = new Date(blog.getUpdatedOn());
+			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -110,10 +110,10 @@ public class BlogsController {
 		List<Blog> blogs = blogsService.getTopBlogsByLimit(limit);
 
 		List<BlogVO> blogVO = new ArrayList<BlogVO>();
-		for (Blog article : blogs) {
-			BlogVO vo = new BlogVO(article);
-			Date createDate = new Date(article.getCreatedOn());
-			Date updateDate = new Date(article.getBlogKey().getUpdatedOn());
+		for (Blog blog : blogs) {
+			BlogVO vo = new BlogVO(blog);
+			Date updateDate = new Date(blog.getUpdatedOn());
+			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -167,7 +167,7 @@ public class BlogsController {
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
-		blogVO.setCreatedOn(currentBlog.getCreatedOn());
+		blogVO.setCreatedOn(currentBlog.getBlogKey().getCreatedOn());
 		blogVO.setUpdatedOn(dt.getTime());
 		blogsService.updateBlog(new Blog(blogVO));
 		return new ResponseEntity<BlogVO>(blogVO, HttpStatus.OK);

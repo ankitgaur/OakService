@@ -18,8 +18,8 @@ public class BlogKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
-	@PrimaryKeyColumn(name = "updatedOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
-	private Long updatedOn;
+	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	private Long createdOn;
 
 	public String getCategory() {
 		return category;
@@ -29,22 +29,22 @@ public class BlogKey implements Serializable {
 		this.category = category;
 	}
 
-	public Long getUpdatedOn() {
-		return updatedOn;
+	public Long getCreatedOn() {
+		return createdOn;
 	}
 
-	public void setUpdatedOn(Long updatedOn) {
-		this.updatedOn = updatedOn;
+	public void setCreatedOn(Long createdOn) {
+		this.createdOn = createdOn;
 	}
 
 	public BlogKey() {
 		super();
 	}
 
-	public BlogKey(String category, Long updatedOn) {
+	public BlogKey(String category, Long createdOn) {
 		super();
 		this.category = category;
-		this.updatedOn = updatedOn;
+		this.createdOn = createdOn;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BlogKey implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((updatedOn == null) ? 0 : updatedOn.hashCode());
+				+ ((createdOn == null) ? 0 : createdOn.hashCode());
 		result = prime * result
 				+ ((category == null) ? 0 : category.hashCode());
 		return result;
@@ -67,10 +67,10 @@ public class BlogKey implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		BlogKey blogsKey = (BlogKey) obj;
-		if (updatedOn == null) {
-			if (blogsKey.updatedOn != null)
+		if (createdOn == null) {
+			if (blogsKey.createdOn != null)
 				return false;
-		} else if (!updatedOn.equals(blogsKey.updatedOn))
+		} else if (!createdOn.equals(blogsKey.createdOn))
 			return false;
 		if (category == null) {
 			if (blogsKey.category != null)

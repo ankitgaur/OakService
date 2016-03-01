@@ -27,14 +27,14 @@ public class BlogVO {
 	public BlogVO(Blog blog) {
 		super();
 		this.category = blog.getBlogKey().getCategory();
-		this.updatedOn = blog.getBlogKey().getUpdatedOn();
+		this.updatedOn = blog.getUpdatedOn();
 		this.title = blog.getTitle();
 		this.content = blog.getContent();
 		this.displayImage = blog.getDisplayImage();
 		this.approved = blog.getApproved();
 		this.approvedBy = blog.getApprovedBy();
 		this.approvedOn = blog.getApprovedOn();
-		this.createdOn = blog.getCreatedOn();
+		this.createdOn = blog.getBlogKey().getCreatedOn();
 		this.createdBy = blog.getCreatedBy();
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();

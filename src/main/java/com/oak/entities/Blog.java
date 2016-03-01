@@ -16,7 +16,7 @@ public class Blog {
 	private Boolean approved;
 	private String approvedBy;
 	private Long approvedOn;
-	private Long createdOn;
+	private Long updatedOn;
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
@@ -30,7 +30,7 @@ public class Blog {
 		super();
 		BlogKey key = new BlogKey();
 		key.setCategory(blogVO.getCategory());
-		key.setUpdatedOn(blogVO.getUpdatedOn());
+		key.setCreatedOn(blogVO.getCreatedOn());
 		this.blogKey = key;
 		this.title = blogVO.getTitle();
 		this.content = blogVO.getContent();
@@ -38,7 +38,7 @@ public class Blog {
 		this.approved = blogVO.getApproved();
 		this.approvedBy = blogVO.getApprovedBy();
 		this.approvedOn = blogVO.getApprovedOn();
-		this.createdOn = blogVO.getCreatedOn();
+		this.updatedOn = blogVO.getUpdatedOn();
 		this.createdBy = blogVO.getCreatedBy();
 		this.updatedBy = blogVO.getUpdatedBy();
 		this.rating = blogVO.getRating();
@@ -101,12 +101,12 @@ public class Blog {
 		this.approvedOn = approvedOn;
 	}
 
-	public Long getCreatedOn() {
-		return createdOn;
+	public Long getUpdatedOn() {
+		return updatedOn;
 	}
 
-	public void setCreatedOn(Long createdOn) {
-		this.createdOn = createdOn;
+	public void setUpdatedOn(Long updatedOn) {
+		this.updatedOn = updatedOn;
 	}
 
 	public String getCreatedBy() {
