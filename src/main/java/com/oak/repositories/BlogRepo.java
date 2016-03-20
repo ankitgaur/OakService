@@ -7,12 +7,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.entities.Blog;
-import com.oak.entities.BlogCategory;
 import com.oak.entities.BlogKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Transactional
-@Repository("blogsRepo")
+@Repository("blogRepo")
 public class BlogRepo {
 
 	@Autowired
@@ -40,7 +39,7 @@ public class BlogRepo {
 
 	}
 
-	public void deleteBlogCategoryById(BlogKey key) {
+	public void deleteBlogById(BlogKey key) {
 
 		oakCassandraTemplate.deleteById(key, Blog.class);
 

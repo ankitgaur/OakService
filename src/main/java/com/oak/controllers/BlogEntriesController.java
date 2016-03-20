@@ -79,18 +79,18 @@ public class BlogEntriesController {
 
 	//TODO : update code to get blog entries for a blog
 	@CrossOrigin
-	@RequestMapping(value = "/blog_entries/{blog}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/blog_entries/{blog}", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogEntryVO> getBlogEntriesForBlog(
-			@PathVariable("category") String category) throws JsonProcessingException {
+			@PathVariable("blog") String blog) throws JsonProcessingException {
 
 		int limit = 500;
-		List<BlogEntry> blogs = blogEntryService.getTopBlogEntriesByBlog(category, limit);
+		List<BlogEntry> blogs = blogEntryService.getTopBlogEntriesByBlog(blog, limit);
 
 		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
-		for (BlogEntry blog : blogs) {
-			BlogEntryVO vo = new BlogEntryVO(blog);
-			Date updateDate = new Date(blog.getUpdatedOn());
-			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
+		for (BlogEntry blogEntry : blogs) {
+			BlogEntryVO vo = new BlogEntryVO(blogEntry);
+			Date updateDate = new Date(blogEntry.getUpdatedOn());
+			Date createDate = new Date(blogEntry.getBlogKey().getCreatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -146,10 +146,10 @@ public class BlogEntriesController {
 			throws ParseException {
 
 		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
-		blogVO.setCreatedOn(dt.getTime());
-		blogVO.setUpdatedOn(dt.getTime());
+		/*SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));*/
+		blogVO.setCreatedOn(dNow.getTime());
+		blogVO.setUpdatedOn(dNow.getTime());
 		blogEntryService.createBlogEntry(new BlogEntry(blogVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -168,10 +168,10 @@ public class BlogEntriesController {
 			System.out.println("Blogs with id " + id + " not found");
 		}
 		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
+		/*SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date dt = ft.parse(ft.format(dNow));*/
 		blogVO.setCreatedOn(currentBlog.getBlogKey().getCreatedOn());
-		blogVO.setUpdatedOn(dt.getTime());
+		blogVO.setUpdatedOn(dNow.getTime());
 		blogEntryService.updateBlogEntry(new BlogEntry(blogVO));
 		return new ResponseEntity<BlogEntryVO>(blogVO, HttpStatus.OK);
 

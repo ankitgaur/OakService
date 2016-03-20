@@ -82,8 +82,7 @@ CREATE TABLE blogs (
     createdby text,
     updatedby text,
     updatedon bigint,
-    displayimage text,
-    hits counter,
+    displayimage text,    
     rating int,      
     PRIMARY KEY (category, createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
@@ -98,13 +97,12 @@ CREATE TABLE blog_entries (
     content text,
     createdby text,
     createdon bigint,
-    displayimage text,
-    hits counter,
+    displayimage text,    
     rating int,
     title text,
     updatedby text,
-    PRIMARY KEY (category, updatedon)
-)WITH CLUSTERING ORDER BY (updatedon DESC);
+    PRIMARY KEY (blog, createdon)
+)WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE incidents (
     incidenttype text,

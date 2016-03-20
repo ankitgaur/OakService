@@ -7,7 +7,7 @@ import com.oak.entities.BlogEntry;
 
 public class BlogEntryVO {
 
-	private String category;
+	private String blog;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -30,7 +30,7 @@ public class BlogEntryVO {
 	public BlogEntryVO(BlogEntry blog) {
 		super();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
-		this.category = blog.getBlogKey().getBlog();
+		this.blog = blog.getBlogKey().getBlog();
 		this.updatedOn = blog.getUpdatedOn();
 		this.title = blog.getTitle();
 		this.content = blog.getContent();
@@ -42,17 +42,33 @@ public class BlogEntryVO {
 		this.createdBy = blog.getCreatedBy();
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();
-		this.hits = blog.getHits();
+		//this.hits = blog.getHits();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
 	}
-
-	public String getCategory() {
-		return category;
+	
+	public String getBlog() {
+		return blog;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setBlog(String blog) {
+		this.blog = blog;
+	}
+
+	public String getCreatedOnStr() {
+		return createdOnStr;
+	}
+
+	public void setCreatedOnStr(String createdOnStr) {
+		this.createdOnStr = createdOnStr;
+	}
+
+	public String getUpdatedOnStr() {
+		return updatedOnStr;
+	}
+
+	public void setUpdatedOnStr(String updatedOnStr) {
+		this.updatedOnStr = updatedOnStr;
 	}
 
 	public String getTitle() {

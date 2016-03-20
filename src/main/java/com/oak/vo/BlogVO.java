@@ -7,7 +7,6 @@ import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 import com.oak.entities.Blog;
-import com.oak.entities.BlogCategory;
 import com.oak.entities.BlogKey;
 
 @Table("blog_categories")
@@ -16,6 +15,7 @@ public class BlogVO {
 	@PrimaryKey
 	private BlogKey blogKey;
 	private String title;
+	private String blogHash;
 	private String category;
 	private long createdOn;
 	private String description;
@@ -43,8 +43,9 @@ public class BlogVO {
 		this.updatedby = blog.getUpdatedby();
 		this.updatedon = blog.getUpdatedon();
 		this.displayimage = blog.getDisplayimage();
-		this.hits = blog.getHits();
+		//this.hits = blog.getHits();
 		this.rating = blog.getRating();
+		this.blogHash = blog.getBlogHash();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedon));
 	}
@@ -144,6 +145,14 @@ public class BlogVO {
 
 	public void setUpdatedOnStr(String updatedOnStr) {
 		this.updatedOnStr = updatedOnStr;
+	}
+
+	public String getBlogHash() {
+		return blogHash;
+	}
+
+	public void setBlogHash(String blogHash) {
+		this.blogHash = blogHash;
 	}
 
 }

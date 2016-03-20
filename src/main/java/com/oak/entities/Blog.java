@@ -3,7 +3,6 @@ package com.oak.entities;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import com.oak.vo.BlogCategoryVO;
 import com.oak.vo.BlogVO;
 
 @Table("blogs")
@@ -13,13 +12,14 @@ public class Blog {
 	private BlogKey blogKey;
 	private String category;
 	private String title;
+	private String blogHash;
 	private long createdon;
 	private String description;
 	private String createdby;
 	private String updatedby;
 	private long updatedon;
 	private String displayimage;
-	private long hits;
+	
 	private long rating;
 
 
@@ -28,7 +28,7 @@ public class Blog {
 
 	}
 
-	public Blog(BlogVO blogVO) {
+	public Blog(BlogVO blogVO)  {
 		BlogKey key = new BlogKey();
 		key.setCategory(blogVO.getCategory());
 		key.setCreatedOn(blogVO.getCreatedOn());
@@ -42,7 +42,14 @@ public class Blog {
 		this.updatedon = blogVO.getUpdatedon();
 		this.displayimage = blogVO.getDisplayimage();
 		this.rating = blogVO.getRating();
-		this.hits = blogVO.getHits();
+		
+		if(blogVO.getBlogHash()!=null && !blogVO.getBlogHash().isEmpty()){
+			this.blogHash = blogVO.getBlogHash();
+		}
+		else{
+			//this.blogHash = HashGeneratorUtil.generateMD5(this.title.trim());
+			this.blogHash = ""+this.title.trim().hashCode();
+		}
 	}
 
 	
@@ -71,13 +78,7 @@ public class Blog {
 		this.title = title;
 	}
 
-	public long getHits() {
-		return hits;
-	}
-
-	public void setHits(long hits) {
-		this.hits = hits;
-	}
+	
 
 	public long getRating() {
 		return rating;
@@ -133,6 +134,14 @@ public class Blog {
 
 	public void setDisplayimage(String displayimage) {
 		this.displayimage = displayimage;
+	}
+
+	public String getBlogHash() {
+		return blogHash;
+	}
+
+	public void setBlogHash(String blogHash) {
+		this.blogHash = blogHash;
 	}
 
 }

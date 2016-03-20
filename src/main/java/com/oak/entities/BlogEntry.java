@@ -20,7 +20,7 @@ public class BlogEntry {
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
-	private Long hits;
+	
 
 	public BlogEntry() {
 		super();
@@ -29,7 +29,7 @@ public class BlogEntry {
 	public BlogEntry(BlogEntryVO blogVO) {
 		super();
 		BlogEntryKey key = new BlogEntryKey();
-		key.setBlog(blogVO.getCategory());
+		key.setBlog(blogVO.getBlog());
 		key.setCreatedOn(blogVO.getCreatedOn());
 		this.blogKey = key;
 		this.title = blogVO.getTitle();
@@ -42,7 +42,7 @@ public class BlogEntry {
 		this.createdBy = blogVO.getCreatedBy();
 		this.updatedBy = blogVO.getUpdatedBy();
 		this.rating = blogVO.getRating();
-		this.hits = blogVO.getHits();
+		
 	}
 
 	public BlogEntryKey getBlogKey() {
@@ -131,14 +131,6 @@ public class BlogEntry {
 
 	public void setRating(Integer rating) {
 		this.rating = rating;
-	}
-
-	public Long getHits() {
-		return hits;
-	}
-
-	public void setHits(Long hits) {
-		this.hits = hits;
 	}
 
 }
