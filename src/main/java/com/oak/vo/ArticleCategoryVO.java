@@ -5,9 +5,9 @@ import java.util.Date;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 
-import com.oak.entities.BlogCategory;
+import com.oak.entities.ArticleCategory;
 
-public class BlogCategoryVO {
+public class ArticleCategoryVO {
 
 	@PrimaryKey
 	private long id;
@@ -21,11 +21,11 @@ public class BlogCategoryVO {
 	private String createdOnStr;
 	private String updatedOnStr;
 
-	public BlogCategoryVO(){
+	public ArticleCategoryVO(){
 		
 	}
 	
-	public BlogCategoryVO(BlogCategory category) {
+	public ArticleCategoryVO(ArticleCategory category) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		this.id = category.getId();
 		this.name = category.getName();

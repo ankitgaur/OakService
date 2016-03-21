@@ -1,13 +1,12 @@
-package com.oak.vo;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package com.oak.entities;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.Table;
 
-import com.oak.entities.BlogCategory;
+import com.oak.vo.ArticleCategoryVO;
 
-public class BlogCategoryVO {
+@Table("article_categories")
+public class ArticleCategory {
 
 	@PrimaryKey
 	private long id;
@@ -18,25 +17,20 @@ public class BlogCategoryVO {
 	private String updatedby;
 	private long updatedon;
 	private String displayimage;
-	private String createdOnStr;
-	private String updatedOnStr;
 
-	public BlogCategoryVO(){
-		
+	public ArticleCategory() {
+
 	}
-	
-	public BlogCategoryVO(BlogCategory category) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
-		this.id = category.getId();
-		this.name = category.getName();
-		this.createdon = category.getCreatedon();
-		this.description = category.getDescription();
-		this.createdby = category.getCreatedby();
-		this.updatedby = category.getUpdatedby();
-		this.updatedon = category.getUpdatedon();
-		this.displayimage = category.getDisplayimage();
-		this.createdOnStr = sdf.format(new Date(createdon));
-		this.updatedOnStr = sdf.format(new Date(updatedon));
+
+	public ArticleCategory(ArticleCategoryVO categoryVO) {
+		this.id = categoryVO.getId();
+		this.name = categoryVO.getName();
+		this.createdon = categoryVO.getCreatedon();
+		this.description = categoryVO.getDescription();
+		this.createdby = categoryVO.getCreatedby();
+		this.updatedby = categoryVO.getUpdatedby();
+		this.updatedon = categoryVO.getUpdatedon();
+		this.displayimage = categoryVO.getDisplayimage();
 	}
 
 	public long getId() {
@@ -101,22 +95,6 @@ public class BlogCategoryVO {
 
 	public void setDisplayimage(String displayimage) {
 		this.displayimage = displayimage;
-	}
-
-	public String getCreatedOnStr() {
-		return createdOnStr;
-	}
-
-	public void setCreatedOnStr(String createdOnStr) {
-		this.createdOnStr = createdOnStr;
-	}
-
-	public String getUpdatedOnStr() {
-		return updatedOnStr;
-	}
-
-	public void setUpdatedOnStr(String updatedOnStr) {
-		this.updatedOnStr = updatedOnStr;
 	}
 
 }

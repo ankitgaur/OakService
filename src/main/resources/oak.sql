@@ -3,6 +3,7 @@ use oak;
 --DROP TABLE IF EXISTS keyspace_name.table_name;
 
 DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS article_categories;
 DROP TABLE IF EXISTS blog_entries;
 DROP TABLE IF EXISTS blogs;
 DROP TABLE IF EXISTS blog_categories;
@@ -16,6 +17,17 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS placements;
 DROP TABLE IF EXISTS videos;
+
+CREATE TABLE article_categories(
+	id bigint PRIMARY KEY,
+    name text,
+    createdon bigint,
+    description text,
+    createdby text,
+    updatedby text,
+    updatedon bigint,
+    displayimage text      
+);
 
 CREATE TABLE placements(
  section text,

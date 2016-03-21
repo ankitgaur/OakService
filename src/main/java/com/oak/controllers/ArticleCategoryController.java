@@ -23,86 +23,86 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oak.entities.BlogCategory;
-import com.oak.service.BlogCategoryService;
-import com.oak.vo.BlogCategoryVO;
+import com.oak.entities.ArticleCategory;
+import com.oak.service.ArticleCategoryService;
+import com.oak.vo.ArticleCategoryVO;
 
 @RestController
-public class BlogCategoryController {
+public class ArticleCategoryController {
 
 	@Autowired
-	BlogCategoryService blogCategoryService;
+	ArticleCategoryService articleCategoryService;
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_categories", produces = "application/json", method = RequestMethod.GET)
-	public List<BlogCategoryVO> getAllBlogCategories() throws JsonParseException,
+	@RequestMapping(value = "/article_categories", produces = "application/json", method = RequestMethod.GET)
+	public List<ArticleCategoryVO> getAllArticleCategories() throws JsonParseException,
 			JsonMappingException, IOException {
-		List<BlogCategory> categories = blogCategoryService.getBlogCategories();
+		List<ArticleCategory> categories = articleCategoryService.getArticleCategories();
 		if (categories == null || categories.isEmpty()) {
 			return null;
 		}
 
-		List<BlogCategoryVO> categoriesVO = new ArrayList<BlogCategoryVO>();
+		List<ArticleCategoryVO> categoriesVO = new ArrayList<ArticleCategoryVO>();
 
-		for (BlogCategory category : categories) {
-			categoriesVO.add(new BlogCategoryVO(category));
+		for (ArticleCategory category : categories) {
+			categoriesVO.add(new ArticleCategoryVO(category));
 		}
 
 		return categoriesVO;
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_categories/{id}", produces = "application/json", method = RequestMethod.GET)
-	public BlogCategoryVO getBlogCategoryById(@PathVariable("id") long id)
+	@RequestMapping(value = "/article_categories/{id}", produces = "application/json", method = RequestMethod.GET)
+	public ArticleCategoryVO getArticleCategoryById(@PathVariable("id") long id)
 			throws JsonParseException, JsonMappingException, IOException {
-		BlogCategory category = blogCategoryService.getBlogCategoryById(id);
+		ArticleCategory category = articleCategoryService.getArticleCategoryById(id);
 		if (category == null) {
 			return null;
 		}
-		return new BlogCategoryVO(category);
+		return new ArticleCategoryVO(category);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_categories", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlogCategory(@RequestBody BlogCategoryVO categoryVO,
+	@RequestMapping(value = "/article_categories", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createArticleCategory(@RequestBody ArticleCategoryVO categoryVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
 		categoryVO.setId(new Date().getTime());
-		//TODO : Change to the name of logged in User		
+		//TODO : Change to the name of logged in User
 		categoryVO.setCreatedby("test");
 		categoryVO.setCreatedon(new Date().getTime());
-		blogCategoryService.createBlogCategory(new BlogCategory(categoryVO));
+		articleCategoryService.createArticleCategory(new ArticleCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<BlogCategoryVO> updateBlogCategory(@PathVariable("id") long id,
-			@RequestBody BlogCategoryVO categoryVO) throws JsonGenerationException,
+	@RequestMapping(value = "/article_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
+	public ResponseEntity<ArticleCategoryVO> updateArticleCategory(@PathVariable("id") long id,
+			@RequestBody ArticleCategoryVO categoryVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
 		//TODO : Change to the name of logged in User
 		categoryVO.setUpdatedby("test");
 		categoryVO.setUpdatedon(new Date().getTime());
-		blogCategoryService.updateBlogCategory(new BlogCategory(categoryVO));
-		return new ResponseEntity<BlogCategoryVO>(categoryVO, HttpStatus.OK);
+		articleCategoryService.updateArticleCategory(new ArticleCategory(categoryVO));
+		return new ResponseEntity<ArticleCategoryVO>(categoryVO, HttpStatus.OK);
 
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_categories/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<BlogCategoryVO> deleteBlogCategory(@PathVariable("id") long id) {
-		System.out.println("Fetching & Deleting Blog Category with id " + id);
+	@RequestMapping(value = "/article_categories/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<ArticleCategoryVO> deleteArticleCategory(@PathVariable("id") long id) {
+		System.out.println("Fetching & Deleting Article Category with id " + id);
 
-		BlogCategory category = blogCategoryService.getBlogCategoryById(id);
+		ArticleCategory category = articleCategoryService.getArticleCategoryById(id);
 		if (category == null) {
-			System.out.println("Unable to delete. Blog Category with id " + id
+			System.out.println("Unable to delete. Article Category with id " + id
 					+ " not found");
-			return new ResponseEntity<BlogCategoryVO>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<ArticleCategoryVO>(HttpStatus.NOT_FOUND);
 		}
-		blogCategoryService.deleteBlogCategoryById(id);
-		return new ResponseEntity<BlogCategoryVO>(HttpStatus.NO_CONTENT);
+		articleCategoryService.deleteArticleCategoryById(id);
+		return new ResponseEntity<ArticleCategoryVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@ExceptionHandler(Exception.class)
