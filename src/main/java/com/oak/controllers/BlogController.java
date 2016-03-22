@@ -43,7 +43,6 @@ public class BlogController {
 		if (blogs == null || blogs.isEmpty()) {
 			return null;
 		}
-
 		List<BlogVO> blogsVO = new ArrayList<BlogVO>();
 
 		for (Blog blog : blogs) {
@@ -77,7 +76,8 @@ public class BlogController {
 	public ResponseEntity<Void> createState(@RequestBody BlogVO blogVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
-
+		System.out.println(blogVO.getBlogHash());
+		System.out.println(blogVO.getCategory());
 		blogVO.setCreatedOn(new Date().getTime());
 		blogService.createBlog(new Blog(blogVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -86,9 +86,12 @@ public class BlogController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") long id,
+	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id,
 			@RequestBody BlogVO blogVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		String blogKey[] = id.split("_");
+		blogVO.setCategory(blogKey[0]);
+		blogVO.setCreatedOn(Long.parseLong(blogKey[1]));
 		blogService.updateBlog(new Blog(blogVO));
 		return new ResponseEntity<BlogVO>(blogVO, HttpStatus.OK);
 

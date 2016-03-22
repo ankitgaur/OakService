@@ -3,20 +3,13 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
-
 import com.oak.entities.Blog;
-import com.oak.entities.BlogKey;
 
-@Table("blog_categories")
 public class BlogVO {
 
-	@PrimaryKey
-	private BlogKey blogKey;
+	private String category;
 	private String title;
 	private String blogHash;
-	private String category;
 	private long createdOn;
 	private String description;
 	private String createdby;
@@ -28,29 +21,27 @@ public class BlogVO {
 	private String createdOnStr;
 	private String updatedOnStr;
 
+	public BlogVO() {
 
-	public BlogVO(){
-		
 	}
-	
+
 	public BlogVO(Blog blog) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
-		this.category = blog.getCategory();
+		this.category = blog.getBlogKey().getCategory();
 		this.title = blog.getTitle();
-		this.createdOn = blog.getCreatedon();
+		this.createdOn = blog.getBlogKey().getCreatedOn();
 		this.description = blog.getDescription();
 		this.createdby = blog.getCreatedby();
 		this.updatedby = blog.getUpdatedby();
 		this.updatedon = blog.getUpdatedon();
 		this.displayimage = blog.getDisplayimage();
-		//this.hits = blog.getHits();
+		this.hits = blog.getHits();
 		this.rating = blog.getRating();
 		this.blogHash = blog.getBlogHash();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedon));
 	}
 
-	
 	public long getCreatedOn() {
 		return createdOn;
 	}

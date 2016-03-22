@@ -91,11 +91,13 @@ CREATE TABLE blogs (
     createdon bigint,
     title text,
     description text,
+    blogHash text,
     createdby text,
     updatedby text,
     updatedon bigint,
     displayimage text,    
-    rating int,      
+    rating bigint, 
+    hits bigint,
     PRIMARY KEY (category, createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 

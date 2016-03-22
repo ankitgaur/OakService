@@ -10,49 +10,40 @@ public class Blog {
 
 	@PrimaryKey
 	private BlogKey blogKey;
-	private String category;
 	private String title;
 	private String blogHash;
-	private long createdon;
 	private String description;
 	private String createdby;
 	private String updatedby;
 	private long updatedon;
 	private String displayimage;
-	
 	private long rating;
-
-
+	private long hits;
 
 	public Blog() {
 
 	}
 
-	public Blog(BlogVO blogVO)  {
+	public Blog(BlogVO blogVO) {
 		BlogKey key = new BlogKey();
 		key.setCategory(blogVO.getCategory());
 		key.setCreatedOn(blogVO.getCreatedOn());
 		this.blogKey = key;
-		this.category = blogVO.getCategory();
 		this.title = blogVO.getTitle();
-		this.createdon = blogVO.getCreatedOn();
 		this.description = blogVO.getDescription();
 		this.createdby = blogVO.getCreatedby();
 		this.updatedby = blogVO.getUpdatedby();
 		this.updatedon = blogVO.getUpdatedon();
 		this.displayimage = blogVO.getDisplayimage();
 		this.rating = blogVO.getRating();
-		
-		if(blogVO.getBlogHash()!=null && !blogVO.getBlogHash().isEmpty()){
+
+		if (blogVO.getBlogHash() != null && !blogVO.getBlogHash().isEmpty()) {
 			this.blogHash = blogVO.getBlogHash();
-		}
-		else{
-			//this.blogHash = HashGeneratorUtil.generateMD5(this.title.trim());
-			this.blogHash = ""+this.title.trim().hashCode();
+		} else {
+			// this.blogHash = HashGeneratorUtil.generateMD5(this.title.trim());
+			this.blogHash = "" + this.title.trim().hashCode();
 		}
 	}
-
-	
 
 	public BlogKey getBlogKey() {
 		return blogKey;
@@ -60,14 +51,6 @@ public class Blog {
 
 	public void setBlogKey(BlogKey blogKey) {
 		this.blogKey = blogKey;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public String getTitle() {
@@ -78,22 +61,12 @@ public class Blog {
 		this.title = title;
 	}
 
-	
-
 	public long getRating() {
 		return rating;
 	}
 
 	public void setRating(long rating) {
 		this.rating = rating;
-	}
-
-	public long getCreatedon() {
-		return createdon;
-	}
-
-	public void setCreatedon(long createdon) {
-		this.createdon = createdon;
 	}
 
 	public String getDescription() {
@@ -142,6 +115,14 @@ public class Blog {
 
 	public void setBlogHash(String blogHash) {
 		this.blogHash = blogHash;
+	}
+
+	public long getHits() {
+		return hits;
+	}
+
+	public void setHits(long hits) {
+		this.hits = hits;
 	}
 
 }
