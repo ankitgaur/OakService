@@ -22,12 +22,13 @@ public class BlogEntryRepo {
 		return blogs;
 	}
 
-	public List<BlogEntry> getTopBlogEntriesByCategory(String category, int limit) {
+	public List<BlogEntry> getTopBlogEntriesByCategory(String category,
+			int limit) {
 		String blogs_by_category_qry = "SELECT * FROM blog_entries WHERE category=";
 		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'"
 				+ " LIMIT " + limit;
-		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
-				+ blogs_by_category_qry);
+		System.out
+				.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
 		List<BlogEntry> blogs = oakCassendraTemplate.findByPartitionKey(
 				blogs_by_category_qry, BlogEntry.class);
 		return blogs;
@@ -36,8 +37,7 @@ public class BlogEntryRepo {
 	public List<BlogEntry> getTopBlogEntriesByLimit(int limit) {
 		String blogs_by_limit_qry = "SELECT * FROM blog_entries LIMIT ";
 		blogs_by_limit_qry = blogs_by_limit_qry + limit;
-		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
-				+ blogs_by_limit_qry);
+		System.out.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_limit_qry);
 		List<BlogEntry> articles = oakCassendraTemplate.findByLimit(
 				blogs_by_limit_qry, BlogEntry.class);
 		return articles;
