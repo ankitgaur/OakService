@@ -45,6 +45,12 @@ public class Blog {
 		}
 	}
 
+	public String generateId(){
+		String id = this.getBlogKey().getCategory()
+				+ "_"+this.getBlogKey().getCreatedOn();
+		return id;
+	}
+	
 	public BlogKey getBlogKey() {
 		return blogKey;
 	}

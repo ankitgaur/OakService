@@ -27,6 +27,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.oak.entities.Blog;
 import com.oak.entities.BlogKey;
 import com.oak.service.BlogService;
+import com.oak.service.CounterService;
+import com.oak.vo.BlogCountVO;
 import com.oak.vo.BlogVO;
 
 @RestController
@@ -34,6 +36,9 @@ public class BlogController {
 
 	@Autowired
 	BlogService blogService;
+	
+	@Autowired
+	CounterService counterService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
@@ -47,6 +52,26 @@ public class BlogController {
 
 		for (Blog blog : blogs) {
 			blogsVO.add(new BlogVO(blog));
+		}
+
+		return blogsVO;
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/blogcounts", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogCountVO> getAllBlogCounts() throws JsonParseException,
+			JsonMappingException, IOException {
+		List<Blog> blogs = blogService.getBlogs();
+		if (blogs == null || blogs.isEmpty()) {
+			return null;
+		}
+		List<BlogCountVO> blogsVO = new ArrayList<BlogCountVO>();
+
+		for (Blog blog : blogs) {
+			
+			BlogCountVO bcvo = new BlogCountVO(blog);	
+			bcvo.setCount(counterService.getCounterValue(blog.generateId()+"_count"));
+			blogsVO.add(bcvo);
 		}
 
 		return blogsVO;
