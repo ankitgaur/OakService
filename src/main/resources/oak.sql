@@ -49,14 +49,14 @@ CREATE TABLE counters(
 );
 
 CREATE TABLE images (
-  id text,  
+  prefix text,  
   name text,
   kbsize bigint,
   img blob, 
   createdby text,
   createdon bigint,
-  PRIMARY KEY (id)
-) ;
+  PRIMARY KEY (prefix,createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE articles (
     category text,

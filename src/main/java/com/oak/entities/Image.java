@@ -2,24 +2,27 @@ package com.oak.entities;
 
 import java.nio.ByteBuffer;
 
+import org.springframework.cassandra.core.PrimaryKeyType;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table(value = "images")
 public class Image {
 
 	@PrimaryKey
-	private String id;
+	private ImageKey key;
 	private String name;
 	private ByteBuffer img;
-	private Long kbsize;
-	private Long createdOn;
+	private Long kbsize;	
 	private String createdBy;
-	public String getId() {
-		return id;
+			
+	
+	public ImageKey getKey() {
+		return key;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setKey(ImageKey key) {
+		this.key = key;
 	}
 	public String getName() {
 		return name;
@@ -40,16 +43,11 @@ public class Image {
 	public void setKbsize(Long kbsize) {
 		this.kbsize = kbsize;
 	}
-	public Long getCreatedOn() {
-		return createdOn;
-	}
-	public void setCreatedOn(Long createdOn) {
-		this.createdOn = createdOn;
-	}
 	public String getCreatedBy() {
 		return createdBy;
 	}
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
-	}	
+	}
+		
 }
