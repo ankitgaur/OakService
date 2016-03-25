@@ -43,7 +43,7 @@ public class BlogEntryVO {
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
 		this.id = blog.getBlogKey().getBlog()
-				+ blog.getBlogKey().getCreatedOn();
+				+"_"+ blog.getBlogKey().getCreatedOn();
 	}
 
 	public String getBlog() {
