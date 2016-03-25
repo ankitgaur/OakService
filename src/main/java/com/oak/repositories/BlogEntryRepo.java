@@ -16,6 +16,9 @@ public class BlogEntryRepo {
 
 	@Autowired
 	private OakCassandraTemplate oakCassendraTemplate;
+	
+	@Autowired
+	private CountersRepo countersRepo;
 
 	public List<BlogEntry> getBlogEntries() {
 		List<BlogEntry> blogs = oakCassendraTemplate.findAll(BlogEntry.class);
@@ -57,6 +60,7 @@ public class BlogEntryRepo {
 	public void createBlogEntry(BlogEntry blog) {
 
 		oakCassendraTemplate.create(blog, BlogEntry.class);
+		countersRepo.increment(blog.getBlogKey().getBlog()+"_count");
 
 	}
 
