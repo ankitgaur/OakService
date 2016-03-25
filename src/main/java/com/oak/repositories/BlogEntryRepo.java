@@ -16,13 +16,30 @@ public class BlogEntryRepo {
 
 	@Autowired
 	private OakCassandraTemplate oakCassendraTemplate;
-	
+
 	@Autowired
 	private CountersRepo countersRepo;
 
 	public List<BlogEntry> getBlogEntries() {
-		List<BlogEntry> blogs = oakCassendraTemplate.findAll(BlogEntry.class);
-		return blogs;
+		//List<BlogEntry> blogs = oakCassendraTemplate.findAll(BlogEntry.class);
+		//return blogs;
+		List<BlogEntry> posts = getTopBlogEntriesByLimit(100);
+		return posts;
+	}
+
+	public void incrementHits(String blog, long createdOn) {
+		
+		BlogEntryKey id = new BlogEntryKey();
+		id.setBlog(blog);
+		id.setCreatedOn(createdOn);
+
+		long hits = getBlogEntryById(id).getHits();
+		long hitsnew = hits + 1;
+
+		String sql = "update oak.blog_entries set hits=" + hitsnew
+				+ " where blog='" + blog + "' and createdon='" + createdOn
+				+ "'";
+		oakCassendraTemplate.executeQuery(sql);
 	}
 
 	public List<BlogEntry> getTopBlogEntriesByCategory(String category,
@@ -60,7 +77,7 @@ public class BlogEntryRepo {
 	public void createBlogEntry(BlogEntry blog) {
 
 		oakCassendraTemplate.create(blog, BlogEntry.class);
-		countersRepo.increment(blog.getBlogKey().getBlog()+"_count");
+		countersRepo.increment(blog.getBlogKey().getBlog() + "_count");
 
 	}
 

@@ -115,6 +115,7 @@ CREATE TABLE blog_entries (
     rating int,
     title text,
     updatedby text,
+    hits bigint,
     PRIMARY KEY (blog, createdon)
 )WITH CLUSTERING ORDER BY (createdon DESC);
 

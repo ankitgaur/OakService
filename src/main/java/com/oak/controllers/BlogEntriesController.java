@@ -84,6 +84,31 @@ public class BlogEntriesController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/popular_blog_entries", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogEntryVO> getPopularBlogEntries() throws JsonProcessingException {
+		
+		List<BlogEntry> blogs = blogEntryService
+				.getBlogsByPopularity();
+
+		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
+		for (BlogEntry blog : blogs) {
+			BlogEntryVO vo = new BlogEntryVO(blog);
+			Date updateDate = new Date(blog.getUpdatedOn());
+			Date createDate = new Date(blog.getBlogKey().getCreatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnDate(dateCreateText);
+			vo.setUpdatedOnDate(updateCreateText);
+			blogVO.add(vo);
+		}
+
+		return blogVO;
+
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/blog_entries", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogEntryVO> getBlogEntries() throws JsonProcessingException {
 

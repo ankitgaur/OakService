@@ -1,10 +1,12 @@
 package com.oak.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oak.comparators.BlogEntryComparator;
 import com.oak.entities.BlogEntry;
 import com.oak.entities.BlogEntryKey;
 import com.oak.repositories.BlogEntryRepo;
@@ -19,6 +21,14 @@ public class BlogEntryService {
 		return blogEntryRepo.getBlogEntries();
 	}
 
+	public List<BlogEntry> getBlogsByPopularity(){
+		
+		List<BlogEntry> blogs = getBlogEntries();
+		Collections.sort(blogs,new BlogEntryComparator());
+		
+		return blogs;
+	}
+	
 	public List<BlogEntry> getTopBlogEntriesByBlog(String category, int limit) {
 
 		return blogEntryRepo.getTopBlogEntriesByCategory(category, limit);

@@ -20,7 +20,7 @@ public class BlogEntry {
 	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
-	
+	private long hits;
 
 	public BlogEntry() {
 		super();
@@ -131,6 +131,14 @@ public class BlogEntry {
 
 	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+
+	public long getHits() {
+		return hits;
+	}
+
+	public void setHits(long hits) {
+		this.hits = hits;
 	}
 
 }
