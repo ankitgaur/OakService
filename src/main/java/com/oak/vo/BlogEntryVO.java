@@ -22,10 +22,7 @@ public class BlogEntryVO {
 	private Long hits;
 	private String createdOnStr;
 	private String updatedOnStr;
-
-	public BlogEntryVO() {
-
-	}
+	private String id;
 
 	public BlogEntryVO(BlogEntry blog) {
 		super();
@@ -42,11 +39,13 @@ public class BlogEntryVO {
 		this.createdBy = blog.getCreatedBy();
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();
-		//this.hits = blog.getHits();
+		// this.hits = blog.getHits();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
+		this.id = blog.getBlogKey().getBlog()
+				+ blog.getBlogKey().getCreatedOn();
 	}
-	
+
 	public String getBlog() {
 		return blog;
 	}
@@ -181,6 +180,18 @@ public class BlogEntryVO {
 
 	public void setUpdatedOnDate(String updatedOnDate) {
 		this.updatedOnStr = updatedOnDate;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public BlogEntryVO() {
+
 	}
 
 }

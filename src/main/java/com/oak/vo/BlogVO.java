@@ -20,6 +20,7 @@ public class BlogVO {
 	private long rating;
 	private String createdOnStr;
 	private String updatedOnStr;
+	private String id;
 
 	public BlogVO() {
 
@@ -40,6 +41,8 @@ public class BlogVO {
 		this.blogHash = blog.getBlogHash();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedon));
+		this.id = blog.getBlogKey().getCategory()
+				+ blog.getBlogKey().getCreatedOn();
 	}
 
 	public long getCreatedOn() {
@@ -144,6 +147,14 @@ public class BlogVO {
 
 	public void setBlogHash(String blogHash) {
 		this.blogHash = blogHash;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
