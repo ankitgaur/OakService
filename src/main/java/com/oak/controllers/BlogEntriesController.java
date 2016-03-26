@@ -38,8 +38,8 @@ public class BlogEntriesController {
 			throws JsonProcessingException {
 
 		String blogKey[] = id.split("_");
-		BlogEntryKey key = new BlogEntryKey(blogKey[0],
-				Long.parseLong(blogKey[1]));
+		String blogVal = blogKey[0] + "_" + blogKey[1];
+		BlogEntryKey key = new BlogEntryKey(blogVal, Long.parseLong(blogKey[2]));
 
 		BlogEntry blog = blogEntryService.getBlogEntryById(key);
 		BlogEntryVO blogVO = new BlogEntryVO(blog);
@@ -85,10 +85,10 @@ public class BlogEntriesController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/popular_blog_entries", produces = "application/json", method = RequestMethod.GET)
-	public List<BlogEntryVO> getPopularBlogEntries() throws JsonProcessingException {
-		
-		List<BlogEntry> blogs = blogEntryService
-				.getBlogsByPopularity();
+	public List<BlogEntryVO> getPopularBlogEntries()
+			throws JsonProcessingException {
+
+		List<BlogEntry> blogs = blogEntryService.getBlogsByPopularity();
 
 		List<BlogEntryVO> blogVO = new ArrayList<BlogEntryVO>();
 		for (BlogEntry blog : blogs) {
@@ -107,7 +107,7 @@ public class BlogEntriesController {
 		return blogVO;
 
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/blog_entries", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogEntryVO> getBlogEntries() throws JsonProcessingException {
@@ -140,8 +140,8 @@ public class BlogEntriesController {
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String blogKey[] = id.split("_");
-		BlogEntryKey key = new BlogEntryKey(blogKey[0],
-				Long.parseLong(blogKey[1]));
+		String blogVal = blogKey[0] + "_" + blogKey[1];
+		BlogEntryKey key = new BlogEntryKey(blogVal, Long.parseLong(blogKey[2]));
 		blogEntryService.deleteBlogEntryById(key);
 		return new ResponseEntity<BlogEntryVO>(HttpStatus.NO_CONTENT);
 	}
@@ -171,8 +171,8 @@ public class BlogEntriesController {
 
 		System.out.println("Updating User " + id);
 		String blogKey[] = id.split("_");
-		BlogEntryKey key = new BlogEntryKey(blogKey[0],
-				Long.parseLong(blogKey[1]));
+		String blogVal = blogKey[0] + "_" + blogKey[1];
+		BlogEntryKey key = new BlogEntryKey(blogVal, Long.parseLong(blogKey[2]));
 		BlogEntry currentBlog = blogEntryService.getBlogEntryById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");
