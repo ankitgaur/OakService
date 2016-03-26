@@ -87,6 +87,7 @@ public class BlogEntriesController {
 	@RequestMapping(value = "/popular_blog_entries", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogEntryVO> getPopularBlogEntries() throws JsonProcessingException {
 		
+		int limit = 10;
 		List<BlogEntry> blogs = blogEntryService
 				.getBlogsByPopularity();
 
@@ -102,6 +103,10 @@ public class BlogEntriesController {
 			vo.setCreatedOnDate(dateCreateText);
 			vo.setUpdatedOnDate(updateCreateText);
 			blogVO.add(vo);
+			limit--;
+			if(limit <= 0){
+				break;
+			}
 		}
 
 		return blogVO;
