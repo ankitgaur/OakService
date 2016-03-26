@@ -38,8 +38,8 @@ public class BlogEntriesController {
 			throws JsonProcessingException {
 
 		String blogKey[] = id.split("_");
-		BlogEntryKey key = new BlogEntryKey(blogKey[0],
-				Long.parseLong(blogKey[1]));
+		BlogEntryKey key = new BlogEntryKey(blogKey[0]+"_"+blogKey[1],
+				Long.parseLong(blogKey[2]));
 
 		BlogEntry blog = blogEntryService.getBlogEntryById(key);
 		BlogEntryVO blogVO = new BlogEntryVO(blog);
