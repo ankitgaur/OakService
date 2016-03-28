@@ -2,12 +2,13 @@ package com.oak.comparators;
 
 import java.util.Comparator;
 
-import com.oak.entities.BlogEntry;
+import com.oak.entities.Article;
 
-public class BlogEntryComparator implements Comparator<BlogEntry> {
+public class ArticleComparator implements Comparator<Article> {
 
-	public int compare(BlogEntry o1, BlogEntry o2) {
+	public int compare(Article o1, Article o2) {
 		// TODO Auto-generated method stub
+		
 		if(o1.getHits()==null){
 			o1.setHits(0L);
 		}

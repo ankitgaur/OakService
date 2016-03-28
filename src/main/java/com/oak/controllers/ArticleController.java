@@ -46,8 +46,8 @@ public class ArticleController {
 				"dd-MM-yyyy HH:mm:ss");
 		String dateCreateText = dateFormatter.format(createDate);
 		String updateCreateText = dateFormatter.format(updateDate);
-		articleVO.setCreatedOnDate(dateCreateText);
-		articleVO.setUpdatedOnDate(updateCreateText);
+		articleVO.setCreatedOnStr(dateCreateText);
+		articleVO.setUpdatedOnStr(updateCreateText);
 		return articleVO;
 	}
 
@@ -64,14 +64,38 @@ public class ArticleController {
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
+			vo.setCreatedOnStr(dateCreateText);
+			vo.setUpdatedOnStr(updateCreateText);
 			articleVO.add(vo);
 		}
 		return articleVO;
 
 	}
 
+	@CrossOrigin
+	@RequestMapping(value = "/popular_articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	public List<ArticleVO> getPopularArticleByCategory(
+			@PathVariable("category") String category,
+			@PathVariable("limit") int limit) throws JsonProcessingException {
+
+		List<Article> articles = articleService.getPopularArticlesByCategory(
+				category, limit);
+		List<ArticleVO> articleVO = new ArrayList<ArticleVO>();
+		for (Article article : articles) {
+			ArticleVO vo = new ArticleVO(article);
+			Date createDate = new Date(article.getPk().getCreatedOn());
+			Date updateDate = new Date(article.getUpdatedOn());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String dateCreateText = dateFormatter.format(createDate);
+			String updateCreateText = dateFormatter.format(updateDate);
+			vo.setCreatedOnStr(dateCreateText);
+			vo.setUpdatedOnStr(updateCreateText);
+			articleVO.add(vo);
+		}
+		return articleVO;
+	}
+	
 	@CrossOrigin
 	@RequestMapping(value = "/articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticleByCategory(
@@ -89,8 +113,8 @@ public class ArticleController {
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
+			vo.setCreatedOnStr(dateCreateText);
+			vo.setUpdatedOnStr(updateCreateText);
 			articleVO.add(vo);
 		}
 		return articleVO;
@@ -112,8 +136,8 @@ public class ArticleController {
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
+			vo.setCreatedOnStr(dateCreateText);
+			vo.setUpdatedOnStr(updateCreateText);
 			articleVO.add(vo);
 		}
 		return articleVO;

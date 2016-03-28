@@ -1,11 +1,13 @@
 package com.oak.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oak.comparators.ArticleComparator;
 import com.oak.entities.Article;
 import com.oak.entities.ArticleKey;
 import com.oak.repositories.ArticleRepo;
@@ -22,6 +24,14 @@ public class ArticleService {
 
 	}
 
+	public List<Article> getPopularArticlesByCategory(String category, int limit) {
+
+		System.out.println("popular articles by limit");
+		List<Article> articles = articleRepo.getTopArticlesByCategory(category, limit);
+		Collections.sort(articles,new ArticleComparator());
+		return articles;
+	}
+	
 	public List<Article> getTopArticlesByCategory(String category, int limit) {
 
 		System.out.println("articles by limit");
