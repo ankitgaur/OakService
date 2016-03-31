@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS placements;
 DROP TABLE IF EXISTS videos;
+DROP TABLE IF EXISTS pages;
 
 CREATE TABLE article_categories(
 	id bigint PRIMARY KEY,
@@ -193,6 +194,18 @@ CREATE TABLE users (
     createdon bigint,
     updatedon bigint,
     PRIMARY KEY (email)
+);
+
+
+CREATE TABLE pages (
+    name text,
+    link text,
+    parent text,
+    createdby text,
+    updatedby text,
+    createdon bigint,
+    updatedon bigint,
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE videos (
