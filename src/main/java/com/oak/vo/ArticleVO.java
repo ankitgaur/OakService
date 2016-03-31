@@ -10,6 +10,7 @@ public class ArticleVO {
 	private String category;
 	private Long updatedOn;
 	private String title;
+	private String intro;
 	private String content;
 	private String displayImage;
 	private Boolean approved;
@@ -20,8 +21,8 @@ public class ArticleVO {
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
-	private String createdOnDate;
-	private String updatedOnDate;
+	private String createdOnStr;
+	private String updatedOnStr;
 
 	public ArticleVO() {
 
@@ -43,9 +44,9 @@ public class ArticleVO {
 		this.updatedBy = article.getUpdatedBy();
 		this.rating = article.getRating();
 		this.hits = article.getHits();
-		this.createdOnDate = sdf.format(new Date(createdOn));
-		this.updatedOnDate = sdf.format(new Date(updatedOn));
-
+		this.createdOnStr = sdf.format(new Date(createdOn));
+		this.updatedOnStr = sdf.format(new Date(updatedOn));
+		this.intro = article.getIntro();
 	}
 
 	public String getCategory() {
@@ -152,20 +153,30 @@ public class ArticleVO {
 		this.hits = hits;
 	}
 
-	public String getCreatedOnDate() {
-		return createdOnDate;
+	
+
+	public String getCreatedOnStr() {
+		return createdOnStr;
 	}
 
-	public void setCreatedOnDate(String createdOnDate) {
-		this.createdOnDate = createdOnDate;
+	public void setCreatedOnStr(String createdOnStr) {
+		this.createdOnStr = createdOnStr;
 	}
 
-	public String getUpdatedOnDate() {
-		return updatedOnDate;
+	public String getUpdatedOnStr() {
+		return updatedOnStr;
 	}
 
-	public void setUpdatedOnDate(String updatedOnDate) {
-		this.updatedOnDate = updatedOnDate;
+	public void setUpdatedOnStr(String updatedOnStr) {
+		this.updatedOnStr = updatedOnStr;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 
 }

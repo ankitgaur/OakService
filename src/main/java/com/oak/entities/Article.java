@@ -25,7 +25,8 @@ public class Article {
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
-
+	private String intro;
+	
 	public Article() {
 
 	}
@@ -47,6 +48,7 @@ public class Article {
 		this.updatedBy = articleVO.getUpdatedBy();
 		this.rating = articleVO.getRating();
 		this.hits = articleVO.getHits();
+		this.intro = articleVO.getIntro();
 	}
 
 	public ArticleKey getPk() {
@@ -143,6 +145,14 @@ public class Article {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 
 }

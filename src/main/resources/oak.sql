@@ -66,6 +66,7 @@ CREATE TABLE articles (
     approvedby text,
     approvedon bigint,
     content text,
+    intro text,
     createdby text,
     createdon bigint,
     displayimage text,
