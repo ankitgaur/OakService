@@ -3,9 +3,9 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.oak.entities.Pages;
+import com.oak.entities.Page;
 
-public class PagesVO {
+public class PageVO {
 
 	private String name;
 	private String link;
@@ -17,11 +17,11 @@ public class PagesVO {
 	private Long createdOn;
 	private Long updatedOn;
 
-	public PagesVO() {
+	public PageVO() {
 		super();
 	}
 
-	public PagesVO(Pages page) {
+	public PageVO(Page page) {
 		super();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		this.name = page.getName();

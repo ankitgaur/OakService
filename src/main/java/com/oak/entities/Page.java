@@ -3,10 +3,10 @@ package com.oak.entities;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import com.oak.vo.PagesVO;
+import com.oak.vo.PageVO;
 
-@Table(value = "users")
-public class Pages {
+@Table(value = "pages")
+public class Page {
 
 	@PrimaryKey
 	private String name;
@@ -17,11 +17,11 @@ public class Pages {
 	private Long updatedon;
 	private String parent;
 
-	public Pages() {
+	public Page() {
 		super();
 	}
 
-	public Pages(PagesVO pagesVO) {
+	public Page(PageVO pagesVO) {
 		super();
 		this.name = pagesVO.getName();
 		this.link = pagesVO.getLink();

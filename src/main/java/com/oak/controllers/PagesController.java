@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oak.entities.Pages;
+import com.oak.entities.Page;
 import com.oak.service.PagesService;
-import com.oak.vo.PagesVO;
+import com.oak.vo.PageVO;
 
 @RestController
 public class PagesController {
@@ -34,66 +34,66 @@ public class PagesController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/pages", produces = "application/json", method = RequestMethod.GET)
-	public List<PagesVO> getAllPages() throws JsonParseException,
+	public List<PageVO> getAllPages() throws JsonParseException,
 			JsonMappingException, IOException {
-		List<Pages> pages = pagesService.getPages();
+		List<Page> pages = pagesService.getPages();
 		if (pages == null || pages.isEmpty()) {
 			return null;
 		}
-		List<PagesVO> pagesVO = new ArrayList<PagesVO>();
+		List<PageVO> pagesVO = new ArrayList<PageVO>();
 
-		for (Pages page : pages) {
-			pagesVO.add(new PagesVO(page));
+		for (Page page : pages) {
+			pagesVO.add(new PageVO(page));
 		}
 		return pagesVO;
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/pages/{name}", produces = "application/json", method = RequestMethod.GET)
-	public PagesVO getPageById(@PathVariable("name") String id)
+	public PageVO getPageById(@PathVariable("name") String id)
 			throws JsonParseException, JsonMappingException, IOException {
-		Pages Page = pagesService.getPageById(id);
+		Page Page = pagesService.getPageById(id);
 		if (Page == null) {
 			return null;
 		}
-		return new PagesVO(Page);
+		return new PageVO(Page);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/pages", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createPage(@RequestBody PagesVO PageVO,
+	public ResponseEntity<Void> createPage(@RequestBody PageVO PageVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
-		pagesService.createPage(new Pages(PageVO));
+		pagesService.createPage(new Page(PageVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/pages/{name}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<PagesVO> updatePage(
-			@PathVariable("name") String pageName, @RequestBody PagesVO PagesVO)
+	public ResponseEntity<PageVO> updatePage(
+			@PathVariable("name") String pageName, @RequestBody PageVO PagesVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		pagesService.updatePage(new Pages(PagesVO));
-		return new ResponseEntity<PagesVO>(PagesVO, HttpStatus.OK);
+		pagesService.updatePage(new Page(PagesVO));
+		return new ResponseEntity<PageVO>(PagesVO, HttpStatus.OK);
 
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/pages/{name}", method = RequestMethod.DELETE)
-	public ResponseEntity<PagesVO> deletePage(
+	public ResponseEntity<PageVO> deletePage(
 			@PathVariable("name") String pageName) {
 		System.out.println("Fetching & Deleting Page with id " + pageName);
 
-		Pages Page = pagesService.getPageById(pageName);
+		Page Page = pagesService.getPageById(pageName);
 		if (Page == null) {
 			System.out.println("Unable to delete. Page with id " + pageName
 					+ " not found");
-			return new ResponseEntity<PagesVO>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<PageVO>(HttpStatus.NOT_FOUND);
 		}
 		pagesService.deletePageById(pageName);
-		return new ResponseEntity<PagesVO>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<PageVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@ExceptionHandler(Exception.class)
