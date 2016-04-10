@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS placements;
 DROP TABLE IF EXISTS videos;
 DROP TABLE IF EXISTS pages;
+DROP TABLE IF EXISTS sections;
 
 CREATE TABLE article_categories(
 	id bigint PRIMARY KEY,
@@ -31,6 +32,7 @@ CREATE TABLE article_categories(
 );
 
 CREATE TABLE placements(
+ page text,
  section text,
  position int,
  title text,
@@ -41,8 +43,8 @@ CREATE TABLE placements(
  createdon bigint,
  updatedby text,
  updatedon bigint,
- PRIMARY KEY (section,position)
-);
+ PRIMARY KEY ((page,section),position)
+)WITH CLUSTERING ORDER BY (position ASC);
 
 CREATE TABLE counters(
 	name text PRIMARY KEY,
@@ -207,6 +209,16 @@ CREATE TABLE pages (
     createdon bigint,
     updatedon bigint,
     PRIMARY KEY (name)
+);
+
+CREATE TABLE sections (
+    page text,
+	name text,    
+    createdby text,
+    updatedby text,
+    createdon bigint,
+    updatedon bigint,
+    PRIMARY KEY (page,name)
 );
 
 CREATE TABLE videos (

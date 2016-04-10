@@ -21,7 +21,7 @@ public class PlacementService {
 		return placementRepo.getPlacements();
 
 	}
-	
+
 	public List<Placement> findBySection(String section) {
 		return placementRepo.getPlacementsBySection(section);
 	}
@@ -29,25 +29,34 @@ public class PlacementService {
 	public Placement getPlacementById(String id) {
 
 		PlacementKey pk = new PlacementKey();
-		String section = id.split("_")[0];
-		int pos = Integer.parseInt(id.split("_")[1]);
-		
+
+		String[] keyarr = id.split("_");
+
+		String page = keyarr[0];
+		String section = keyarr[1];
+		int pos = Integer.parseInt(keyarr[2]);
+
+		pk.setPage(page);
 		pk.setSection(section);
 		pk.setPosition(pos);
-		
+
 		return placementRepo.getPlacementById(pk);
 	}
 
 	public void deletePlacementById(String id) {
 
 		PlacementKey pk = new PlacementKey();
-		
-		String section = id.split("_")[0];
-		int pos = Integer.parseInt(id.split("_")[1]);
-		
+
+		String[] keyarr = id.split("_");
+
+		String page = keyarr[0];
+		String section = keyarr[1];
+		int pos = Integer.parseInt(keyarr[2]);
+
+		pk.setPage(page);
 		pk.setSection(section);
 		pk.setPosition(pos);
-		
+
 		placementRepo.deletePlacementById(pk);
 	}
 

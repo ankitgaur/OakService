@@ -15,20 +15,32 @@ public class PlacementKey implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@PrimaryKeyColumn(name = "page", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String page;
+	
 	@PrimaryKeyColumn(name = "section", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String section;
 
-	@PrimaryKeyColumn(name = "position", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	@PrimaryKeyColumn(name = "position", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.ASCENDING)
 	private int position;
 
 	public PlacementKey() {
 		super();
 	}
 
-	public PlacementKey(String section, int position) {
+	public PlacementKey(String page, String section, int position) {
 		super();
+		this.page = page;
 		this.section = section;
 		this.position = position;
+	}
+	
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
 	}
 
 	public String getSection() {

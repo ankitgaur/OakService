@@ -5,6 +5,8 @@ import com.oak.entities.PlacementKey;
 
 public class PlacementVO {
 
+	private String id;
+	private String page;
 	private String section;
 	private int position;
 	private String title;
@@ -25,6 +27,7 @@ public class PlacementVO {
 	public PlacementVO(Placement placement) {
 
 		PlacementKey pk = placement.getPk();
+		this.page = pk.getPage();
 		this.section = pk.getSection();
 		this.position = pk.getPosition();
 		this.title = placement.getTitle();
@@ -36,6 +39,7 @@ public class PlacementVO {
 
 		this.createdOn = placement.getCreatedon();
 		this.updatedOn = placement.getUpdatedon();
+		this.id = this.page + "_" + this.section + "_" + this.position;
 
 		/*
 		 * SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -43,7 +47,15 @@ public class PlacementVO {
 		 * this.updatedOnStr = sdf.format(new Date(placement.getUpdatedon()));
 		 */
 	}
-	
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
 	public String getSection() {
 		return section;
 	}
@@ -138,6 +150,14 @@ public class PlacementVO {
 
 	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

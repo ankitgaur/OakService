@@ -26,9 +26,10 @@ public class Placement {
 	public Placement(PlacementVO placementVO) {
 		
 		PlacementKey pkey = new PlacementKey();
+		String page = placementVO.getPage();
 		String section = placementVO.getSection();
 		int pos = placementVO.getPosition();
-		
+		pkey.setPage(page);
 		pkey.setSection(section);
 		pkey.setPosition(pos);
 		
