@@ -23,7 +23,8 @@ public class PlacementRepo {
 	}
 	
 	public List<Placement> getPlacementsBySection(String section) {
-		String sqlQry = "select * from placements where section='"+section+"'";
+		String []sarr = section.split("_");
+		String sqlQry = "select * from placements where page='"+sarr[0]+"' and section='"+sarr[1]+"'";
 		List<Placement> placements = oakCassendraTemplate.findByPartitionKey(sqlQry, Placement.class);
 		return placements;
 	}
