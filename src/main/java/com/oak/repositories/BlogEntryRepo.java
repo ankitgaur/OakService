@@ -44,7 +44,7 @@ public class BlogEntryRepo {
 
 	public List<BlogEntry> getTopBlogEntriesByCategory(String category,
 			int limit) {
-		String blogs_by_category_qry = "SELECT * FROM blog_entries WHERE category=";
+		String blogs_by_category_qry = "SELECT * FROM blog_entries WHERE blog=";
 		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'"
 				+ " LIMIT " + limit;
 		System.out
