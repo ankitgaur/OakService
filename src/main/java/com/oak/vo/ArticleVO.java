@@ -7,6 +7,7 @@ import com.oak.entities.Article;
 
 public class ArticleVO {
 
+	private String id;
 	private String category;
 	private Long updatedOn;
 	private String title;
@@ -47,6 +48,7 @@ public class ArticleVO {
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
 		this.intro = article.getIntro();
+		this.setId(this.category + "_"+this.createdOn);
 	}
 
 	public String getCategory() {
@@ -177,6 +179,14 @@ public class ArticleVO {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
