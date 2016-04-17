@@ -238,3 +238,14 @@ CREATE TABLE videos (
     updatedon bigint,
     PRIMARY KEY (category, createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
+
+CREATE TABLE comments (
+    service text,     
+    service_id text,
+    createdon bigint,
+    comment text,     
+    createdby text,
+    updatedby text,    
+    updatedon bigint,
+    PRIMARY KEY ((service,service_id), createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
