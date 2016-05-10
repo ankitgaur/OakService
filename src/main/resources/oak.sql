@@ -249,3 +249,45 @@ CREATE TABLE comments (
     updatedon bigint,
     PRIMARY KEY ((service,service_id), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
+
+CREATE TABLE forum_categories(
+	id bigint PRIMARY KEY,
+    name text,
+    createdon bigint,
+    description text,
+    createdby text,
+    updatedby text,
+    updatedon bigint,
+    displayimage text      
+);
+
+CREATE TABLE forum_topics (
+    category text,
+    createdon bigint,
+    title text,
+    description text,
+    createdby text,
+    updatedby text,
+    updatedon bigint,
+    displayimage text,    
+    rating bigint, 
+    hits bigint,
+    PRIMARY KEY (category, createdon)
+) WITH CLUSTERING ORDER BY (createdon DESC);
+
+CREATE TABLE forum_posts (
+    topic text,
+    updatedon bigint,
+    approved boolean,
+    approvedby text,
+    approvedon bigint,
+    content text,
+    createdby text,
+    createdon bigint,
+    displayimage text,    
+    rating int,
+    title text,
+    updatedby text,
+    hits bigint,
+    PRIMARY KEY (topic, createdon)
+)WITH CLUSTERING ORDER BY (createdon DESC);
