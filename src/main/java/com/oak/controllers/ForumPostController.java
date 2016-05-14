@@ -32,34 +32,34 @@ public class ForumPostController {
 	ForumPostService forumPostService;
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles/{id}", produces = "application/json", method = RequestMethod.GET)
-	public ForumPostVO getSticleById(@PathVariable String id)
+	@RequestMapping(value = "/forum_post/{id}", produces = "application/json", method = RequestMethod.GET)
+	public ForumPostVO getForumPostById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		String articleKey[] = id.split("_");
-		ForumPostKey key = new ForumPostKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
+		String forumPostKey[] = id.split("_");
+		ForumPostKey key = new ForumPostKey(forumPostKey[0],
+				Long.parseLong(forumPostKey[1]));
 		ForumPost forumPost = forumPostService.getForumPostById(key);
-		ForumPostVO articleVO = new ForumPostVO(forumPost);
+		ForumPostVO forumPostVO = new ForumPostVO(forumPost);
 		Date createDate = new Date(forumPost.getPk().getCreatedOn());
 		Date updateDate = new Date(forumPost.getUpdatedOn());
 		SimpleDateFormat dateFormatter = new SimpleDateFormat(
 				"dd-MM-yyyy HH:mm:ss");
 		String dateCreateText = dateFormatter.format(createDate);
 		String updateCreateText = dateFormatter.format(updateDate);
-		articleVO.setCreatedOnStr(dateCreateText);
-		articleVO.setUpdatedOnStr(updateCreateText);
-		return articleVO;
+		forumPostVO.setCreatedOnStr(dateCreateText);
+		forumPostVO.setUpdatedOnStr(updateCreateText);
+		return forumPostVO;
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/forum_post", produces = "application/json", method = RequestMethod.GET)
 	public List<ForumPostVO> getForumPost() throws JsonProcessingException {
-		List<ForumPost> articles = forumPostService.getForumPosts();
+		List<ForumPost> forumPostList = forumPostService.getForumPosts();
 		List<ForumPostVO> articleVO = new ArrayList<ForumPostVO>();
-		for (ForumPost article : articles) {
-			ForumPostVO vo = new ForumPostVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
+		for (ForumPost forumPost : forumPostList) {
+			ForumPostVO vo = new ForumPostVO(forumPost);
+			Date createDate = new Date(forumPost.getPk().getCreatedOn());
+			Date updateDate = new Date(forumPost.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
@@ -73,92 +73,92 @@ public class ForumPostController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/popular_articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/popular_forum_post/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ForumPostVO> getPopularForumPostByCategory(
 			@PathVariable("category") String category,
 			@PathVariable("limit") int limit) throws JsonProcessingException {
 
-		List<ForumPost> articles = forumPostService
+		List<ForumPost> forumPostList = forumPostService
 				.getPopularForumPostsByCategory(category, limit);
-		List<ForumPostVO> articleVO = new ArrayList<ForumPostVO>();
-		for (ForumPost article : articles) {
-			ForumPostVO vo = new ForumPostVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
+		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
+		for (ForumPost forumPost : forumPostList) {
+			ForumPostVO forumPostVo = new ForumPostVO(forumPost);
+			Date createDate = new Date(forumPost.getPk().getCreatedOn());
+			Date updateDate = new Date(forumPost.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
-			articleVO.add(vo);
+			forumPostVo.setCreatedOnStr(dateCreateText);
+			forumPostVo.setUpdatedOnStr(updateCreateText);
+			forumPostVoList.add(forumPostVo);
 		}
-		return articleVO;
+		return forumPostVoList;
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/forum_post/{category}/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ForumPostVO> getForumPostByCategory(
 			@PathVariable("category") String category,
 			@PathVariable("limit") int limit) throws JsonProcessingException {
 
-		List<ForumPost> articles = forumPostService.getTopForumPostsByCategory(
-				category, limit);
-		List<ForumPostVO> articleVO = new ArrayList<ForumPostVO>();
-		for (ForumPost article : articles) {
-			ForumPostVO vo = new ForumPostVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
+		List<ForumPost> forumPostList = forumPostService
+				.getTopForumPostsByCategory(category, limit);
+		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
+		for (ForumPost forumPost : forumPostList) {
+			ForumPostVO vo = new ForumPostVO(forumPost);
+			Date createDate = new Date(forumPost.getPk().getCreatedOn());
+			Date updateDate = new Date(forumPost.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
 			vo.setCreatedOnStr(dateCreateText);
 			vo.setUpdatedOnStr(updateCreateText);
-			articleVO.add(vo);
+			forumPostVoList.add(vo);
 		}
-		return articleVO;
+		return forumPostVoList;
 
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/forum_post/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<ForumPostVO> getForumPostByLimit(
 			@PathVariable("limit") int limit) throws JsonProcessingException {
 
-		List<ForumPost> articles = forumPostService
+		List<ForumPost> forumPostList = forumPostService
 				.getTopForumPostsByLimit(limit);
-		List<ForumPostVO> articleVO = new ArrayList<ForumPostVO>();
-		for (ForumPost article : articles) {
-			ForumPostVO vo = new ForumPostVO(article);
+		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
+		for (ForumPost article : forumPostList) {
+			ForumPostVO forumPostVO = new ForumPostVO(article);
 			Date createDate = new Date(article.getPk().getCreatedOn());
 			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
 					"dd-MM-yyyy HH:mm:ss");
 			String dateCreateText = dateFormatter.format(createDate);
 			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
-			articleVO.add(vo);
+			forumPostVO.setCreatedOnStr(dateCreateText);
+			forumPostVO.setUpdatedOnStr(updateCreateText);
+			forumPostVoList.add(forumPostVO);
 		}
-		return articleVO;
+		return forumPostVoList;
 
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/forum_post/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ForumPostVO> deleteRticle(
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-		String articleKey[] = id.split("_");
-		ForumPostKey key = new ForumPostKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
+		String forumPostKey[] = id.split("_");
+		ForumPostKey key = new ForumPostKey(forumPostKey[0],
+				Long.parseLong(forumPostKey[1]));
 		forumPostService.deleteForumPostById(key);
 		return new ResponseEntity<ForumPostVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/forum_post", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumPost(
 			@RequestBody ForumPostVO articleVO) throws ParseException {
 		Date dNow = new Date();
@@ -171,28 +171,28 @@ public class ForumPostController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
+	@RequestMapping(value = "/forum_post/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ForumPostVO> updateForumPost(
 			@PathVariable("id") String articleID,
-			@RequestBody ForumPostVO articleVO) throws ParseException {
+			@RequestBody ForumPostVO forumPostVO) throws ParseException {
 
 		System.out.println("Updating User " + articleID);
-		String articleKey[] = articleID.split("_");
-		ForumPostKey key = new ForumPostKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
-		ForumPost article = forumPostService.getForumPostById(key);
-		if (article == null) {
+		String forumPostKey[] = articleID.split("_");
+		ForumPostKey key = new ForumPostKey(forumPostKey[0],
+				Long.parseLong(forumPostKey[1]));
+		ForumPost forumPost = forumPostService.getForumPostById(key);
+		if (forumPost == null) {
 			System.out.println("ForumPost with id " + articleID + " not found");
-			return new ResponseEntity<ForumPostVO>(articleVO,
+			return new ResponseEntity<ForumPostVO>(forumPostVO,
 					HttpStatus.BAD_REQUEST);
 		}
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
-		articleVO.setCreatedOn(article.getPk().getCreatedOn());
-		articleVO.setUpdatedOn(dt.getTime());
-		forumPostService.updateForumPost(new ForumPost(articleVO));
-		return new ResponseEntity<ForumPostVO>(articleVO, HttpStatus.OK);
+		forumPostVO.setCreatedOn(forumPost.getPk().getCreatedOn());
+		forumPostVO.setUpdatedOn(dt.getTime());
+		forumPostService.updateForumPost(new ForumPost(forumPostVO));
+		return new ResponseEntity<ForumPostVO>(forumPostVO, HttpStatus.OK);
 
 	}
 
