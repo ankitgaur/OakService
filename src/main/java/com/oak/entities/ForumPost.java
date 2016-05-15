@@ -5,7 +5,7 @@ import org.springframework.data.cassandra.mapping.Table;
 
 import com.oak.vo.ForumPostVO;
 
-@Table(value = "forum_post")
+@Table(value = "forum_posts")
 public class ForumPost {
 
 	/*
@@ -30,23 +30,23 @@ public class ForumPost {
 
 	}
 
-	public ForumPost(ForumPostVO articleVO) {
+	public ForumPost(ForumPostVO forumPostVO) {
 		super();
 		ForumPostKey forumPostKey = new ForumPostKey();
-		forumPostKey.setTopic(articleVO.getCategory());
-		forumPostKey.setCreatedOn(articleVO.getCreatedOn());
+		forumPostKey.setTopic(forumPostVO.getTopic());
+		forumPostKey.setCreatedOn(forumPostVO.getCreatedOn());
 		this.pk = forumPostKey;
-		this.title = articleVO.getTitle();
-		this.content = articleVO.getContent();
-		this.displayImage = articleVO.getDisplayImage();
-		this.approved = articleVO.getApproved();
-		this.approvedBy = articleVO.getApprovedBy();
-		this.approvedOn = articleVO.getApprovedOn();
-		this.updatedOn = articleVO.getUpdatedOn();
-		this.createdBy = articleVO.getCreatedBy();
-		this.updatedBy = articleVO.getUpdatedBy();
-		this.rating = articleVO.getRating();
-		this.hits = articleVO.getHits();
+		this.title = forumPostVO.getTitle();
+		this.content = forumPostVO.getContent();
+		this.displayImage = forumPostVO.getDisplayImage();
+		this.approved = forumPostVO.getApproved();
+		this.approvedBy = forumPostVO.getApprovedBy();
+		this.approvedOn = forumPostVO.getApprovedOn();
+		this.updatedOn = forumPostVO.getUpdatedOn();
+		this.createdBy = forumPostVO.getCreatedBy();
+		this.updatedBy = forumPostVO.getUpdatedBy();
+		this.rating = forumPostVO.getRating();
+		this.hits = forumPostVO.getHits();
 	}
 
 	public ForumPostKey getPk() {

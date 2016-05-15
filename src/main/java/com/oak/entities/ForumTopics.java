@@ -17,7 +17,6 @@ public class ForumTopics {
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
-	private String intro;
 
 	public ForumTopics() {
 
@@ -36,7 +35,6 @@ public class ForumTopics {
 		this.updatedBy = forumTopicsVO.getUpdatedBy();
 		this.rating = forumTopicsVO.getRating();
 		this.hits = forumTopicsVO.getHits();
-		this.intro = forumTopicsVO.getIntro();
 	}
 
 	public ForumTopicsKey getPk() {
@@ -101,14 +99,6 @@ public class ForumTopics {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
-	}
-
-	public String getIntro() {
-		return intro;
-	}
-
-	public void setIntro(String intro) {
-		this.intro = intro;
 	}
 
 }

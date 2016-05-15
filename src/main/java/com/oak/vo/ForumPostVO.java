@@ -9,6 +9,15 @@ public class ForumPostVO {
 
 	private String id;
 	private String topic;
+
+	public String getTopic() {
+		return topic;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+
 	private Long updatedOn;
 	private String title;
 	private String content;

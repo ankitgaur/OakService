@@ -11,7 +11,6 @@ public class ForumTopicsVO {
 	private String category;
 	private Long updatedOn;
 	private String title;
-	private String intro;
 	private String displayImage;
 	private Long createdOn;
 	private String createdBy;
@@ -39,7 +38,6 @@ public class ForumTopicsVO {
 		this.hits = article.getHits();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
-		this.intro = article.getIntro();
 		this.setId(this.category + "_" + this.createdOn);
 	}
 
@@ -134,14 +132,6 @@ public class ForumTopicsVO {
 
 	public void setUpdatedOnStr(String updatedOnStr) {
 		this.updatedOnStr = updatedOnStr;
-	}
-
-	public String getIntro() {
-		return intro;
-	}
-
-	public void setIntro(String intro) {
-		this.intro = intro;
 	}
 
 	public String getId() {

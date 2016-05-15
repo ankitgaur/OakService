@@ -160,13 +160,13 @@ public class ForumPostController {
 	@CrossOrigin
 	@RequestMapping(value = "/forum_post", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumPost(
-			@RequestBody ForumPostVO articleVO) throws ParseException {
+			@RequestBody ForumPostVO forumPostVO) throws ParseException {
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
-		articleVO.setCreatedOn(dt.getTime());
-		articleVO.setUpdatedOn(dt.getTime());
-		forumPostService.createForumPost(new ForumPost(articleVO));
+		forumPostVO.setCreatedOn(dt.getTime());
+		forumPostVO.setUpdatedOn(dt.getTime());
+		forumPostService.createForumPost(new ForumPost(forumPostVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
