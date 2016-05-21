@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oak.service.ImageService;
+import com.oak.vo.ImageUploadResponse;
 import com.oak.vo.ImageVO;
 
 @RestController
@@ -59,6 +60,25 @@ public class ImageController {
 		String id = imageService.saveImage(prefix, image.getOriginalFilename(),
 				image.getSize(), image.getBytes(),"test");
 		return id;
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/ckimages/{prefix}", method = RequestMethod.POST)
+	public ImageUploadResponse uploadCKImage(@RequestParam("upload") MultipartFile image,
+			@PathVariable String prefix) throws IOException {
+
+		//System.out.println(image.getSize() + image.getOriginalFilename());
+		//System.out.println(Arrays.toString(image.getBytes()));	
+		
+		String fname = image.getOriginalFilename();
+		//TODO : Get username from session
+		String id = imageService.saveImage(prefix, fname,
+				image.getSize(), image.getBytes(),"test");
+		ImageUploadResponse response = new ImageUploadResponse();
+		response.setUploaded(1);
+		response.setFilename(fname);
+		response.setUrl("http://localhost:6767/image/"+id);
+		return response;
 	}
 	
 	@CrossOrigin
