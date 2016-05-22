@@ -24,7 +24,7 @@ public class ForumPostRepo {
 	}
 
 	public List<ForumPost> getTopForumPostByCategory(String category, int limit) {
-		String forum_by_category_qry = "SELECT * FROM forum_posts WHERE category=";
+		String forum_by_category_qry = "SELECT * FROM forum_posts WHERE topic=";
 		forum_by_category_qry = forum_by_category_qry + "'" + category + "'"
 				+ " LIMIT " + limit;
 		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
