@@ -36,8 +36,9 @@ public class ForumPostController {
 	public ForumPostVO getForumPostById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
 		String forumPostKey[] = id.split("_");
-		ForumPostKey key = new ForumPostKey(forumPostKey[0],
-				Long.parseLong(forumPostKey[1]));
+		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
+		ForumPostKey key = new ForumPostKey(topicID,
+				Long.parseLong(forumPostKey[2]));
 		ForumPost forumPost = forumPostService.getForumPostById(key);
 		ForumPostVO forumPostVO = new ForumPostVO(forumPost);
 		Date createDate = new Date(forumPost.getPk().getCreatedOn());
@@ -151,8 +152,9 @@ public class ForumPostController {
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		String forumPostKey[] = id.split("_");
-		ForumPostKey key = new ForumPostKey(forumPostKey[0],
-				Long.parseLong(forumPostKey[1]));
+		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
+		ForumPostKey key = new ForumPostKey(topicID,
+				Long.parseLong(forumPostKey[2]));
 		forumPostService.deleteForumPostById(key);
 		return new ResponseEntity<ForumPostVO>(HttpStatus.NO_CONTENT);
 	}
@@ -173,16 +175,17 @@ public class ForumPostController {
 	@CrossOrigin
 	@RequestMapping(value = "/forum_post/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ForumPostVO> updateForumPost(
-			@PathVariable("id") String articleID,
+			@PathVariable("id") String postID,
 			@RequestBody ForumPostVO forumPostVO) throws ParseException {
 
-		System.out.println("Updating User " + articleID);
-		String forumPostKey[] = articleID.split("_");
-		ForumPostKey key = new ForumPostKey(forumPostKey[0],
-				Long.parseLong(forumPostKey[1]));
+		System.out.println("Updating User " + postID);
+		String forumPostKey[] = postID.split("_");
+		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
+		ForumPostKey key = new ForumPostKey(topicID,
+				Long.parseLong(forumPostKey[2]));
 		ForumPost forumPost = forumPostService.getForumPostById(key);
 		if (forumPost == null) {
-			System.out.println("ForumPost with id " + articleID + " not found");
+			System.out.println("ForumPost with id " + postID + " not found");
 			return new ResponseEntity<ForumPostVO>(forumPostVO,
 					HttpStatus.BAD_REQUEST);
 		}
