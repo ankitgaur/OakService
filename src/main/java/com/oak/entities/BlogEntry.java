@@ -10,6 +10,7 @@ public class BlogEntry {
 
 	@PrimaryKey
 	private BlogEntryKey blogKey;
+	private String blogname;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -42,7 +43,7 @@ public class BlogEntry {
 		this.createdBy = blogVO.getCreatedBy();
 		this.updatedBy = blogVO.getUpdatedBy();
 		this.rating = blogVO.getRating();
-		
+		this.blogname = blogVO.getBlogname();
 	}
 
 	public BlogEntryKey getBlogKey() {
@@ -139,6 +140,14 @@ public class BlogEntry {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getBlogname() {
+		return blogname;
+	}
+
+	public void setBlogname(String blogname) {
+		this.blogname = blogname;
 	}
 
 }

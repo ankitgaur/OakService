@@ -134,7 +134,7 @@ public class IncidentController {
 
 		return incidentVO;
 	}
-
+	
 	@CrossOrigin
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncident(

@@ -136,6 +136,6 @@ public class Users {
 
 	public void setUpdatedon(Long updatedon) {
 		this.updatedon = updatedon;
-	}	
+	}
 
 }

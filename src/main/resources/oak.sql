@@ -108,6 +108,7 @@ CREATE TABLE blogs (
 
 CREATE TABLE blog_entries (
     blog text,
+    blogname text,
     updatedon bigint,
     approved boolean,
     approvedby text,

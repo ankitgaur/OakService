@@ -8,6 +8,7 @@ import com.oak.entities.BlogEntry;
 public class BlogEntryVO {
 
 	private String blog;
+	private String blogname;
 	private String title;
 	private String content;
 	private String displayImage;
@@ -39,6 +40,7 @@ public class BlogEntryVO {
 		this.createdBy = blog.getCreatedBy();
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();
+		this.blogname = blog.getBlogname();
 		// this.hits = blog.getHits();
 		this.createdOnStr = sdf.format(new Date(createdOn));
 		this.updatedOnStr = sdf.format(new Date(updatedOn));
@@ -192,6 +194,14 @@ public class BlogEntryVO {
 
 	public BlogEntryVO() {
 
+	}
+
+	public String getBlogname() {
+		return blogname;
+	}
+
+	public void setBlogname(String blogname) {
+		this.blogname = blogname;
 	}
 
 }
