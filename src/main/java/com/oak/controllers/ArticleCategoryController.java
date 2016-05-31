@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +34,7 @@ public class ArticleCategoryController {
 
 	@Autowired
 	ArticleCategoryService articleCategoryService;
-
+	
 	@CrossOrigin
 	@RequestMapping(value = "/article_categories", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleCategoryVO> getAllArticleCategories() throws JsonParseException,
@@ -68,9 +70,11 @@ public class ArticleCategoryController {
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+				
 		categoryVO.setId(new Date().getTime());
-		//TODO : Change to the name of logged in User
-		categoryVO.setCreatedby("test");
+		categoryVO.setCreatedby(email);
 		categoryVO.setCreatedon(new Date().getTime());
 		articleCategoryService.createArticleCategory(new ArticleCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -82,8 +86,10 @@ public class ArticleCategoryController {
 	public ResponseEntity<ArticleCategoryVO> updateArticleCategory(@PathVariable("id") long id,
 			@RequestBody ArticleCategoryVO categoryVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		//TODO : Change to the name of logged in User
-		categoryVO.setUpdatedby("test");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+				
+		categoryVO.setUpdatedby(email);
 		categoryVO.setUpdatedon(new Date().getTime());
 		articleCategoryService.updateArticleCategory(new ArticleCategory(categoryVO));
 		return new ResponseEntity<ArticleCategoryVO>(categoryVO, HttpStatus.OK);

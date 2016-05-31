@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +68,9 @@ public class GroupsController {
 	public ResponseEntity<Void> createGroup(@RequestBody GroupsVO groupsVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		groupsVO.setCreatedby(email);
 		groupService.createGroup(new Groups(groupsVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -76,6 +81,9 @@ public class GroupsController {
 	public ResponseEntity<GroupsVO> updateGroup(
 			@PathVariable("groupname") String id, @RequestBody GroupsVO groupsVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		groupsVO.setUpdatedby(email);
 		groupService.updateGroup(new Groups(groupsVO));
 		return new ResponseEntity<GroupsVO>(groupsVO, HttpStatus.OK);
 

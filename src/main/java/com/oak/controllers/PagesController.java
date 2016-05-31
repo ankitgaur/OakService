@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,6 +66,10 @@ public class PagesController {
 	public ResponseEntity<Void> createPage(@RequestBody PageVO PageVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		PageVO.setCreatedby(email);
 
 		pagesService.createPage(new Page(PageVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -75,6 +81,11 @@ public class PagesController {
 	public ResponseEntity<PageVO> updatePage(
 			@PathVariable("name") String pageName, @RequestBody PageVO PagesVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		PagesVO.setUpdatedby(email);
+		
 		pagesService.updatePage(new Page(PagesVO));
 		return new ResponseEntity<PageVO>(PagesVO, HttpStatus.OK);
 

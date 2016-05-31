@@ -19,4 +19,12 @@ public class CounterService {
 		}
 		return 0;
 	}
+
+	public void incrementCounter(String name) {
+		countersRepo.increment(name);
+	}
+
+	public void decrementCounter(String name) {
+		countersRepo.decrement(name);
+	}
 }

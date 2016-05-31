@@ -3,6 +3,7 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.BlogEntry;
 
 public class BlogEntryVO {
@@ -27,7 +28,7 @@ public class BlogEntryVO {
 
 	public BlogEntryVO(BlogEntry blog) {
 		super();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.blog = blog.getBlogKey().getBlog();
 		this.updatedOn = blog.getUpdatedOn();
 		this.title = blog.getTitle();

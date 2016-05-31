@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +32,7 @@ public class ArticleController {
 
 	@Autowired
 	ArticleService articleService;
-
+	
 	@CrossOrigin
 	@RequestMapping(value = "/articles/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ArticleVO getSticleById(@PathVariable String id)
@@ -159,11 +161,15 @@ public class ArticleController {
 	@RequestMapping(value = "/articles", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createArticle(@RequestBody ArticleVO articleVO)
 			throws ParseException {
-		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+				
+		Date dt = new Date();
+		
 		articleVO.setCreatedOn(dt.getTime());
-		articleVO.setUpdatedOn(dt.getTime());
+		articleVO.setCreatedBy(email);
+		
 		articleService.createArticle(new Article(articleVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
@@ -174,7 +180,9 @@ public class ArticleController {
 			@PathVariable("id") String articleID,
 			@RequestBody ArticleVO articleVO) throws ParseException {
 
-		System.out.println("Updating User " + articleID);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+				
 		String articleKey[] = articleID.split("_");
 		ArticleKey key = new ArticleKey(articleKey[0],
 				Long.parseLong(articleKey[1]));
@@ -184,11 +192,9 @@ public class ArticleController {
 			return new ResponseEntity<ArticleVO>(articleVO,
 					HttpStatus.BAD_REQUEST);
 		}
-		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
-		articleVO.setCreatedOn(article.getPk().getCreatedOn());
+		Date dt = new Date();
 		articleVO.setUpdatedOn(dt.getTime());
+		articleVO.setUpdatedBy(email);
 		articleService.updateArticle(new Article(articleVO));
 		return new ResponseEntity<ArticleVO>(articleVO, HttpStatus.OK);
 

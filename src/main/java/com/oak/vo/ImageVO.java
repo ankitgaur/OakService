@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.Image;
 
 public class ImageVO {
@@ -22,7 +23,7 @@ public class ImageVO {
 	
 	public ImageVO(Image img){
 		super();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.id = img.getKey().getPrefix()+"_"+img.getKey().getCreatedOn();
 		this.name = img.getName();
 		this.kbsize = img.getKbsize();

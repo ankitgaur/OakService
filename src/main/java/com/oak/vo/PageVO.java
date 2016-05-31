@@ -3,6 +3,7 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.Page;
 
 public class PageVO {
@@ -23,7 +24,7 @@ public class PageVO {
 
 	public PageVO(Page page) {
 		super();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.name = page.getName();
 		this.link = page.getLink();
 		this.parent = page.getParent();

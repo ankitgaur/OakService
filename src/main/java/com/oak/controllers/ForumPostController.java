@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.ForumPost;
 import com.oak.entities.ForumPostKey;
+import com.oak.service.CounterService;
 import com.oak.service.ForumPostService;
 import com.oak.vo.ForumPostVO;
 
@@ -30,6 +33,9 @@ public class ForumPostController {
 
 	@Autowired
 	ForumPostService forumPostService;
+	
+	@Autowired
+	CounterService counterService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/forum_post/{id}", produces = "application/json", method = RequestMethod.GET)
@@ -156,6 +162,7 @@ public class ForumPostController {
 		ForumPostKey key = new ForumPostKey(topicID,
 				Long.parseLong(forumPostKey[2]));
 		forumPostService.deleteForumPostById(key);
+		counterService.decrementCounter(topicID);
 		return new ResponseEntity<ForumPostVO>(HttpStatus.NO_CONTENT);
 	}
 
@@ -163,12 +170,16 @@ public class ForumPostController {
 	@RequestMapping(value = "/forum_post", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumPost(
 			@RequestBody ForumPostVO forumPostVO) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		forumPostVO.setCreatedOn(dt.getTime());
 		forumPostVO.setUpdatedOn(dt.getTime());
+		forumPostVO.setCreatedBy(email);
 		forumPostService.createForumPost(new ForumPost(forumPostVO));
+		counterService.incrementCounter(forumPostVO.getTopic());
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
@@ -177,6 +188,8 @@ public class ForumPostController {
 	public ResponseEntity<ForumPostVO> updateForumPost(
 			@PathVariable("id") String postID,
 			@RequestBody ForumPostVO forumPostVO) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		System.out.println("Updating User " + postID);
 		String forumPostKey[] = postID.split("_");
@@ -194,6 +207,7 @@ public class ForumPostController {
 		Date dt = ft.parse(ft.format(dNow));
 		forumPostVO.setCreatedOn(forumPost.getPk().getCreatedOn());
 		forumPostVO.setUpdatedOn(dt.getTime());
+		forumPostVO.setUpdatedBy(email);
 		forumPostService.updateForumPost(new ForumPost(forumPostVO));
 		return new ResponseEntity<ForumPostVO>(forumPostVO, HttpStatus.OK);
 

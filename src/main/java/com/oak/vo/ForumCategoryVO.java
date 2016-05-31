@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.ForumCategory;
 
 public class ForumCategoryVO {
@@ -17,6 +18,7 @@ public class ForumCategoryVO {
 	private String createdby;
 	private String updatedby;
 	private long updatedon;
+	private long topicCount;
 	private String displayimage;
 	private String createdOnStr;
 	private String updatedOnStr;
@@ -26,7 +28,7 @@ public class ForumCategoryVO {
 	}
 
 	public ForumCategoryVO(ForumCategory category) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.id = category.getId();
 		this.name = category.getName();
 		this.createdon = category.getCreatedon();
@@ -117,6 +119,14 @@ public class ForumCategoryVO {
 
 	public void setUpdatedOnStr(String updatedOnStr) {
 		this.updatedOnStr = updatedOnStr;
+	}
+
+	public long getTopicCount() {
+		return topicCount;
+	}
+
+	public void setTopicCount(long topicCount) {
+		this.topicCount = topicCount;
 	}
 
 }

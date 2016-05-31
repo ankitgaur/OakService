@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +54,9 @@ public class ImageController {
 	@RequestMapping(value = "/images/{prefix}", method = RequestMethod.POST)
 	public String uploadImage(@RequestParam("file") MultipartFile image,
 			@PathVariable String prefix) throws IOException {
-
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		//System.out.println(image.getSize() + image.getOriginalFilename());
 		//System.out.println(Arrays.toString(image.getBytes()));	
 				

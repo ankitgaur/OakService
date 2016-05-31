@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,9 +103,11 @@ public class BlogController {
 	public ResponseEntity<Void> createState(@RequestBody BlogVO blogVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
-		System.out.println(blogVO.getBlogHash());
-		System.out.println(blogVO.getCategory());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
 		blogVO.setCreatedOn(new Date().getTime());
+		blogVO.setCreatedby(email);
 		blogService.createBlog(new Blog(blogVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -114,9 +118,13 @@ public class BlogController {
 	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id,
 			@RequestBody BlogVO blogVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		String blogKey[] = id.split("_");
 		blogVO.setCategory(blogKey[0]);
 		blogVO.setCreatedOn(Long.parseLong(blogKey[1]));
+		blogVO.setUpdatedon(new Date().getTime());
+		blogVO.setUpdatedby(email);
 		blogService.updateBlog(new Blog(blogVO));
 		return new ResponseEntity<BlogVO>(blogVO, HttpStatus.OK);
 

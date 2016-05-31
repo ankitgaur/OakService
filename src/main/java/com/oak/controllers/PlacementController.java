@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,11 +85,14 @@ public class PlacementController {
 	@RequestMapping(value = "/placements", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createPlacement(
 			@RequestBody PlacementVO placementVO) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		Placement placement = new Placement(placementVO);
 		// TODO: Get user name from session
 		placement.setCreatedby("plcmntctrl");
 		placement.setCreatedon(new Date().getTime());
+		placement.setCreatedby(email);
 
 		placementService.createPlacement(placement);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
@@ -98,6 +103,8 @@ public class PlacementController {
 	public ResponseEntity<PlacementVO> updatePlacement(
 			@PathVariable("id") String placementID,
 			@RequestBody PlacementVO placementVO) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		System.out.println("Updating User " + placementID);
 
@@ -105,6 +112,7 @@ public class PlacementController {
 		// TODO: Get user name from session
 		placement.setCreatedby("plcmntctrl");
 		placement.setCreatedon(new Date().getTime());
+		placement.setUpdatedby(email);
 		placementService.updatePlacement(placement);
 		return new ResponseEntity<PlacementVO>(placementVO, HttpStatus.OK);
 

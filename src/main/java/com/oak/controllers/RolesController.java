@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +68,9 @@ public class RolesController {
 	public ResponseEntity<Void> createRole(@RequestBody RolesVO roleVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		roleVO.setCreatedby(email);
 
 		rolesService.createRole(new Roles(roleVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -78,6 +83,9 @@ public class RolesController {
 			@PathVariable("roleName") String roleName,
 			@RequestBody RolesVO roleVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		roleVO.setUpdatedby(email);
 		rolesService.updateRoles(new Roles(roleVO));
 		return new ResponseEntity<RolesVO>(roleVO, HttpStatus.OK);
 

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -151,13 +153,16 @@ public class BlogEntriesController {
 	public ResponseEntity<Void> createBlogEntry(@RequestBody BlogEntryVO blogVO)
 			throws ParseException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		Date dNow = new Date();
 		/*
 		 * SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		 * Date dt = ft.parse(ft.format(dNow));
 		 */
 		blogVO.setCreatedOn(dNow.getTime());
-		blogVO.setUpdatedOn(dNow.getTime());
+		blogVO.setCreatedBy(email);
+		
 		blogEntryService.createBlogEntry(new BlogEntry(blogVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -169,6 +174,9 @@ public class BlogEntriesController {
 			@PathVariable("id") String id, @RequestBody BlogEntryVO blogVO)
 			throws ParseException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
 		System.out.println("Updating User " + id);
 		String blogKey[] = id.split("_");
 		String blogVal = blogKey[0] + "_" + blogKey[1];
@@ -184,6 +192,7 @@ public class BlogEntriesController {
 		 */
 		blogVO.setCreatedOn(currentBlog.getBlogKey().getCreatedOn());
 		blogVO.setUpdatedOn(dNow.getTime());
+		blogVO.setUpdatedBy(email);
 		blogEntryService.updateBlogEntry(new BlogEntry(blogVO));
 		return new ResponseEntity<BlogEntryVO>(blogVO, HttpStatus.OK);
 

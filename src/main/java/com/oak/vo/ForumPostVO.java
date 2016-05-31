@@ -3,6 +3,7 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.ForumPost;
 
 public class ForumPostVO {
@@ -39,7 +40,7 @@ public class ForumPostVO {
 
 	public ForumPostVO(ForumPost forumPost) {
 		super();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.topic = forumPost.getPk().getTopic();
 		this.updatedOn = forumPost.getUpdatedOn();
 		this.title = forumPost.getTitle();

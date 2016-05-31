@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.oak.entities.ForumCategory;
+import com.oak.service.CounterService;
 import com.oak.service.ForumCategoryService;
 import com.oak.vo.ForumCategoryVO;
 
@@ -32,6 +35,9 @@ public class ForumCategoryController {
 
 	@Autowired
 	ForumCategoryService forumCategoryService;
+	
+	@Autowired
+	CounterService counterService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/forum_categories", produces = "application/json", method = RequestMethod.GET)
@@ -46,7 +52,10 @@ public class ForumCategoryController {
 		List<ForumCategoryVO> categoriesVO = new ArrayList<ForumCategoryVO>();
 
 		for (ForumCategory category : categories) {
-			categoriesVO.add(new ForumCategoryVO(category));
+			long cnt = counterService.getCounterValue(category.getName());
+			ForumCategoryVO vo = new ForumCategoryVO(category);
+			vo.setTopicCount(cnt);
+			categoriesVO.add(vo);
 		}
 
 		return categoriesVO;
@@ -71,10 +80,13 @@ public class ForumCategoryController {
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		categoryVO.setId(new Date().getTime());
 		// TODO : Change to the name of logged in User
 		categoryVO.setCreatedby("test");
 		categoryVO.setCreatedon(new Date().getTime());
+		categoryVO.setCreatedby(email);
 		forumCategoryService
 				.createForumCategory(new ForumCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -86,9 +98,12 @@ public class ForumCategoryController {
 	public ResponseEntity<ForumCategoryVO> updateForumCategory(
 			@PathVariable("id") long id, @RequestBody ForumCategoryVO categoryVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		// TODO : Change to the name of logged in User
 		categoryVO.setUpdatedby("test");
 		categoryVO.setUpdatedon(new Date().getTime());
+		categoryVO.setUpdatedby(email);
 		forumCategoryService
 				.updateForumCategory(new ForumCategory(categoryVO));
 		return new ResponseEntity<ForumCategoryVO>(categoryVO, HttpStatus.OK);

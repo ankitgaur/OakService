@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.ForumTopics;
 import com.oak.entities.ForumTopicsKey;
+import com.oak.service.CounterService;
 import com.oak.service.ForumTopicsService;
 import com.oak.vo.ForumTopicsVO;
 
@@ -31,6 +34,9 @@ public class ForumTopicsController {
 	@Autowired
 	ForumTopicsService forumTopicsService;
 
+	@Autowired
+	CounterService counterService;
+	
 	@CrossOrigin
 	@RequestMapping(value = "/forum_topics/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ForumTopicsVO getSticleById(@PathVariable String id)
@@ -83,6 +89,8 @@ public class ForumTopicsController {
 		List<ForumTopicsVO> forumTopicsVoList = new ArrayList<ForumTopicsVO>();
 		for (ForumTopics article : forum_topics) {
 			ForumTopicsVO forumTopicsVo = new ForumTopicsVO(article);
+			long cnt = counterService.getCounterValue(forumTopicsVo.getId());
+			forumTopicsVo.setPstCount(cnt);
 			Date createDate = new Date(article.getPk().getCreatedOn());
 			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -107,6 +115,8 @@ public class ForumTopicsController {
 		List<ForumTopicsVO> forumTopicsListVO = new ArrayList<ForumTopicsVO>();
 		for (ForumTopics article : forum_topics) {
 			ForumTopicsVO forumTopicsVO = new ForumTopicsVO(article);
+			long cnt = counterService.getCounterValue(forumTopicsVO.getId());
+			forumTopicsVO.setPstCount(cnt);
 			Date createDate = new Date(article.getPk().getCreatedOn());
 			Date updateDate = new Date(article.getUpdatedOn());
 			SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -154,6 +164,7 @@ public class ForumTopicsController {
 		ForumTopicsKey key = new ForumTopicsKey(articleKey[0],
 				Long.parseLong(articleKey[1]));
 		forumTopicsService.deleteForumTopicsById(key);
+		counterService.decrementCounter(key.getCategory());
 		return new ResponseEntity<ForumTopicsVO>(HttpStatus.NO_CONTENT);
 	}
 
@@ -161,12 +172,15 @@ public class ForumTopicsController {
 	@RequestMapping(value = "/forum_topics", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumTopics(
 			@RequestBody ForumTopicsVO forumTopicsVO) throws ParseException {
-		Date dNow = new Date();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		Date dNow = new Date();		
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
-		forumTopicsVO.setCreatedOn(dt.getTime());
-		forumTopicsVO.setUpdatedOn(dt.getTime());
+		forumTopicsVO.setCreatedOn(dNow.getTime());
+		forumTopicsVO.setCreatedBy(email);
 		forumTopicsService.createForumTopics(new ForumTopics(forumTopicsVO));
+		counterService.incrementCounter(forumTopicsVO.getCategory());
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
@@ -175,6 +189,8 @@ public class ForumTopicsController {
 	public ResponseEntity<ForumTopicsVO> updateForumTopics(
 			@PathVariable("id") String articleID,
 			@RequestBody ForumTopicsVO articleVO) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		System.out.println("Updating User " + articleID);
 		String articleKey[] = articleID.split("_");
@@ -192,6 +208,7 @@ public class ForumTopicsController {
 		Date dt = ft.parse(ft.format(dNow));
 		articleVO.setCreatedOn(article.getPk().getCreatedOn());
 		articleVO.setUpdatedOn(dt.getTime());
+		articleVO.setUpdatedBy(email);
 		forumTopicsService.updateForumTopics(new ForumTopics(articleVO));
 		return new ResponseEntity<ForumTopicsVO>(articleVO, HttpStatus.OK);
 

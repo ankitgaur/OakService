@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,8 +69,11 @@ public class StateController {
 	public ResponseEntity<Void> createState(@RequestBody StatesVO stateVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		stateVO.setId(new Date().getTime());
+		stateVO.setCreatedby(email);
 		stateService.createState(new States(stateVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -79,6 +84,9 @@ public class StateController {
 	public ResponseEntity<StatesVO> updateStates(@PathVariable("id") long id,
 			@RequestBody StatesVO stateVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		stateVO.setUpdatedby(email);
 		stateService.updateState(new States(stateVO));
 		return new ResponseEntity<StatesVO>(stateVO, HttpStatus.OK);
 

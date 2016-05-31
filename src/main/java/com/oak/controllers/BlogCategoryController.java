@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,8 +71,10 @@ public class BlogCategoryController {
 			JsonMappingException, IOException {
 
 		categoryVO.setId(new Date().getTime());
-		//TODO : Change to the name of logged in User		
-		categoryVO.setCreatedby("test");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		categoryVO.setCreatedby(email);
 		categoryVO.setCreatedon(new Date().getTime());
 		blogCategoryService.createBlogCategory(new BlogCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -82,8 +86,10 @@ public class BlogCategoryController {
 	public ResponseEntity<BlogCategoryVO> updateBlogCategory(@PathVariable("id") long id,
 			@RequestBody BlogCategoryVO categoryVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		//TODO : Change to the name of logged in User
-		categoryVO.setUpdatedby("test");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		categoryVO.setUpdatedby(email);
 		categoryVO.setUpdatedon(new Date().getTime());
 		blogCategoryService.updateBlogCategory(new BlogCategory(categoryVO));
 		return new ResponseEntity<BlogCategoryVO>(categoryVO, HttpStatus.OK);

@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -135,11 +137,14 @@ public class VideoController {
 	@RequestMapping(value = "/videos", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createVideo(@RequestBody VideoVO videoVO)
 			throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		videoVO.setCreatedOn(dt.getTime());
 		videoVO.setUpdatedOn(dt.getTime());
+		videoVO.setCreatedBy(email);
 		videoService.createVideo(new Video(videoVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
@@ -150,6 +155,9 @@ public class VideoController {
 			@PathVariable("id") String videoID,
 			@RequestBody VideoVO videoVO) throws ParseException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
 		System.out.println("Updating User " + videoID);
 		String videoKey[] = videoID.split("_");
 		VideoKey key = new VideoKey(videoKey[0],
@@ -165,6 +173,7 @@ public class VideoController {
 		Date dt = ft.parse(ft.format(dNow));
 		videoVO.setCreatedOn(video.getUpdatedOn());
 		videoVO.setUpdatedOn(dt.getTime());
+		videoVO.setUpdatedBy(email);
 		videoService.updateVideo(new Video(videoVO));
 		return new ResponseEntity<VideoVO>(videoVO, HttpStatus.OK);
 

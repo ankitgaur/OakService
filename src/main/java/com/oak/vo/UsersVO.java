@@ -3,6 +3,7 @@ package com.oak.vo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.Users;
 
 public class UsersVO {
@@ -28,7 +29,7 @@ public class UsersVO {
 
 	public UsersVO(Users user) {
 		super();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.email = user.getEmail();
 		this.name = user.getName();
 		this.username = user.getUsername();

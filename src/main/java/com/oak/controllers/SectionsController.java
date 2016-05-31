@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,6 +66,9 @@ public class SectionsController {
 	public ResponseEntity<Void> createSection(@RequestBody SectionVO SectionVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		SectionVO.setCreatedby(email);
 
 		sectionsService.createSection(new Section(SectionVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -75,6 +80,10 @@ public class SectionsController {
 	public ResponseEntity<SectionVO> updateSection(
 			@PathVariable("id") String id, @RequestBody SectionVO SectionsVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		SectionsVO.setUpdatedby(email);
 		sectionsService.updateSection(new Section(SectionsVO));
 		return new ResponseEntity<SectionVO>(SectionsVO, HttpStatus.OK);
 

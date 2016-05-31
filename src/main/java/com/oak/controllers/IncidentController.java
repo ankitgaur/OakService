@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -140,12 +142,15 @@ public class IncidentController {
 	public ResponseEntity<Void> createIncident(
 			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
 			JsonMappingException, IOException, ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		incidentVO.setCreatedOn(dt.getTime());
 		incidentVO.setReportDate(dt.getTime());
+		incidentVO.setCreatedBy(email);
 		incidentService.createIncident(new Incident(incidentVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -156,6 +161,8 @@ public class IncidentController {
 	public ResponseEntity<IncidentVO> updateIncident(
 			@RequestBody IncidentVO IncidentVO, @PathVariable("id") String id)
 			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
 
 		System.out.println("Updating User " + id);
 		String incidentKey[] = id.split("_");

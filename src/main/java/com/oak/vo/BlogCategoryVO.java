@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.BlogCategory;
 
 public class BlogCategoryVO {
@@ -26,7 +27,7 @@ public class BlogCategoryVO {
 	}
 	
 	public BlogCategoryVO(BlogCategory category) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.id = category.getId();
 		this.name = category.getName();
 		this.createdon = category.getCreatedon();

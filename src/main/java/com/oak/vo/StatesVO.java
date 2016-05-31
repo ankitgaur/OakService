@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.States;
 
 public class StatesVO {
@@ -34,7 +35,7 @@ public class StatesVO {
 	public StatesVO(States state) throws JsonParseException,
 			JsonMappingException, IOException {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		id = state.getId();
 		name = state.getName();
 		currGovt = state.getCurrGovt();

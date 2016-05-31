@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +58,9 @@ public class IncidentTypeController {
 	public ResponseEntity<Void> createIncidentType(
 			@RequestBody IncidentType typeVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		typeVO.setCreatedBy(email);
 		incidentTypeService.createIncidentType(typeVO);
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -67,6 +72,9 @@ public class IncidentTypeController {
 	public ResponseEntity<IncidentType> updateIncidentType(
 			@RequestBody IncidentType typeVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		typeVO.setUpdatedBy(email);
 		incidentTypeService.updateIncidentType(typeVO);
 		return new ResponseEntity<IncidentType>(typeVO, HttpStatus.OK);
 	}

@@ -35,6 +35,7 @@ public class DBAuthProvider implements AuthenticationProvider {
 				List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
 				grantedAuths.add(new SimpleGrantedAuthority("ROLE_" + "USER"));
 				Authentication auth = new UsernamePasswordAuthenticationToken(id, password, grantedAuths);
+				
 				return auth;
 			}
 
