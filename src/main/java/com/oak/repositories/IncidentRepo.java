@@ -47,6 +47,16 @@ public class IncidentRepo {
 				incidents_by_limit_qry, Incident.class);
 		return articles;
 	}
+	
+	public List<Incident> getIncidentsAfterId(long createdOn, int limit) {
+		String incidents_by_limit_qry = "SELECT * FROM incidents where createdon < " + createdOn +" LIMIT ";
+		incidents_by_limit_qry = incidents_by_limit_qry + limit + " ALLOW FILTERING";
+		System.out.println("ARTICLE_BY_CATEGORY_QRY ::: "
+				+ incidents_by_limit_qry);
+		List<Incident> articles = oakCassendraTemplate.findByLimit(
+				incidents_by_limit_qry, Incident.class);
+		return articles;
+	}
 
 	public Incident getIncidentById(IncidentKey id) {
 		Incident incident = oakCassendraTemplate.findById(id, Incident.class);

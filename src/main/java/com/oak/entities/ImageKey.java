@@ -15,9 +15,12 @@ public class ImageKey implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKeyColumn(name = "prefix", ordinal = 0, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
+	@PrimaryKeyColumn(name = "prefix", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String prefix;
-
+	
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdon", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 	
@@ -84,8 +87,13 @@ public class ImageKey implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

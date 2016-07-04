@@ -11,9 +11,9 @@ public class ForumTopics {
 	@PrimaryKey
 	private ForumTopicsKey pk;
 	private String title;
+	private String alias;
 	private String displayImage;
 	private Long updatedOn;
-	private String createdBy;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
@@ -27,11 +27,11 @@ public class ForumTopics {
 		ForumTopicsKey forumTopicsKey = new ForumTopicsKey();
 		forumTopicsKey.setCategory(forumTopicsVO.getCategory());
 		forumTopicsKey.setCreatedOn(forumTopicsVO.getCreatedOn());
+		forumTopicsKey.setCreatedBy(forumTopicsVO.getCreatedBy());
 		this.pk = forumTopicsKey;
 		this.title = forumTopicsVO.getTitle();
 		this.displayImage = forumTopicsVO.getDisplayImage();
 		this.updatedOn = forumTopicsVO.getUpdatedOn();
-		this.createdBy = forumTopicsVO.getCreatedBy();
 		this.updatedBy = forumTopicsVO.getUpdatedBy();
 		this.rating = forumTopicsVO.getRating();
 		this.hits = forumTopicsVO.getHits();
@@ -61,20 +61,12 @@ public class ForumTopics {
 		this.displayImage = displayImage;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
 	public Long getUpdatedOn() {
 		return updatedOn;
 	}
 
 	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
 	}
 
 	public String getUpdatedBy() {
@@ -99,6 +91,14 @@ public class ForumTopics {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }

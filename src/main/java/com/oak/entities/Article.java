@@ -15,13 +15,14 @@ public class Article {
 	@PrimaryKey
 	private ArticleKey pk;
 	private String title;
+	private String alias;
 	private String content;
 	private String displayImage;
 	private Boolean approved;
 	private String approvedBy;
 	private Long approvedOn;
 	private Long updatedOn;
-	private String createdBy;
+	private String author;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
@@ -36,6 +37,7 @@ public class Article {
 		ArticleKey aqrticleKey = new ArticleKey();
 		aqrticleKey.setCategory(articleVO.getCategory());
 		aqrticleKey.setCreatedOn(articleVO.getCreatedOn());
+		aqrticleKey.setCreatedBy(articleVO.getCreatedBy());
 		this.pk = aqrticleKey;
 		this.title = articleVO.getTitle();
 		this.content = articleVO.getContent();
@@ -43,12 +45,12 @@ public class Article {
 		this.approved = articleVO.getApproved();
 		this.approvedBy = articleVO.getApprovedBy();
 		this.approvedOn = articleVO.getApprovedOn();
-		this.updatedOn = articleVO.getUpdatedOn();
-		this.createdBy = articleVO.getCreatedBy();
+		this.updatedOn = articleVO.getUpdatedOn();		
 		this.updatedBy = articleVO.getUpdatedBy();
 		this.rating = articleVO.getRating();
 		this.hits = articleVO.getHits();
 		this.intro = articleVO.getIntro();
+		this.author = articleVO.getAuthor();
 	}
 
 	public ArticleKey getPk() {
@@ -107,9 +109,7 @@ public class Article {
 		this.approvedBy = approvedBy;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
+
 	
 	public Long getUpdatedOn() {
 		return updatedOn;
@@ -119,10 +119,7 @@ public class Article {
 		this.updatedOn = updatedOn;
 	}
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
+	
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -153,6 +150,22 @@ public class Article {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }

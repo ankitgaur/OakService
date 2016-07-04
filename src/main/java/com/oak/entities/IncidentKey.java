@@ -18,6 +18,9 @@ public class IncidentKey implements Serializable {
 	@PrimaryKeyColumn(name = "incidenttype", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String incidentType;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdon", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -41,10 +44,11 @@ public class IncidentKey implements Serializable {
 
 	}
 
-	public IncidentKey(String incidentType, Long createdOn) {
+	public IncidentKey(String incidentType, String createdBy, long createdOn) {
 		super();
 		this.incidentType = incidentType;
 		this.createdOn = createdOn;
+		this.createdBy = createdBy;
 	}
 
 	@Override
@@ -78,6 +82,14 @@ public class IncidentKey implements Serializable {
 		} else if (!incidentType.equals(other.incidentType))
 			return false;
 		return true;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

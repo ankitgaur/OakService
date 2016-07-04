@@ -2,12 +2,14 @@ package com.oak.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.comparators.ForumTopicsComparator;
+import com.oak.entities.Alias;
 import com.oak.entities.ForumTopics;
 import com.oak.entities.ForumTopicsKey;
 import com.oak.repositories.ForumTopicsRepo;
@@ -17,6 +19,9 @@ public class ForumTopicsService {
 
 	@Autowired
 	ForumTopicsRepo forumTopicsepo;
+	
+	@Autowired
+	AliasService aliasService;
 
 	public List<ForumTopics> getForumTopics() {
 
@@ -61,6 +66,15 @@ public class ForumTopicsService {
 	@Transactional
 	public void createForumTopics(ForumTopics article) {
 
+		UUID uuid = UUID.randomUUID();
+		Alias alias = new Alias();
+		alias.setId(uuid.toString());
+		alias.setCategory(article.getPk().getCategory());
+		alias.setCreatedby(article.getPk().getCreatedBy());
+		alias.setCreatedon(article.getPk().getCreatedOn());
+		aliasService.createAlias(alias);
+			
+		article.setAlias(alias.getId());
 		forumTopicsepo.createForumTopics(article);
 
 	}

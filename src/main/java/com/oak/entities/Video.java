@@ -16,15 +16,16 @@ public class Video {
 	private VideoKey pk;
 	private String title;
 	private String intro;    
+	private String alias;
 	private String videourl;
 	private String videoimgurl;
 	private Long hits;    
-    private int rating;
-    private boolean approved;
+    private Integer rating;
+    private Boolean approved;
 	private String approvedBy;
 	private Long approvedOn;
-	private Long updatedOn;
-	private String createdBy;
+	private Long updatedOn;	
+	private String author;
 	private String updatedBy;
   
 	public Video() {
@@ -36,6 +37,7 @@ public class Video {
 		VideoKey videoKey = new VideoKey();
 		videoKey.setCategory(videoVO.getCategory());
 		videoKey.setCreatedOn(videoVO.getCreatedOn());
+		videoKey.setCreatedBy(videoVO.getCreatedBy());
 		this.pk = videoKey;
 		this.title = videoVO.getTitle();
 		this.intro = videoVO.getIntro();
@@ -45,10 +47,10 @@ public class Video {
 		this.approvedBy = videoVO.getApprovedBy();
 		this.approvedOn = videoVO.getApprovedOn();
 		this.updatedOn = videoVO.getUpdatedOn();
-		this.createdBy = videoVO.getCreatedBy();
 		this.updatedBy = videoVO.getUpdatedBy();
 		this.rating = videoVO.getRating();
 		this.hits = videoVO.getHits();
+		this.author = videoVO.getAuthor();
 	}
 
 	public VideoKey getPk() {
@@ -99,19 +101,19 @@ public class Video {
 		this.hits = hits;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
 
-	public boolean isApproved() {
+	public Boolean isApproved() {
 		return approved;
 	}
 
-	public void setApproved(boolean approved) {
+	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
 
@@ -139,20 +141,28 @@ public class Video {
 		this.updatedOn = updatedOn;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }

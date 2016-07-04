@@ -26,9 +26,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oak.entities.Alias;
 import com.oak.entities.Incident;
 import com.oak.entities.IncidentKey;
+import com.oak.entities.User;
+import com.oak.service.AliasService;
 import com.oak.service.IncidentService;
+import com.oak.service.UsersService;
 import com.oak.vo.IncidentVO;
 
 @RestController
@@ -36,6 +40,12 @@ public class IncidentController {
 
 	@Autowired
 	IncidentService incidentService;
+	
+	@Autowired
+	UsersService usersService;
+	
+	@Autowired
+	AliasService aliasService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/incidents", produces = "application/json", method = RequestMethod.GET)
@@ -87,6 +97,32 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/incidents/page/{createdOn}", produces = "application/json", method = RequestMethod.GET)
+	public List<IncidentVO> getTopIncidentsByPage(
+			@PathVariable("createdOn") long createdOn) throws JsonGenerationException,
+			JsonMappingException, IOException {
+		int limit = 20;
+		List<Incident> incidents = incidentService
+				.getIncidentsAfterId(createdOn,limit);
+
+		List<IncidentVO> incidentVO = new ArrayList<IncidentVO>();
+		for (Incident incident : incidents) {
+			IncidentVO vo = new IncidentVO(incident);
+			Date createOn = new Date(incident.getIncidentKey().getCreatedOn());
+			Date reportDate = new Date(incident.getReportDate());
+			SimpleDateFormat dateFormatter = new SimpleDateFormat(
+					"dd-MM-yyyy HH:mm:ss");
+			String createDateText = dateFormatter.format(createOn);
+			String reportDateText = dateFormatter.format(reportDate);
+			vo.setCreatedOnStr(createDateText);
+			vo.setReportDateStr(reportDateText);
+			incidentVO.add(vo);
+		}
+
+		return incidentVO;
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/incidents/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getTopIncidentsByLimit(
 			@PathVariable("limit") int limit) throws JsonGenerationException,
@@ -117,9 +153,8 @@ public class IncidentController {
 			@PathVariable("incidentID") String incidentID)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		String incidentKey[] = incidentID.split("_");
-		IncidentKey key = new IncidentKey(incidentKey[0],
-				Long.parseLong(incidentKey[1]));
+		Alias alias = aliasService.getAliasById(incidentID);		
+		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
@@ -138,19 +173,39 @@ public class IncidentController {
 	}
 	
 	@CrossOrigin
+	@RequestMapping(value = "/incidents/bulk", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createIncidentBulk(
+			@RequestBody List<IncidentVO> incidentVOs) throws JsonGenerationException,
+			JsonMappingException, IOException, ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		User user = usersService.getUserById(email);
+		
+		for(IncidentVO incidentVO : incidentVOs){
+			incidentVO.setCreatedBy(email);
+			incidentVO.setAuthor(user.getUsername());
+			incidentService.createIncident(new Incident(incidentVO));
+		}	
+		
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncident(
 			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
 			JsonMappingException, IOException, ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
-
+		User user = usersService.getUserById(email);
 		Date dNow = new Date();
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
-		incidentVO.setCreatedOn(dt.getTime());
-		incidentVO.setReportDate(dt.getTime());
+		
+		incidentVO.setCreatedOn(dNow.getTime());
+		incidentVO.setReportDate(dNow.getTime());
 		incidentVO.setCreatedBy(email);
+		incidentVO.setAuthor(user.getUsername());
+		
 		incidentService.createIncident(new Incident(incidentVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -159,31 +214,30 @@ public class IncidentController {
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/{id}", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<IncidentVO> updateIncident(
-			@RequestBody IncidentVO IncidentVO, @PathVariable("id") String id)
+			@RequestBody IncidentVO incidentVO, @PathVariable("id") String id)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 
 		System.out.println("Updating User " + id);
-		String incidentKey[] = id.split("_");
-		IncidentKey key = new IncidentKey(incidentKey[0],
-				Long.parseLong(incidentKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
 		}
-		IncidentVO.setCreatedOn(Long.parseLong(incidentKey[1]));
-		IncidentVO.setType(incidentKey[0]);
-		incidentService.updateIncident(new Incident(IncidentVO));
-		return new ResponseEntity<IncidentVO>(IncidentVO, HttpStatus.OK);
+		//incidentVO.setUpdatedOn(alias.getCreatedon());
+		//incidentVO.setCreatedBy(alias.getCreatedby());
+		//incidentVO.setType(alias.getCategory());
+		incidentService.updateIncident(new Incident(incidentVO));
+		return new ResponseEntity<IncidentVO>(incidentVO, HttpStatus.OK);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable("incidentID") String incidentID) {
-		String incidentKey[] = incidentID.split("_");
-		IncidentKey key = new IncidentKey(incidentKey[0],
-				Long.parseLong(incidentKey[1]));
+		Alias alias = aliasService.getAliasById(incidentID);		
+		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		incidentService.deleteIncidentById(key);
 	}
 

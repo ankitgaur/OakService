@@ -1,5 +1,9 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.oak.config.OakConstants;
 import com.oak.entities.Groups;
 
 public class GroupsVO {
@@ -19,12 +23,19 @@ public class GroupsVO {
 
 	public GroupsVO(Groups group) {
 		super();
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.name = group.getName();
 		this.roles = group.getRoles();
 		this.createdby = group.getCreatedby();
 		this.updatedby = group.getUpdatedby();
 		this.createdon = group.getCreatedon();
 		this.updateon = group.getUpdateon();
+		if (createdon != null) {
+			this.createdOnStr = sdf.format(new Date(createdon));
+		}
+		if(updateon != null) {
+			this.updateOnStr = sdf.format(new Date(updateon));
+		}
 	}
 
 	public String getCreatedOnStr() {

@@ -18,6 +18,9 @@ public class BlogKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdby;
+	
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -41,10 +44,11 @@ public class BlogKey implements Serializable {
 		super();
 	}
 
-	public BlogKey(String category, Long createdOn) {
+	public BlogKey(String category, String createdby, Long createdOn) {
 		super();
 		this.category = category;
 		this.createdOn = createdOn;
+		this.createdby = createdby;
 	}
 
 	@Override
@@ -78,6 +82,14 @@ public class BlogKey implements Serializable {
 		} else if (!category.equals(blogsKey.category))
 			return false;
 		return true;
+	}
+
+	public String getCreatedby() {
+		return createdby;
+	}
+
+	public void setCreatedby(String createdby) {
+		this.createdby = createdby;
 	}
 
 }

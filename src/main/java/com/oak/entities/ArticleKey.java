@@ -18,6 +18,9 @@ public class ArticleKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -35,10 +38,11 @@ public class ArticleKey implements Serializable {
 		super();
 	}
 
-	public ArticleKey(String category, Long createdOn) {
+	public ArticleKey(String category, String createdBy, Long createdOn) {
 		super();
 		this.category = category;
 		this.createdOn = createdOn;
+		this.createdBy = createdBy;
 	}
 
 	@Override
@@ -84,6 +88,14 @@ public class ArticleKey implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

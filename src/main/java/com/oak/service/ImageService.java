@@ -4,10 +4,12 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oak.entities.Alias;
 import com.oak.entities.Image;
 import com.oak.entities.ImageKey;
 import com.oak.repositories.ImageRepo;
@@ -18,6 +20,9 @@ public class ImageService {
 
 	@Autowired
 	ImageRepo imageRepo;
+	
+	@Autowired
+	AliasService aliasService;
 
 	public List<ImageVO> getImagesForPrefix(String prefix) {
 		List<ImageVO> imgvos = new ArrayList<ImageVO>();
@@ -51,12 +56,11 @@ public class ImageService {
 	public String saveImage(String prefix, String name, long size,
 			byte[] content, String createdBy) {
 
+		long createdOn = new Date().getTime();
 		ImageKey key = new ImageKey();
-		key.setCreatedOn(new Date().getTime());
+		key.setCreatedOn(createdOn);
 		key.setPrefix(prefix);
-		
-
-		String id = key.getPrefix() + "_" + key.getCreatedOn();
+		key.setCreatedBy(createdBy);
 
 		Image image = new Image();
 		image.setKey(key);
@@ -64,21 +68,31 @@ public class ImageService {
 		image.setKbsize(size);
 		ByteBuffer buf = ByteBuffer.wrap(content);
 		image.setImg(buf);
-		image.setCreatedBy(createdBy);
+		
+		UUID uuid = UUID.randomUUID();
+		Alias alias = new Alias();
+		alias.setId(uuid.toString());
+		alias.setCategory(prefix);
+		alias.setCreatedby(createdBy);
+		alias.setCreatedon(createdOn);
+		aliasService.createAlias(alias);
+			
+		image.setAlias(alias.getId());
+		
 		imageRepo.createImage(image);
 
-		return id;
+		return alias.getId();
 	}
 
 	public byte[] getImage(String id) {
 		
-		String []arr = id.split("_");
-		
+		Alias alias = aliasService.getAliasById(id);
+				
 		ImageKey key = new ImageKey();
-		key.setPrefix(arr[0]);
-		key.setCreatedOn(Long.parseLong(arr[1]));
-		
-		
+		key.setPrefix(alias.getCategory());
+		key.setCreatedOn(alias.getCreatedon());
+		key.setCreatedBy(alias.getCreatedby());
+				
 		Image img = imageRepo.getImage(key);
 		ByteBuffer buf = img.getImg();
 		byte[] bytes = new byte[buf.remaining()];

@@ -1,10 +1,12 @@
 package com.oak.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oak.entities.Alias;
 import com.oak.entities.Blog;
 import com.oak.entities.BlogKey;
 import com.oak.repositories.BlogRepo;
@@ -14,6 +16,9 @@ public class BlogService {
 
 	@Autowired
 	private BlogRepo blogRepo;
+	
+	@Autowired
+	AliasService aliasService;
 	
 	public List<Blog> getBlogs() {
 		return blogRepo.getBlogs();
@@ -31,6 +36,15 @@ public class BlogService {
 
 	public void createBlog(Blog blog) {
 
+		UUID uuid = UUID.randomUUID();
+		Alias alias = new Alias();
+		alias.setId(uuid.toString());
+		alias.setCategory(blog.getBlogKey().getCategory());
+		alias.setCreatedby(blog.getBlogKey().getCreatedby());
+		alias.setCreatedon(blog.getBlogKey().getCreatedOn());
+		aliasService.createAlias(alias);
+			
+		blog.setAlias(alias.getId());
 		blogRepo.createBlog(blog);
 
 	}

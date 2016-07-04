@@ -4,7 +4,7 @@ use oak;
 
 DROP TABLE IF EXISTS articles;
 DROP TABLE IF EXISTS article_categories;
-DROP TABLE IF EXISTS blog_entries;
+DROP TABLE IF EXISTS blog_posts;
 DROP TABLE IF EXISTS blogs;
 DROP TABLE IF EXISTS blog_categories;
 DROP TABLE IF EXISTS states;
@@ -19,6 +19,11 @@ DROP TABLE IF EXISTS placements;
 DROP TABLE IF EXISTS videos;
 DROP TABLE IF EXISTS pages;
 DROP TABLE IF EXISTS sections;
+DROP TABLE IF EXISTS forum_categories;
+DROP TABLE IF EXISTS forum_topics;
+DROP TABLE IF EXISTS forum_posts;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS aliases;
 
 CREATE TABLE article_categories(
 	id bigint PRIMARY KEY,
@@ -52,13 +57,14 @@ CREATE TABLE counters(
 );
 
 CREATE TABLE images (
+  alias text,
   prefix text,  
   name text,
   kbsize bigint,
   img blob, 
   createdby text,
   createdon bigint,
-  PRIMARY KEY (prefix,createdon)
+  PRIMARY KEY ((prefix,createdby),createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE articles (
@@ -67,6 +73,7 @@ CREATE TABLE articles (
     approved boolean,
     approvedby text,
     approvedon bigint,
+    alias text,
     content text,
     intro text,
     createdby text,
@@ -76,7 +83,8 @@ CREATE TABLE articles (
     rating int,
     title text,
     updatedby text,
-    PRIMARY KEY (category, createdon)
+    author text,
+    PRIMARY KEY ((category,createdby), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE blog_categories(
@@ -95,20 +103,21 @@ CREATE TABLE blogs (
     createdon bigint,
     title text,
     description text,
-    blogHash text,
+    alias text,
     createdby text,
     updatedby text,
     updatedon bigint,
     displayimage text,    
     rating bigint, 
     hits bigint,
-    PRIMARY KEY (category, createdon)
+    PRIMARY KEY ((category,createdby), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
 
-CREATE TABLE blog_entries (
+CREATE TABLE blog_posts (
     blog text,
     blogname text,
+    alias text,
     updatedon bigint,
     approved boolean,
     approvedby text,
@@ -121,11 +130,13 @@ CREATE TABLE blog_entries (
     title text,
     updatedby text,
     hits bigint,
-    PRIMARY KEY (blog, createdon)
+    author text,
+    PRIMARY KEY ((blog,createdby), createdon)
 )WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE incidents (
     incidenttype text,
+    alias text,
     category text,
     createdon bigint,
     createdby text,
@@ -137,7 +148,8 @@ CREATE TABLE incidents (
     state text,
     status text,
     type text,
- PRIMARY KEY (incidenttype,  createdon)
+    author text,
+ PRIMARY KEY ((incidenttype,createdby),  createdon)
 )WITH CLUSTERING ORDER BY (createdon DESC);
 
 
@@ -225,6 +237,7 @@ CREATE TABLE sections (
 CREATE TABLE videos (
     category text,     
     title text,
+    alias text,
     intro text,    
     videourl text,
     videoimgurl text,
@@ -237,7 +250,8 @@ CREATE TABLE videos (
     updatedby text,
     createdon bigint,
     updatedon bigint,
-    PRIMARY KEY (category, createdon)
+    author text,
+    PRIMARY KEY ((category,createdby), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE comments (
@@ -248,6 +262,7 @@ CREATE TABLE comments (
     createdby text,
     updatedby text,    
     updatedon bigint,
+    author text,
     PRIMARY KEY ((service,service_id), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
@@ -266,6 +281,7 @@ CREATE TABLE forum_topics (
     category text,
     createdon bigint,
     title text,
+    alias text,
     description text,
     createdby text,
     updatedby text,
@@ -273,11 +289,12 @@ CREATE TABLE forum_topics (
     displayimage text,    
     rating bigint, 
     hits bigint,
-    PRIMARY KEY (category, createdon)
+    PRIMARY KEY ((category,createdby), createdon)
 ) WITH CLUSTERING ORDER BY (createdon DESC);
 
 CREATE TABLE forum_posts (
     topic text,
+    alias text,
     updatedon bigint,
     approved boolean,
     approvedby text,
@@ -290,5 +307,14 @@ CREATE TABLE forum_posts (
     title text,
     updatedby text,
     hits bigint,
-    PRIMARY KEY (topic, createdon)
+    author text,
+    PRIMARY KEY ((topic,createdby), createdon)
 )WITH CLUSTERING ORDER BY (createdon DESC);
+
+CREATE TABLE aliases (
+    id text,
+    category text,
+    createdby text,    
+    createdon bigint,    
+    PRIMARY KEY (id)
+);

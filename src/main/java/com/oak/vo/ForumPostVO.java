@@ -28,6 +28,7 @@ public class ForumPostVO {
 	private Long approvedOn;
 	private Long createdOn;
 	private String createdBy;
+	private String author;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
@@ -50,13 +51,18 @@ public class ForumPostVO {
 		this.approvedBy = forumPost.getApprovedBy();
 		this.approvedOn = forumPost.getApprovedOn();
 		this.createdOn = forumPost.getPk().getCreatedOn();
-		this.createdBy = forumPost.getCreatedBy();
+		this.createdBy = forumPost.getPk().getCreatedBy();
 		this.updatedBy = forumPost.getUpdatedBy();
 		this.rating = forumPost.getRating();
+		this.author = forumPost.getAuthor();
 		this.hits = forumPost.getHits();
-		this.createdOnStr = sdf.format(new Date(createdOn));
-		this.updatedOnStr = sdf.format(new Date(updatedOn));
-		this.setId(this.topic + "_" + this.createdOn);
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
+		this.id = forumPost.getAlias();
 	}
 
 	public String getCategory() {
@@ -185,6 +191,14 @@ public class ForumPostVO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 }

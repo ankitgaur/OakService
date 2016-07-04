@@ -1,6 +1,8 @@
 package com.oak.vo;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.oak.config.OakConstants;
 import com.oak.entities.Incident;
 
 public class IncidentVO {
@@ -21,7 +24,8 @@ public class IncidentVO {
 	private Map<String, String> questions;
 	private String status;
 	private Long reportDate;
-	private String createdBy;
+	private String createdBy;	
+	private String author;	
 	private Long createdOn;
 	private String createdOnStr;
 	private String reportDateStr;
@@ -48,8 +52,7 @@ public class IncidentVO {
 
 	public IncidentVO(Incident incident) throws JsonGenerationException,
 			JsonMappingException, IOException {
-		id = incident.getIncidentKey().getIncidentType() + "_"
-				+ incident.getIncidentKey().getCreatedOn();
+		id = incident.getAlias();
 		type = incident.getType();
 
 		state = incident.getState();
@@ -57,9 +60,10 @@ public class IncidentVO {
 		description = incident.getDescription();
 		status = incident.getStatus();
 		reportDate = incident.getReportDate();
-		createdBy = incident.getCreatedBy();
+		createdBy = incident.getIncidentKey().getCreatedBy();
 		createdOn = incident.getIncidentKey().getCreatedOn();
-
+		author = incident.getAuthor();
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		if (incident.getQuestions() != null
 				&& !incident.getQuestions().isEmpty()) {
 			Map<String, String> map = new HashMap<String, String>();
@@ -69,7 +73,11 @@ public class IncidentVO {
 					});
 			questions = map;
 		}
-
+		
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		
 	}
 
 	public String getType() {
@@ -140,7 +148,7 @@ public class IncidentVO {
 		return reportDate;
 	}
 
-	public void setReportDate(long reportDate) {
+	public void setReportDate(Long reportDate) {
 		this.reportDate = reportDate;
 	}
 
@@ -148,8 +156,16 @@ public class IncidentVO {
 		return createdOn;
 	}
 
-	public void setCreatedOn(long createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 }

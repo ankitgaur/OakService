@@ -34,13 +34,17 @@ public class ForumTopicsVO {
 		this.title = article.getTitle();
 		this.displayImage = article.getDisplayImage();
 		this.createdOn = article.getPk().getCreatedOn();
-		this.createdBy = article.getCreatedBy();
+		this.createdBy = article.getPk().getCreatedBy();
 		this.updatedBy = article.getUpdatedBy();
 		this.rating = article.getRating();
 		this.hits = article.getHits();
-		this.createdOnStr = sdf.format(new Date(createdOn));
-		this.updatedOnStr = sdf.format(new Date(updatedOn));
-		this.setId(this.category + "_" + this.createdOn);
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
+		this.id = article.getAlias();
 	}
 
 	public String getCategory() {

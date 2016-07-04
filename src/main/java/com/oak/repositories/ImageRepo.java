@@ -23,7 +23,7 @@ public class ImageRepo {
 	}
 
 	public List<Image> getImagesForPrefix(String prefix, int limit) {
-		String images_by_prefix = "SELECT prefix,name,kbsize,createdby,createdon FROM images WHERE prefix = '"
+		String images_by_prefix = "SELECT prefix,alias,name,kbsize,createdby,createdon FROM images WHERE prefix = '"
 				+ prefix + "' LIMIT " + limit;
 
 		List<Image> images = oakCassendraTemplate.findByPartitionKey(
@@ -32,7 +32,7 @@ public class ImageRepo {
 	}
 
 	public List<Image> getRecentImages(int limit) {
-		String images_by_prefix = "SELECT prefix,name,kbsize,createdby,createdon FROM images LIMIT "
+		String images_by_prefix = "SELECT prefix,alias,name,kbsize,createdby,createdon FROM images LIMIT "
 				+ limit;
 
 		List<Image> images = oakCassendraTemplate.findByLimit(

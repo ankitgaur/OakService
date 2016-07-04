@@ -2,9 +2,7 @@ package com.oak.entities;
 
 import java.nio.ByteBuffer;
 
-import org.springframework.cassandra.core.PrimaryKeyType;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table(value = "images")
@@ -12,10 +10,11 @@ public class Image {
 
 	@PrimaryKey
 	private ImageKey key;
+	private String alias;
 	private String name;
 	private ByteBuffer img;
 	private Long kbsize;	
-	private String createdBy;
+	
 			
 	
 	public ImageKey getKey() {
@@ -43,11 +42,10 @@ public class Image {
 	public void setKbsize(Long kbsize) {
 		this.kbsize = kbsize;
 	}
-	public String getCreatedBy() {
-		return createdBy;
+	public String getAlias() {
+		return alias;
 	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-		
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}		
 }

@@ -18,14 +18,16 @@ public class Incident {
 	private IncidentKey incidentKey;
 	private String type;
 	private String image;
+	private String alias;
 	private String state;
 	private String govt;
 	private String category;
 	private String description;
 	private String questions;
 	private String status;
+	private String author;
 	private Long reportDate;
-	private String createdBy;
+	
 
 	public Incident() {
 
@@ -36,6 +38,7 @@ public class Incident {
 		IncidentKey key = new IncidentKey();
 		key.setCreatedOn(incidentVO.getCreatedOn());
 		key.setIncidentType(incidentVO.getType());
+		key.setCreatedBy(incidentVO.getCreatedBy());
 		this.incidentKey = key;
 		this.type = incidentVO.getType();
 		this.state = incidentVO.getState();
@@ -43,7 +46,7 @@ public class Incident {
 		this.description = incidentVO.getDescription();
 		this.status = incidentVO.getStatus();
 		this.reportDate = incidentVO.getReportDate();
-		this.createdBy = incidentVO.getCreatedBy();
+		this.author = incidentVO.getAuthor();
 		//this.image = incidentVO.get;
 		if (incidentVO.getQuestions() != null
 				&& !incidentVO.getQuestions().isEmpty()) {
@@ -51,7 +54,7 @@ public class Incident {
 			ObjectWriter writer = new ObjectMapper().writer();
 			questions = writer.writeValueAsString(incidentVO.getQuestions());
 		}
-		//TODO: this.category = incidentVO.getCategory();
+		
 	}
 
 	public IncidentKey getIncidentKey() {
@@ -110,14 +113,6 @@ public class Incident {
 		this.status = status;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -140,5 +135,21 @@ public class Incident {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 }

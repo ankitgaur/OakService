@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oak.entities.Users;
+import com.oak.entities.User;
 import com.oak.service.UsersService;
 import com.oak.vo.UsersVO;
 
@@ -26,7 +26,7 @@ public class LoginController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
-		Users user = usersService.getUserById(email);
+		User user = usersService.getUserById(email);
 		UsersVO uvo = new UsersVO();
 		uvo.setName(user.getName());
 		uvo.setUsername(user.getUsername());

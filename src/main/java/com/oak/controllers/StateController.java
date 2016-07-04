@@ -65,6 +65,23 @@ public class StateController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/states/bulk", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createStateBulk(@RequestBody List<StatesVO> stateVOs,
+			UriComponentsBuilder ucBuilder) throws JsonParseException,
+			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+
+		for(StatesVO stateVO : stateVOs){
+			stateVO.setCreatedby(email);
+			stateService.createState(new States(stateVO));
+		}
+				
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/states", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createState(@RequestBody StatesVO stateVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,

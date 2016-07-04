@@ -16,7 +16,7 @@ public class CountersRepo {
 		
 		Counter counter = new Counter();
 		counter.setName(name);
-		counter.setVal(0);
+		counter.setVal(0L);
 		oakCassendraTemplate.create(counter, Counter.class);
 	}
 	

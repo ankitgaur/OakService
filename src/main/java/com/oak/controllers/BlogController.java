@@ -1,7 +1,6 @@
 package com.oak.controllers;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.oak.entities.Alias;
 import com.oak.entities.Blog;
 import com.oak.entities.BlogKey;
+import com.oak.service.AliasService;
 import com.oak.service.BlogService;
 import com.oak.service.CounterService;
 import com.oak.vo.BlogCountVO;
@@ -42,6 +43,9 @@ public class BlogController {
 	@Autowired
 	CounterService counterService;
 
+	@Autowired
+	AliasService aliasService;
+	
 	@CrossOrigin
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogVO> getAllBlog() throws JsonParseException,
@@ -83,18 +87,13 @@ public class BlogController {
 	@RequestMapping(value = "/blogs/{blogId}", produces = "application/json", method = RequestMethod.GET)
 	public BlogVO getStateById(@PathVariable("blogId") String blogId)
 			throws JsonParseException, JsonMappingException, IOException {
-		String blogKey[] = blogId.split("_");
-		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
+		
+		Alias alias = aliasService.getAliasById(blogId);		
+		BlogKey key = new BlogKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		
 		Blog blog = blogService.getBlogById(key);
 		BlogVO blogVO = new BlogVO(blog);
-		Date updateDate = new Date(blog.getUpdatedon());
-		Date createDate = new Date(blog.getBlogKey().getCreatedOn());
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MM-yyyy HH:mm:ss");
-		String dateCreateText = dateFormatter.format(createDate);
-		String updateCreateText = dateFormatter.format(updateDate);
-		blogVO.setCreatedOnStr(dateCreateText);
-		blogVO.setUpdatedOnStr(updateCreateText);
+		
 		return blogVO;
 	}
 
@@ -134,8 +133,8 @@ public class BlogController {
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting Blog with id " + id);
-		String blogKey[] = id.split("_");
-		BlogKey key = new BlogKey(blogKey[0], Long.parseLong(blogKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		BlogKey key = new BlogKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		blogService.deleteBlogById(key);
 		return new ResponseEntity<BlogVO>(HttpStatus.NO_CONTENT);
 	}

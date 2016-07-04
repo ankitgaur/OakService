@@ -7,7 +7,7 @@ public class BlogCountVO {
 	private String title;
 	private String displayimage;
 	private String id;
-	private long count;
+	private Long count;
 
 	public BlogCountVO() {
 
@@ -44,11 +44,11 @@ public class BlogCountVO {
 		this.id = id;
 	}
 
-	public long getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public void setCount(long count) {
+	public void setCount(Long count) {
 		this.count = count;
 	}
 

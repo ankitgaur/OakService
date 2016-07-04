@@ -1,5 +1,9 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.oak.config.OakConstants;
 import com.oak.entities.Roles;
 
 public class RolesVO {
@@ -18,11 +22,18 @@ public class RolesVO {
 
 	public RolesVO(Roles role) {
 		super();
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.name = role.getName();
 		this.createdby = role.getCreatedby();
 		this.updatedby = role.getUpdatedby();
 		this.createdon = role.getCreatedon();
 		this.updateon = role.getUpdateon();
+		if (createdon != null) {
+			this.createdOnStr = sdf.format(new Date(createdon));
+		}
+		if (updateon != null) {
+			this.updateOnStr = sdf.format(new Date(updateon));
+		}
 	}
 
 	public String getName() {

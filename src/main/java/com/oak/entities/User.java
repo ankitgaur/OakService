@@ -6,7 +6,7 @@ import org.springframework.data.cassandra.mapping.Table;
 import com.oak.vo.UsersVO;
 
 @Table(value = "users")
-public class Users {
+public class User {
 
 	@PrimaryKey
 	private String email;
@@ -14,19 +14,19 @@ public class Users {
 	private String username;
 	private String password;
 	private String groups;
-	private boolean activated;
-	private boolean forgotpassword;
-	private boolean sendemail;
+	private Boolean activated;
+	private Boolean forgotpassword;
+	private Boolean sendemail;
 	private String createdby;
 	private String updatedby;
 	private Long createdon;
 	private Long updatedon;
 
-	public Users() {
+	public User() {
 		super();
 	}
 
-	public Users(UsersVO usersVO) {
+	public User(UsersVO usersVO) {
 		super();
 		this.email = usersVO.getEmail();
 		this.name = usersVO.getName();
@@ -82,27 +82,27 @@ public class Users {
 		this.groups = groups;
 	}
 
-	public boolean isActivated() {
+	public Boolean isActivated() {
 		return activated;
 	}
 
-	public void setActivated(boolean activated) {
+	public void setActivated(Boolean activated) {
 		this.activated = activated;
 	}
 
-	public boolean isForgotpassword() {
+	public Boolean isForgotpassword() {
 		return forgotpassword;
 	}
 
-	public void setForgotpassword(boolean forgotpassword) {
+	public void setForgotpassword(Boolean forgotpassword) {
 		this.forgotpassword = forgotpassword;
 	}
 
-	public boolean isSendemail() {
+	public Boolean isSendemail() {
 		return sendemail;
 	}
 
-	public void setSendemail(boolean sendemail) {
+	public void setSendemail(Boolean sendemail) {
 		this.sendemail = sendemail;
 	}
 

@@ -11,13 +11,13 @@ import com.oak.entities.ArticleCategory;
 public class ArticleCategoryVO {
 
 	@PrimaryKey
-	private long id;
+	private Long id;
 	private String name;
-	private long createdon;
+	private Long createdon;
 	private String description;
 	private String createdby;
 	private String updatedby;
-	private long updatedon;
+	private Long updatedon;
 	private String displayimage;
 	private String createdOnStr;
 	private String updatedOnStr;
@@ -36,15 +36,19 @@ public class ArticleCategoryVO {
 		this.updatedby = category.getUpdatedby();
 		this.updatedon = category.getUpdatedon();
 		this.displayimage = category.getDisplayimage();
-		this.createdOnStr = sdf.format(new Date(createdon));
-		this.updatedOnStr = sdf.format(new Date(updatedon));
+		if (createdon != null) {
+			this.createdOnStr = sdf.format(new Date(createdon));
+		}
+		if (updatedon != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedon));
+		}
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -56,11 +60,11 @@ public class ArticleCategoryVO {
 		this.name = name;
 	}
 
-	public long getCreatedon() {
+	public Long getCreatedon() {
 		return createdon;
 	}
 
-	public void setCreatedon(long createdon) {
+	public void setCreatedon(Long createdon) {
 		this.createdon = createdon;
 	}
 
@@ -88,11 +92,11 @@ public class ArticleCategoryVO {
 		this.updatedby = updatedby;
 	}
 
-	public long getUpdatedon() {
+	public Long getUpdatedon() {
 		return updatedon;
 	}
 
-	public void setUpdatedon(long updatedon) {
+	public void setUpdatedon(Long updatedon) {
 		this.updatedon = updatedon;
 	}
 

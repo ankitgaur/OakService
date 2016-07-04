@@ -2,12 +2,14 @@ package com.oak.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.oak.comparators.ForumPostComparator;
+import com.oak.entities.Alias;
 import com.oak.entities.ForumPost;
 import com.oak.entities.ForumPostKey;
 import com.oak.repositories.ForumPostRepo;
@@ -17,6 +19,9 @@ public class ForumPostService {
 
 	@Autowired
 	ForumPostRepo forumPostRepo;
+	
+	@Autowired
+	AliasService aliasService;
 
 	public List<ForumPost> getForumPosts() {
 
@@ -60,6 +65,15 @@ public class ForumPostService {
 	@Transactional
 	public void createForumPost(ForumPost article) {
 
+		UUID uuid = UUID.randomUUID();
+		Alias alias = new Alias();
+		alias.setId(uuid.toString());
+		alias.setCategory(article.getPk().getTopic());
+		alias.setCreatedby(article.getPk().getCreatedBy());
+		alias.setCreatedon(article.getPk().getCreatedOn());
+		aliasService.createAlias(alias);
+			
+		article.setAlias(alias.getId());
 		forumPostRepo.createForumPost(article);
 
 	}

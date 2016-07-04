@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.oak.entities.Users;
+import com.oak.entities.User;
 import com.oak.service.UsersService;
 
 @Component
@@ -43,7 +43,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 			String email = upass[0];
 			String password = upass[1];
 			
-			Users user = userService.getUserById(email);		
+			User user = userService.getUserById(email);		
 			
 			if(password.equals(user.getPassword())){	
 				request.setAttribute("user", email);

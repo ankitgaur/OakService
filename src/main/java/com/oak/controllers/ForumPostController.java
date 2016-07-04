@@ -22,10 +22,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.oak.entities.Alias;
 import com.oak.entities.ForumPost;
 import com.oak.entities.ForumPostKey;
+import com.oak.entities.User;
+import com.oak.service.AliasService;
 import com.oak.service.CounterService;
 import com.oak.service.ForumPostService;
+import com.oak.service.UsersService;
 import com.oak.vo.ForumPostVO;
 
 @RestController
@@ -36,15 +40,23 @@ public class ForumPostController {
 	
 	@Autowired
 	CounterService counterService;
+	
+	@Autowired
+	UsersService usersService;
+	
+	@Autowired
+	AliasService aliasService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/forum_post/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ForumPostVO getForumPostById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		String forumPostKey[] = id.split("_");
-		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
-		ForumPostKey key = new ForumPostKey(topicID,
-				Long.parseLong(forumPostKey[2]));
+		
+		Alias alias = aliasService.getAliasById(id);		
+		
+		ForumPostKey key = new ForumPostKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
+		
 		ForumPost forumPost = forumPostService.getForumPostById(key);
 		ForumPostVO forumPostVO = new ForumPostVO(forumPost);
 		Date createDate = new Date(forumPost.getPk().getCreatedOn());
@@ -157,12 +169,12 @@ public class ForumPostController {
 	public ResponseEntity<ForumPostVO> deleteRticle(
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-		String forumPostKey[] = id.split("_");
-		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
-		ForumPostKey key = new ForumPostKey(topicID,
-				Long.parseLong(forumPostKey[2]));
+		Alias alias = aliasService.getAliasById(id);		
+		
+		ForumPostKey key = new ForumPostKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
 		forumPostService.deleteForumPostById(key);
-		counterService.decrementCounter(topicID);
+		counterService.decrementCounter(alias.getCategory());
 		return new ResponseEntity<ForumPostVO>(HttpStatus.NO_CONTENT);
 	}
 
@@ -171,13 +183,17 @@ public class ForumPostController {
 	public ResponseEntity<Void> createForumPost(
 			@RequestBody ForumPostVO forumPostVO) throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
+		String email = authentication.getName();		
+		
+		User user = usersService.getUserById(email);
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		forumPostVO.setCreatedOn(dt.getTime());
 		forumPostVO.setUpdatedOn(dt.getTime());
 		forumPostVO.setCreatedBy(email);
+		forumPostVO.setAuthor(user.getUsername());
+				
 		forumPostService.createForumPost(new ForumPost(forumPostVO));
 		counterService.incrementCounter(forumPostVO.getTopic());
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
@@ -192,10 +208,10 @@ public class ForumPostController {
 		String email = authentication.getName();
 
 		System.out.println("Updating User " + postID);
-		String forumPostKey[] = postID.split("_");
-		String topicID = forumPostKey[0] + "_" + forumPostKey[1];
-		ForumPostKey key = new ForumPostKey(topicID,
-				Long.parseLong(forumPostKey[2]));
+		Alias alias = aliasService.getAliasById(postID);		
+		
+		ForumPostKey key = new ForumPostKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
 		ForumPost forumPost = forumPostService.getForumPostById(key);
 		if (forumPost == null) {
 			System.out.println("ForumPost with id " + postID + " not found");

@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.oak.entities.Users;
+import com.oak.entities.User;
 import com.oak.service.UsersService;
 
 @Component("dbAuthProvider")
@@ -30,7 +30,7 @@ public class DBAuthProvider implements AuthenticationProvider {
 		//System.out.println(password);
 		try {
 			
-			Users user = usersService.getUserById(id);
+			User user = usersService.getUserById(id);
 			if (user.getPassword().equals(password)) {
 				List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
 				grantedAuths.add(new SimpleGrantedAuthority("ROLE_" + "USER"));

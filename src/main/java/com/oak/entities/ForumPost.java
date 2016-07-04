@@ -16,13 +16,14 @@ public class ForumPost {
 	private ForumPostKey pk;
 	private Boolean approved;
 	private String approvedBy;
+	private String alias;
 	private Long approvedOn;
 	private Long updatedOn;
 	private String content;
-	private String createdBy;
 	private String displayImage;
 	private Integer rating;
 	private String title;
+	private String author;
 	private String updatedBy;
 	private Long hits;
 
@@ -35,6 +36,7 @@ public class ForumPost {
 		ForumPostKey forumPostKey = new ForumPostKey();
 		forumPostKey.setTopic(forumPostVO.getTopic());
 		forumPostKey.setCreatedOn(forumPostVO.getCreatedOn());
+		forumPostKey.setCreatedBy(forumPostVO.getCreatedBy());
 		this.pk = forumPostKey;
 		this.title = forumPostVO.getTitle();
 		this.content = forumPostVO.getContent();
@@ -43,10 +45,10 @@ public class ForumPost {
 		this.approvedBy = forumPostVO.getApprovedBy();
 		this.approvedOn = forumPostVO.getApprovedOn();
 		this.updatedOn = forumPostVO.getUpdatedOn();
-		this.createdBy = forumPostVO.getCreatedBy();
 		this.updatedBy = forumPostVO.getUpdatedBy();
 		this.rating = forumPostVO.getRating();
 		this.hits = forumPostVO.getHits();
+		this.author = forumPostVO.getAuthor();
 	}
 
 	public ForumPostKey getPk() {
@@ -105,20 +107,12 @@ public class ForumPost {
 		this.approvedBy = approvedBy;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
 	public Long getUpdatedOn() {
 		return updatedOn;
 	}
 
 	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
 	}
 
 	public String getUpdatedBy() {
@@ -143,6 +137,22 @@ public class ForumPost {
 
 	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }

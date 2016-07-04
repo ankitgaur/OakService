@@ -18,6 +18,9 @@ public class VideoKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdon", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -35,10 +38,11 @@ public class VideoKey implements Serializable {
 		super();
 	}
 
-	public VideoKey(String category, Long createdOn) {
+	public VideoKey(String category, String createdBy, Long createdOn) {
 		super();
 		this.category = category;
 		this.createdOn = createdOn;
+		this.createdBy = createdBy;
 	}
 
 	@Override
@@ -80,5 +84,13 @@ public class VideoKey implements Serializable {
 
 	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}	
 }

@@ -8,7 +8,7 @@ public class Counter {
 	
 	@PrimaryKey
 	private String name;
-	private long val;
+	private Long val;
 	
 	public String getName() {
 		return name;
@@ -16,10 +16,10 @@ public class Counter {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long getVal() {
+	public Long getVal() {
 		return val;
 	}
-	public void setVal(long val) {
+	public void setVal(Long val) {
 		this.val = val;
 	}
 	

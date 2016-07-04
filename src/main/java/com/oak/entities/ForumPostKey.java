@@ -18,6 +18,9 @@ public class ForumPostKey implements Serializable {
 	@PrimaryKeyColumn(name = "topic", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String topic;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -27,10 +30,11 @@ public class ForumPostKey implements Serializable {
 		super();
 	}
 
-	public ForumPostKey(String topic, Long createdOn) {
+	public ForumPostKey(String topic, String createdby, Long createdOn) {
 		super();
 		this.topic = topic;
 		this.createdOn = createdOn;
+		this.createdBy = createdby;
 	}
 
 	public String getTopic() {
@@ -81,8 +85,12 @@ public class ForumPostKey implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

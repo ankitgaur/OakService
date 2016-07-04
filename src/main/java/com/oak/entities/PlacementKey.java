@@ -22,13 +22,13 @@ public class PlacementKey implements Serializable {
 	private String section;
 
 	@PrimaryKeyColumn(name = "position", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.ASCENDING)
-	private int position;
+	private Integer position;
 
 	public PlacementKey() {
 		super();
 	}
 
-	public PlacementKey(String page, String section, int position) {
+	public PlacementKey(String page, String section, Integer position) {
 		super();
 		this.page = page;
 		this.section = section;
@@ -51,11 +51,11 @@ public class PlacementKey implements Serializable {
 		this.section = section;
 	}
 
-	public int getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 

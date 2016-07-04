@@ -75,7 +75,7 @@ public class BlogCategoryController {
 		String email = authentication.getName();
 		
 		categoryVO.setCreatedby(email);
-		categoryVO.setCreatedon(new Date().getTime());
+		categoryVO.setCreatedon(new Date().getTime());		
 		blogCategoryService.createBlogCategory(new BlogCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);

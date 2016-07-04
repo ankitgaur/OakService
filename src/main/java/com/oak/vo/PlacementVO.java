@@ -1,5 +1,9 @@
 package com.oak.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.oak.config.OakConstants;
 import com.oak.entities.Placement;
 import com.oak.entities.PlacementKey;
 
@@ -8,7 +12,7 @@ public class PlacementVO {
 	private String id;
 	private String page;
 	private String section;
-	private int position;
+	private Integer position;
 	private String title;
 	private String img;
 	private String link;
@@ -25,7 +29,7 @@ public class PlacementVO {
 	}
 
 	public PlacementVO(Placement placement) {
-
+		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		PlacementKey pk = placement.getPk();
 		this.page = pk.getPage();
 		this.section = pk.getSection();
@@ -40,6 +44,13 @@ public class PlacementVO {
 		this.createdOn = placement.getCreatedon();
 		this.updatedOn = placement.getUpdatedon();
 		this.id = this.page + "_" + this.section + "_" + this.position;
+		
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
 
 		/*
 		 * SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -64,11 +75,11 @@ public class PlacementVO {
 		this.section = section;
 	}
 
-	public int getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 

@@ -11,14 +11,14 @@ public class BlogVO {
 	private String category;
 	private String title;
 	private String blogHash;
-	private long createdOn;
+	private Long createdOn;
 	private String description;
 	private String createdby;
 	private String updatedby;
-	private long updatedon;
+	private Long updatedon;
 	private String displayimage;
-	private long hits;
-	private long rating;
+	private Long hits;
+	private Long rating;
 	private String createdOnStr;
 	private String updatedOnStr;
 	private String id;
@@ -33,20 +33,23 @@ public class BlogVO {
 		this.title = blog.getTitle();
 		this.createdOn = blog.getBlogKey().getCreatedOn();
 		this.description = blog.getDescription();
-		this.createdby = blog.getCreatedby();
+		this.createdby = blog.getBlogKey().getCreatedby();
 		this.updatedby = blog.getUpdatedby();
 		this.updatedon = blog.getUpdatedon();
 		this.displayimage = blog.getDisplayimage();
 		this.hits = blog.getHits();
 		this.rating = blog.getRating();
-		this.blogHash = blog.getBlogHash();
-		this.createdOnStr = sdf.format(new Date(createdOn));
-		this.updatedOnStr = sdf.format(new Date(updatedon));
-		this.id = blog.getBlogKey().getCategory()
-				+ "_"+blog.getBlogKey().getCreatedOn();
+		
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedon != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedon));
+		}
+		this.id = blog.getAlias();
 	}
 
-	public long getCreatedOn() {
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
@@ -66,23 +69,23 @@ public class BlogVO {
 		this.category = category;
 	}
 
-	public long getHits() {
+	public Long getHits() {
 		return hits;
 	}
 
-	public void setHits(long hits) {
+	public void setHits(Long hits) {
 		this.hits = hits;
 	}
 
-	public long getRating() {
+	public Long getRating() {
 		return rating;
 	}
 
-	public void setRating(long rating) {
+	public void setRating(Long rating) {
 		this.rating = rating;
 	}
 
-	public void setCreatedOn(long createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
 	}
 
@@ -110,11 +113,11 @@ public class BlogVO {
 		this.updatedby = updatedby;
 	}
 
-	public long getUpdatedon() {
+	public Long getUpdatedon() {
 		return updatedon;
 	}
 
-	public void setUpdatedon(long updatedon) {
+	public void setUpdatedon(Long updatedon) {
 		this.updatedon = updatedon;
 	}
 

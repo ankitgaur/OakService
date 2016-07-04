@@ -8,6 +8,7 @@ import com.oak.entities.Video;
 
 public class VideoVO {
 
+	private String id;
 	private String category;	
 	private String title;
 	private String intro;    
@@ -15,15 +16,16 @@ public class VideoVO {
 	private String videoimgurl;
 	private boolean approved;
 	private String approvedBy;
-	private long approvedOn;
-	private long createdOn;
-	private long updatedOn;
+	private Long approvedOn;
+	private Long createdOn;
+	private Long updatedOn;
 	private String createdBy;
+	private String author;
 	private String updatedBy;
-	private int rating;
-	private long hits;
-	private String createdOnDate;
-	private String updatedOnDate;
+	private Integer rating;
+	private Long hits;
+	private String createdOnStr;
+	private String updatedOnStr;
 	
 	public VideoVO() {
 
@@ -42,12 +44,18 @@ public class VideoVO {
 		this.approvedBy = video.getApprovedBy();
 		this.approvedOn = video.getApprovedOn();
 		this.updatedOn = video.getUpdatedOn();
-		this.createdBy = video.getCreatedBy();
+		this.createdBy = video.getPk().getCreatedBy();
+		this.author = video.getAuthor();
 		this.updatedBy = video.getUpdatedBy();
 		this.rating = video.getRating();
 		this.hits = video.getHits();
-		this.createdOnDate = sdf.format(new Date(createdOn));
-		this.updatedOnDate = sdf.format(new Date(updatedOn));
+		this.id = video.getAlias();
+		if(createdOn!=null){
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if(updatedOn!=null){
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
 
 	}
 
@@ -107,27 +115,27 @@ public class VideoVO {
 		this.approvedBy = approvedBy;
 	}
 
-	public long getApprovedOn() {
+	public Long getApprovedOn() {
 		return approvedOn;
 	}
 
-	public void setApprovedOn(long approvedOn) {
+	public void setApprovedOn(Long approvedOn) {
 		this.approvedOn = approvedOn;
 	}
 
-	public long getCreatedOn() {
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(long createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public long getUpdatedOn() {
+	public Long getUpdatedOn() {
 		return updatedOn;
 	}
 
-	public void setUpdatedOn(long updatedOn) {
+	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
 	}
 
@@ -147,35 +155,53 @@ public class VideoVO {
 		this.updatedBy = updatedBy;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
 
-	public long getHits() {
+	public Long getHits() {
 		return hits;
 	}
 
-	public void setHits(long hits) {
+	public void setHits(Long hits) {
 		this.hits = hits;
 	}
 
-	public String getCreatedOnDate() {
-		return createdOnDate;
+	public String getCreatedOnStr() {
+		return createdOnStr;
 	}
 
-	public void setCreatedOnDate(String createdOnDate) {
-		this.createdOnDate = createdOnDate;
+	public void setCreatedOnStr(String createdOnStr) {
+		this.createdOnStr = createdOnStr;
 	}
 
-	public String getUpdatedOnDate() {
-		return updatedOnDate;
+	public String getUpdatedOnStr() {
+		return updatedOnStr;
 	}
 
-	public void setUpdatedOnDate(String updatedOnDate) {
-		this.updatedOnDate = updatedOnDate;
-	}	
+	public void setUpdatedOnStr(String updatedOnStr) {
+		this.updatedOnStr = updatedOnStr;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	
 }

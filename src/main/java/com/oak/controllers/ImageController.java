@@ -62,7 +62,7 @@ public class ImageController {
 				
 		//TODO : Get username from session
 		String id = imageService.saveImage(prefix, image.getOriginalFilename(),
-				image.getSize(), image.getBytes(),"test");
+				image.getSize(), image.getBytes(),email);
 		return id;
 	}
 	

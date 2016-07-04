@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.oak.entities.Alias;
 import com.oak.entities.ForumTopics;
 import com.oak.entities.ForumTopicsKey;
+import com.oak.service.AliasService;
 import com.oak.service.CounterService;
 import com.oak.service.ForumTopicsService;
 import com.oak.vo.ForumTopicsVO;
@@ -37,23 +39,20 @@ public class ForumTopicsController {
 	@Autowired
 	CounterService counterService;
 	
+	@Autowired
+	AliasService aliasService;
+	
 	@CrossOrigin
 	@RequestMapping(value = "/forum_topics/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ForumTopicsVO getSticleById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		String articleKey[] = id.split("_");
-		ForumTopicsKey key = new ForumTopicsKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		
+		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
 		ForumTopics forumTopics = forumTopicsService.getForumTopicsById(key);
 		ForumTopicsVO forumTopicsVO = new ForumTopicsVO(forumTopics);
-		Date createDate = new Date(forumTopics.getPk().getCreatedOn());
-		Date updateDate = new Date(forumTopics.getUpdatedOn());
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MM-yyyy HH:mm:ss");
-		String dateCreateText = dateFormatter.format(createDate);
-		String updateCreateText = dateFormatter.format(updateDate);
-		forumTopicsVO.setCreatedOnStr(dateCreateText);
-		forumTopicsVO.setUpdatedOnStr(updateCreateText);
+		
 		return forumTopicsVO;
 	}
 
@@ -63,15 +62,7 @@ public class ForumTopicsController {
 		List<ForumTopics> forum_topics = forumTopicsService.getForumTopics();
 		List<ForumTopicsVO> forumTopicsVO = new ArrayList<ForumTopicsVO>();
 		for (ForumTopics article : forum_topics) {
-			ForumTopicsVO vo = new ForumTopicsVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
+			ForumTopicsVO vo = new ForumTopicsVO(article);			
 			forumTopicsVO.add(vo);
 		}
 		return forumTopicsVO;
@@ -160,9 +151,10 @@ public class ForumTopicsController {
 	public ResponseEntity<ForumTopicsVO> deleteRticle(
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-		String articleKey[] = id.split("_");
-		ForumTopicsKey key = new ForumTopicsKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		
+		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
 		forumTopicsService.deleteForumTopicsById(key);
 		counterService.decrementCounter(key.getCategory());
 		return new ResponseEntity<ForumTopicsVO>(HttpStatus.NO_CONTENT);
@@ -174,9 +166,8 @@ public class ForumTopicsController {
 			@RequestBody ForumTopicsVO forumTopicsVO) throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
-		Date dNow = new Date();		
-		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Date dt = ft.parse(ft.format(dNow));
+		Date dNow = new Date();			
+		
 		forumTopicsVO.setCreatedOn(dNow.getTime());
 		forumTopicsVO.setCreatedBy(email);
 		forumTopicsService.createForumTopics(new ForumTopics(forumTopicsVO));
@@ -193,9 +184,10 @@ public class ForumTopicsController {
 		String email = authentication.getName();
 
 		System.out.println("Updating User " + articleID);
-		String articleKey[] = articleID.split("_");
-		ForumTopicsKey key = new ForumTopicsKey(articleKey[0],
-				Long.parseLong(articleKey[1]));
+		Alias alias = aliasService.getAliasById(articleID);		
+		
+		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
+				alias.getCreatedby(),alias.getCreatedon());
 		ForumTopics article = forumTopicsService.getForumTopicsById(key);
 		if (article == null) {
 			System.out.println("ForumTopics with id " + articleID

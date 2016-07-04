@@ -54,6 +54,24 @@ public class IncidentTypeController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/incidentTypes/bulk", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createIncidentTypeBulk(
+			@RequestBody List<IncidentType> typeVOs) throws JsonGenerationException,
+			JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		for(IncidentType typeVO : typeVOs){
+			typeVO.setCreatedBy(email);
+			incidentTypeService.createIncidentType(typeVO);
+		}
+		
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
+	}
+	
+	@CrossOrigin
 	@RequestMapping(value = "/incidentTypes", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncidentType(
 			@RequestBody IncidentType typeVO) throws JsonGenerationException,

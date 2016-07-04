@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.oak.config.OakConstants;
-import com.oak.entities.Users;
+import com.oak.entities.User;
 
 public class UsersVO {
 
@@ -27,7 +27,7 @@ public class UsersVO {
 		super();
 	}
 
-	public UsersVO(Users user) {
+	public UsersVO(User user) {
 		super();
 		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.email = user.getEmail();

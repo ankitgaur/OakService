@@ -11,14 +11,13 @@ public class Blog {
 	@PrimaryKey
 	private BlogKey blogKey;
 	private String title;
-	private String blogHash;
+	private String alias;
 	private String description;
-	private String createdby;
 	private String updatedby;
-	private long updatedon;
+	private Long updatedon;
 	private String displayimage;
-	private long rating;
-	private long hits;
+	private Long rating;
+	private Long hits;
 
 	public Blog() {
 
@@ -28,29 +27,23 @@ public class Blog {
 		BlogKey key = new BlogKey();
 		key.setCategory(blogVO.getCategory());
 		key.setCreatedOn(blogVO.getCreatedOn());
+		key.setCreatedby(blogVO.getCreatedby());
 		this.blogKey = key;
 		this.title = blogVO.getTitle();
 		this.description = blogVO.getDescription();
-		this.createdby = blogVO.getCreatedby();
 		this.updatedby = blogVO.getUpdatedby();
 		this.updatedon = blogVO.getUpdatedon();
 		this.displayimage = blogVO.getDisplayimage();
 		this.rating = blogVO.getRating();
 
-		if (blogVO.getBlogHash() != null && !blogVO.getBlogHash().isEmpty()) {
-			this.blogHash = blogVO.getBlogHash();
-		} else {
-			// this.blogHash = HashGeneratorUtil.generateMD5(this.title.trim());
-			this.blogHash = "" + this.title.trim().hashCode();
-		}
 	}
 
-	public String generateId(){
-		String id = this.getBlogKey().getCategory()
-				+ "_"+this.getBlogKey().getCreatedOn();
+	public String generateId() {
+		String id = this.getBlogKey().getCategory() + "_"
+				+ this.getBlogKey().getCreatedOn();
 		return id;
 	}
-	
+
 	public BlogKey getBlogKey() {
 		return blogKey;
 	}
@@ -67,11 +60,11 @@ public class Blog {
 		this.title = title;
 	}
 
-	public long getRating() {
+	public Long getRating() {
 		return rating;
 	}
 
-	public void setRating(long rating) {
+	public void setRating(Long rating) {
 		this.rating = rating;
 	}
 
@@ -83,14 +76,6 @@ public class Blog {
 		this.description = description;
 	}
 
-	public String getCreatedby() {
-		return createdby;
-	}
-
-	public void setCreatedby(String createdby) {
-		this.createdby = createdby;
-	}
-
 	public String getUpdatedby() {
 		return updatedby;
 	}
@@ -99,11 +84,11 @@ public class Blog {
 		this.updatedby = updatedby;
 	}
 
-	public long getUpdatedon() {
+	public Long getUpdatedon() {
 		return updatedon;
 	}
 
-	public void setUpdatedon(long updatedon) {
+	public void setUpdatedon(Long updatedon) {
 		this.updatedon = updatedon;
 	}
 
@@ -115,20 +100,20 @@ public class Blog {
 		this.displayimage = displayimage;
 	}
 
-	public String getBlogHash() {
-		return blogHash;
-	}
-
-	public void setBlogHash(String blogHash) {
-		this.blogHash = blogHash;
-	}
-
-	public long getHits() {
+	public Long getHits() {
 		return hits;
 	}
 
-	public void setHits(long hits) {
+	public void setHits(Long hits) {
 		this.hits = hits;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }

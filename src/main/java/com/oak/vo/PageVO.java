@@ -38,6 +38,12 @@ public class PageVO {
 		if (page.getUpdatedon() != null) {
 			this.updatedOnStr = sdf.format(new Date(page.getUpdatedon()));
 		}
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
 	}
 
 	public String getParent() {

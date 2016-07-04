@@ -8,7 +8,7 @@ import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 @PrimaryKeyClass
-public class BlogEntryKey implements Serializable {
+public class BlogPostKey implements Serializable {
 
 	/**
 	 * 
@@ -18,6 +18,9 @@ public class BlogEntryKey implements Serializable {
 	@PrimaryKeyColumn(name = "blog", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String blog;
 
+	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private String createdBy;
+	
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
@@ -35,16 +38,25 @@ public class BlogEntryKey implements Serializable {
 
 	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
+	}	
+
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public BlogEntryKey() {
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public BlogPostKey() {
 		super();
 	}
 
-	public BlogEntryKey(String category, Long createdOn) {
+	public BlogPostKey(String category, String createdBy, Long createdOn) {
 		super();
 		this.blog = category;
 		this.createdOn = createdOn;
+		this.createdBy = createdBy;
 	}
 
 	@Override
@@ -66,7 +78,7 @@ public class BlogEntryKey implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BlogEntryKey blogsKey = (BlogEntryKey) obj;
+		BlogPostKey blogsKey = (BlogPostKey) obj;
 		if (createdOn == null) {
 			if (blogsKey.createdOn != null)
 				return false;

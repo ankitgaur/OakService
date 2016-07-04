@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oak.entities.Users;
+import com.oak.entities.User;
 import com.oak.repositories.UsersRepo;
 
 @Service("usersService")
@@ -14,21 +14,21 @@ public class UsersService {
 	@Autowired
 	UsersRepo userRepo;
 
-	public List<Users> getUsers() {
+	public List<User> getUsers() {
 		return userRepo.getUsers();
 	}
 
-	public Users getUserById(String id) {
+	public User getUserById(String id) {
 		return userRepo.getUsersById(id);
 	}
 
-	public void createUser(Users user) {
+	public void createUser(User user) {
 
 		userRepo.createUser(user);
 
 	}
 
-	public void updateUser(Users user) {
+	public void updateUser(User user) {
 
 		userRepo.updateUser(user);
 

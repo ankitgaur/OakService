@@ -16,19 +16,26 @@ public class ImageVO {
 	private Long kbsize;
 	private String createdBy;
 	private String createdOnStr;
-
+	private Long createdOn;
+	private String alias;
+	
 	public ImageVO(){
 		
-	}
-	
+	}	
+
 	public ImageVO(Image img){
 		super();
 		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
-		this.id = img.getKey().getPrefix()+"_"+img.getKey().getCreatedOn();
+		this.id = img.getAlias();
 		this.name = img.getName();
 		this.kbsize = img.getKbsize();
-		this.createdBy = img.getCreatedBy();
-		this.createdOnStr = sdf.format(new Date(img.getKey().getCreatedOn()));
+		this.createdBy = img.getKey().getCreatedBy();
+		this.createdOn = img.getKey().getCreatedOn();
+		this.alias = img.getAlias();
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		
 	}
 	
 	public String getId() {
@@ -70,4 +77,21 @@ public class ImageVO {
 	public void setCreatedOnStr(String createdOnStr) {
 		this.createdOnStr = createdOnStr;
 	}
+
+	public Long getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Long createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	
 }

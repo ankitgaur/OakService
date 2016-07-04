@@ -22,8 +22,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.oak.entities.Alias;
+import com.oak.entities.User;
 import com.oak.entities.Video;
 import com.oak.entities.VideoKey;
+import com.oak.service.AliasService;
+import com.oak.service.UsersService;
 import com.oak.service.VideoService;
 import com.oak.vo.VideoVO;
 
@@ -32,24 +36,22 @@ public class VideoController {
 
 	@Autowired
 	VideoService videoService;
+	
+	@Autowired
+	UsersService usersService;
+	
+	@Autowired
+	AliasService aliasService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/videos/{id}", produces = "application/json", method = RequestMethod.GET)
 	public VideoVO getSticleById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		String videoKey[] = id.split("_");
-		VideoKey key = new VideoKey(videoKey[0],
-				Long.parseLong(videoKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		VideoKey key = new VideoKey(alias.getCategory(),alias.getCreatedby(),alias.getCreatedon());
 		Video video = videoService.getVideoById(key);
 		VideoVO videoVO = new VideoVO(video);
-		Date createDate = new Date(video.getUpdatedOn());
-		Date updateDate = new Date(video.getPk().getCreatedOn());
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MM-yyyy HH:mm:ss");
-		String dateCreateText = dateFormatter.format(createDate);
-		String updateCreateText = dateFormatter.format(updateDate);
-		videoVO.setCreatedOnDate(dateCreateText);
-		videoVO.setUpdatedOnDate(updateCreateText);
+						
 		return videoVO;
 	}
 
@@ -59,15 +61,7 @@ public class VideoController {
 		List<Video> videos = videoService.getVideos();
 		List<VideoVO> videoVO = new ArrayList<VideoVO>();
 		for (Video video : videos) {
-			VideoVO vo = new VideoVO(video);
-			Date createDate = new Date(video.getUpdatedOn());
-			Date updateDate = new Date(video.getPk().getCreatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
+			VideoVO vo = new VideoVO(video);						
 			videoVO.add(vo);
 		}
 		return videoVO;
@@ -85,14 +79,6 @@ public class VideoController {
 		List<VideoVO> videoVO = new ArrayList<VideoVO>();
 		for (Video video : videos) {
 			VideoVO vo = new VideoVO(video);
-			Date createDate = new Date(video.getUpdatedOn());
-			Date updateDate = new Date(video.getPk().getCreatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
 			videoVO.add(vo);
 		}
 		return videoVO;
@@ -108,14 +94,7 @@ public class VideoController {
 		List<VideoVO> videoVO = new ArrayList<VideoVO>();
 		for (Video video : videos) {
 			VideoVO vo = new VideoVO(video);
-			Date createDate = new Date(video.getUpdatedOn());
-			Date updateDate = new Date(video.getPk().getCreatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnDate(dateCreateText);
-			vo.setUpdatedOnDate(updateCreateText);
+			
 			videoVO.add(vo);
 		}
 		return videoVO;
@@ -126,9 +105,8 @@ public class VideoController {
 	@RequestMapping(value = "/videos/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<VideoVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-		String videoKey[] = id.split("_");
-		VideoKey key = new VideoKey(videoKey[0],
-				Long.parseLong(videoKey[1]));
+		Alias alias = aliasService.getAliasById(id);		
+		VideoKey key = new VideoKey(alias.getCategory(),alias.getCreatedby(),alias.getCreatedon());
 		videoService.deleteVideoById(key);
 		return new ResponseEntity<VideoVO>(HttpStatus.NO_CONTENT);
 	}
@@ -139,12 +117,14 @@ public class VideoController {
 			throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
+		User user = usersService.getUserById(email);
 		Date dNow = new Date();
 		SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date dt = ft.parse(ft.format(dNow));
 		videoVO.setCreatedOn(dt.getTime());
 		videoVO.setUpdatedOn(dt.getTime());
 		videoVO.setCreatedBy(email);
+		videoVO.setAuthor(user.getUsername());
 		videoService.createVideo(new Video(videoVO));
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
@@ -156,12 +136,12 @@ public class VideoController {
 			@RequestBody VideoVO videoVO) throws ParseException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String email = authentication.getName();
-		
+		String email = authentication.getName();		
 		System.out.println("Updating User " + videoID);
-		String videoKey[] = videoID.split("_");
-		VideoKey key = new VideoKey(videoKey[0],
-				Long.parseLong(videoKey[1]));
+		
+		Alias alias = aliasService.getAliasById(videoID);		
+		VideoKey key = new VideoKey(alias.getCategory(),alias.getCreatedby(),alias.getCreatedon());
+		
 		Video video = videoService.getVideoById(key);
 		if (video == null) {
 			System.out.println("Video with id " + videoID + " not found");

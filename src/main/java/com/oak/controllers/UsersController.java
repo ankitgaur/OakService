@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oak.entities.Users;
+import com.oak.entities.User;
 import com.oak.service.UsersService;
 import com.oak.vo.UsersVO;
 
@@ -38,13 +38,13 @@ public class UsersController {
 	@RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
 	public List<UsersVO> getAllRoles() throws JsonParseException,
 			JsonMappingException, IOException {
-		List<Users> roles = userService.getUsers();
+		List<User> roles = userService.getUsers();
 		if (roles == null || roles.isEmpty()) {
 			return null;
 		}
 		List<UsersVO> usersVO = new ArrayList<UsersVO>();
 
-		for (Users role : roles) {
+		for (User role : roles) {
 			usersVO.add(new UsersVO(role));
 		}
 		return usersVO;
@@ -54,7 +54,7 @@ public class UsersController {
 	@RequestMapping(value = "/users/{emialID:.+}", produces = "application/json", method = RequestMethod.GET)
 	public UsersVO getRoleById(@PathVariable("emialID") String id)
 			throws JsonParseException, JsonMappingException, IOException {
-		Users user = userService.getUserById(id);
+		User user = userService.getUserById(id);
 		if (user == null) {
 			return null;
 		}
@@ -70,7 +70,7 @@ public class UsersController {
 		String email = authentication.getName();
 		userVO.setCreatedby(email);
 
-		userService.createUser(new Users(userVO));
+		userService.createUser(new User(userVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -84,7 +84,7 @@ public class UsersController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		usersVO.setUpdatedby(email);
-		userService.updateUser(new Users(usersVO));
+		userService.updateUser(new User(usersVO));
 		return new ResponseEntity<UsersVO>(usersVO, HttpStatus.OK);
 
 	}
@@ -95,7 +95,7 @@ public class UsersController {
 			@PathVariable("emialID") String emailID) {
 		System.out.println("Fetching & Deleting User with id " + emailID);
 
-		Users user = userService.getUserById(emailID);
+		User user = userService.getUserById(emailID);
 		if (user == null) {
 			System.out.println("Unable to delete. User with id " + emailID
 					+ " not found");

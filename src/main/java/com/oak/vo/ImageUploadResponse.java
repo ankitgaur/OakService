@@ -2,15 +2,15 @@ package com.oak.vo;
 
 public class ImageUploadResponse {
 
-	private int uploaded;
+	private Integer uploaded;
 	private String filename;
 	private String url;
 
-	public int getUploaded() {
+	public Integer getUploaded() {
 		return uploaded;
 	}
 
-	public void setUploaded(int uploaded) {
+	public void setUploaded(Integer uploaded) {
 		this.uploaded = uploaded;
 	}
 

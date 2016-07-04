@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.oak.config.OakConstants;
-import com.oak.entities.BlogEntry;
+import com.oak.entities.BlogPost;
 
-public class BlogEntryVO {
+public class BlogPostVO {
 
 	private String blog;
 	private String blogname;
@@ -19,6 +19,7 @@ public class BlogEntryVO {
 	private Long createdOn;
 	private Long updatedOn;
 	private String createdBy;
+	private String author;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
@@ -26,7 +27,7 @@ public class BlogEntryVO {
 	private String updatedOnStr;
 	private String id;
 
-	public BlogEntryVO(BlogEntry blog) {
+	public BlogPostVO(BlogPost blog) {
 		super();
 		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
 		this.blog = blog.getBlogKey().getBlog();
@@ -36,17 +37,22 @@ public class BlogEntryVO {
 		this.displayImage = blog.getDisplayImage();
 		this.approved = blog.getApproved();
 		this.approvedBy = blog.getApprovedBy();
+		this.setAuthor(blog.getAuthor());
 		this.approvedOn = blog.getApprovedOn();
 		this.createdOn = blog.getBlogKey().getCreatedOn();
-		this.createdBy = blog.getCreatedBy();
+		this.createdBy = blog.getBlogKey().getCreatedBy();
 		this.updatedBy = blog.getUpdatedBy();
 		this.rating = blog.getRating();
 		this.blogname = blog.getBlogname();
 		// this.hits = blog.getHits();
-		this.createdOnStr = sdf.format(new Date(createdOn));
-		this.updatedOnStr = sdf.format(new Date(updatedOn));
-		this.id = blog.getBlogKey().getBlog()
-				+"_"+ blog.getBlogKey().getCreatedOn();
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
+		
+		this.id = blog.getAlias();
 	}
 
 	public String getBlog() {
@@ -169,22 +175,6 @@ public class BlogEntryVO {
 		this.hits = hits;
 	}
 
-	public String getCreatedOnDate() {
-		return createdOnStr;
-	}
-
-	public void setCreatedOnDate(String createdOnDate) {
-		this.createdOnStr = createdOnDate;
-	}
-
-	public String getUpdatedOnDate() {
-		return updatedOnStr;
-	}
-
-	public void setUpdatedOnDate(String updatedOnDate) {
-		this.updatedOnStr = updatedOnDate;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -193,7 +183,7 @@ public class BlogEntryVO {
 		this.id = id;
 	}
 
-	public BlogEntryVO() {
+	public BlogPostVO() {
 
 	}
 
@@ -203,6 +193,14 @@ public class BlogEntryVO {
 
 	public void setBlogname(String blogname) {
 		this.blogname = blogname;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 }

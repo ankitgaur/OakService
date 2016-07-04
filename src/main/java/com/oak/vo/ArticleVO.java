@@ -20,6 +20,7 @@ public class ArticleVO {
 	private Long approvedOn;
 	private Long createdOn;
 	private String createdBy;
+	private String author;
 	private String updatedBy;
 	private Integer rating;
 	private Long hits;
@@ -42,14 +43,19 @@ public class ArticleVO {
 		this.approvedBy = article.getApprovedBy();
 		this.approvedOn = article.getApprovedOn();
 		this.createdOn = article.getPk().getCreatedOn();
-		this.createdBy = article.getCreatedBy();
+		this.createdBy = article.getPk().getCreatedBy();
+		this.author = article.getAuthor();
 		this.updatedBy = article.getUpdatedBy();
 		this.rating = article.getRating();
 		this.hits = article.getHits();
-		this.createdOnStr = sdf.format(new Date(createdOn));
-		this.updatedOnStr = sdf.format(new Date(updatedOn));
+		if (createdOn != null) {
+			this.createdOnStr = sdf.format(new Date(createdOn));
+		}
+		if (updatedOn != null) {
+			this.updatedOnStr = sdf.format(new Date(updatedOn));
+		}
 		this.intro = article.getIntro();
-		this.setId(this.category + "_"+this.createdOn);
+		this.id = article.getAlias();
 	}
 
 	public String getCategory() {
@@ -188,6 +194,14 @@ public class ArticleVO {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 }

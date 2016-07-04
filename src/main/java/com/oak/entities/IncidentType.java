@@ -1,7 +1,5 @@
 package com.oak.entities;
 
-import java.util.Date;
-
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -9,24 +7,20 @@ import org.springframework.data.cassandra.mapping.Table;
 public class IncidentType {
 
 	@PrimaryKey
-	private long id;
+	private Long id;
 	private String name;
 	private String questions;
 	private String createdBy;
 	private String updatedBy;
-	private Date createdOn;
-	private Date updatedOn;
+	private Long createdOn;
+	private Long updatedOn;
 
 	public IncidentType() {
 
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -61,20 +55,26 @@ public class IncidentType {
 		this.updatedBy = updatedBy;
 	}
 
-	public Date getCreatedOn() {
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public Date getUpdatedOn() {
+	public Long getUpdatedOn() {
 		return updatedOn;
 	}
 
-	public void setUpdatedOn(Date updatedOn) {
+	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 
 }

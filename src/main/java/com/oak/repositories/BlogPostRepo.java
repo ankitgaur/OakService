@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oak.entities.BlogEntry;
-import com.oak.entities.BlogEntryKey;
+import com.oak.entities.BlogPost;
+import com.oak.entities.BlogPostKey;
 import com.oak.utils.OakCassandraTemplate;
 
 @Repository("blogEntryRepo")
 @Transactional
-public class BlogEntryRepo {
+public class BlogPostRepo {
 
 	@Autowired
 	private OakCassandraTemplate oakCassendraTemplate;
@@ -20,70 +20,70 @@ public class BlogEntryRepo {
 	@Autowired
 	private CountersRepo countersRepo;
 
-	public List<BlogEntry> getBlogEntries() {
+	public List<BlogPost> getBlogEntries() {
 		//List<BlogEntry> blogs = oakCassendraTemplate.findAll(BlogEntry.class);
 		//return blogs;
-		List<BlogEntry> posts = getTopBlogEntriesByLimit(100);
+		List<BlogPost> posts = getTopBlogEntriesByLimit(100);
 		return posts;
 	}
 
 	public void incrementHits(String blog, long createdOn) {
 		
-		BlogEntryKey id = new BlogEntryKey();
+		BlogPostKey id = new BlogPostKey();
 		id.setBlog(blog);
 		id.setCreatedOn(createdOn);
 
 		long hits = getBlogEntryById(id).getHits();
 		long hitsnew = hits + 1;
 
-		String sql = "update oak.blog_entries set hits=" + hitsnew
+		String sql = "update oak.blog_posts set hits=" + hitsnew
 				+ " where blog='" + blog + "' and createdon='" + createdOn
 				+ "'";
 		oakCassendraTemplate.executeQuery(sql);
 	}
 
-	public List<BlogEntry> getTopBlogEntriesByCategory(String category,
+	public List<BlogPost> getTopBlogEntriesByCategory(String category,
 			int limit) {
-		String blogs_by_category_qry = "SELECT * FROM blog_entries WHERE blog=";
+		String blogs_by_category_qry = "SELECT * FROM blog_posts WHERE blog=";
 		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'"
 				+ " LIMIT " + limit;
 		System.out
 				.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
-		List<BlogEntry> blogs = oakCassendraTemplate.findByPartitionKey(
-				blogs_by_category_qry, BlogEntry.class);
+		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(
+				blogs_by_category_qry, BlogPost.class);
 		return blogs;
 	}
 
-	public List<BlogEntry> getTopBlogEntriesByLimit(int limit) {
-		String blogs_by_limit_qry = "SELECT * FROM blog_entries LIMIT ";
+	public List<BlogPost> getTopBlogEntriesByLimit(int limit) {
+		String blogs_by_limit_qry = "SELECT * FROM blog_posts LIMIT ";
 		blogs_by_limit_qry = blogs_by_limit_qry + limit;
 		System.out.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_limit_qry);
-		List<BlogEntry> articles = oakCassendraTemplate.findByLimit(
-				blogs_by_limit_qry, BlogEntry.class);
+		List<BlogPost> articles = oakCassendraTemplate.findByLimit(
+				blogs_by_limit_qry, BlogPost.class);
 		return articles;
 	}
 
-	public BlogEntry getBlogEntryById(BlogEntryKey id) {
-		BlogEntry blog = oakCassendraTemplate.findById(id, BlogEntry.class);
+	public BlogPost getBlogEntryById(BlogPostKey id) {
+		BlogPost blog = oakCassendraTemplate.findById(id, BlogPost.class);
 		return blog;
 	}
 
-	public void deleteBlogEntryById(BlogEntryKey id) {
+	public void deleteBlogEntryById(BlogPostKey id) {
 
-		oakCassendraTemplate.deleteById(id, BlogEntry.class);
+		oakCassendraTemplate.deleteById(id, BlogPost.class);
 
 	}
 
-	public void createBlogEntry(BlogEntry blog) {
+	public void createBlogEntry(BlogPost blog) {
 
-		oakCassendraTemplate.create(blog, BlogEntry.class);
+		oakCassendraTemplate.create(blog, BlogPost.class);
 		countersRepo.increment(blog.getBlogKey().getBlog() + "_count");
 
 	}
 
-	public void updateBlogEntry(BlogEntry blog) {
+	public void updateBlogEntry(BlogPost blog) {
 
-		oakCassendraTemplate.update(blog, BlogEntry.class);
+		oakCassendraTemplate.update(blog, BlogPost.class);
 
 	}
 

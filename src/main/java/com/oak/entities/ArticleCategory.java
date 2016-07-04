@@ -9,13 +9,13 @@ import com.oak.vo.ArticleCategoryVO;
 public class ArticleCategory {
 
 	@PrimaryKey
-	private long id;
+	private Long id;
 	private String name;
-	private long createdon;
+	private Long createdon;
 	private String description;
 	private String createdby;
 	private String updatedby;
-	private long updatedon;
+	private Long updatedon;
 	private String displayimage;
 
 	public ArticleCategory() {
@@ -33,11 +33,11 @@ public class ArticleCategory {
 		this.displayimage = categoryVO.getDisplayimage();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -49,11 +49,11 @@ public class ArticleCategory {
 		this.name = name;
 	}
 
-	public long getCreatedon() {
+	public Long getCreatedon() {
 		return createdon;
 	}
 
-	public void setCreatedon(long createdon) {
+	public void setCreatedon(Long createdon) {
 		this.createdon = createdon;
 	}
 
@@ -81,11 +81,11 @@ public class ArticleCategory {
 		this.updatedby = updatedby;
 	}
 
-	public long getUpdatedon() {
+	public Long getUpdatedon() {
 		return updatedon;
 	}
 
-	public void setUpdatedon(long updatedon) {
+	public void setUpdatedon(Long updatedon) {
 		this.updatedon = updatedon;
 	}
 

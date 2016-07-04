@@ -3,35 +3,37 @@ package com.oak.entities;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import com.oak.vo.BlogEntryVO;
+import com.oak.vo.BlogPostVO;
 
-@Table("blog_entries")
-public class BlogEntry {
+@Table("blog_posts")
+public class BlogPost {
 
 	@PrimaryKey
-	private BlogEntryKey blogKey;
+	private BlogPostKey blogKey;
 	private String blogname;
 	private String title;
+	private String alias;
 	private String content;
 	private String displayImage;
 	private Boolean approved;
 	private String approvedBy;
 	private Long approvedOn;
-	private Long updatedOn;
-	private String createdBy;
+	private Long updatedOn;	
 	private String updatedBy;
 	private Integer rating;
+	private String author;
 	private Long hits;
 
-	public BlogEntry() {
+	public BlogPost() {
 		super();
 	}
 
-	public BlogEntry(BlogEntryVO blogVO) {
+	public BlogPost(BlogPostVO blogVO) {
 		super();
-		BlogEntryKey key = new BlogEntryKey();
+		BlogPostKey key = new BlogPostKey();
 		key.setBlog(blogVO.getBlog());
 		key.setCreatedOn(blogVO.getCreatedOn());
+		key.setCreatedBy(blogVO.getCreatedBy());
 		this.blogKey = key;
 		this.title = blogVO.getTitle();
 		this.content = blogVO.getContent();
@@ -39,18 +41,18 @@ public class BlogEntry {
 		this.approved = blogVO.getApproved();
 		this.approvedBy = blogVO.getApprovedBy();
 		this.approvedOn = blogVO.getApprovedOn();
-		this.updatedOn = blogVO.getUpdatedOn();
-		this.createdBy = blogVO.getCreatedBy();
+		this.updatedOn = blogVO.getUpdatedOn();		
 		this.updatedBy = blogVO.getUpdatedBy();
 		this.rating = blogVO.getRating();
 		this.blogname = blogVO.getBlogname();
+		this.author = blogVO.getAuthor();
 	}
 
-	public BlogEntryKey getBlogKey() {
+	public BlogPostKey getBlogKey() {
 		return blogKey;
 	}
 
-	public void setBlogKey(BlogEntryKey blogKey) {
+	public void setBlogKey(BlogPostKey blogKey) {
 		this.blogKey = blogKey;
 	}
 
@@ -110,14 +112,6 @@ public class BlogEntry {
 		this.updatedOn = updatedOn;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -148,6 +142,22 @@ public class BlogEntry {
 
 	public void setBlogname(String blogname) {
 		this.blogname = blogname;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
 }
