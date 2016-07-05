@@ -64,8 +64,8 @@ CREATE TABLE images (
   img blob, 
   createdby text,
   createdon bigint,
-  PRIMARY KEY ((prefix,createdby),createdon)
-) WITH CLUSTERING ORDER BY (createdon DESC);
+  PRIMARY KEY (prefix,createdby,createdon)
+) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE articles (
     category text,
@@ -84,8 +84,8 @@ CREATE TABLE articles (
     title text,
     updatedby text,
     author text,
-    PRIMARY KEY ((category,createdby), createdon)
-) WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (category, createdby, createdon)
+) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE blog_categories(
 	id bigint PRIMARY KEY,
@@ -110,8 +110,8 @@ CREATE TABLE blogs (
     displayimage text,    
     rating bigint, 
     hits bigint,
-    PRIMARY KEY ((category,createdby), createdon)
-) WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (category,createdby, createdon)
+) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 
 CREATE TABLE blog_posts (
@@ -131,8 +131,8 @@ CREATE TABLE blog_posts (
     updatedby text,
     hits bigint,
     author text,
-    PRIMARY KEY ((blog,createdby), createdon)
-)WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (blog, createdby, createdon)
+)WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE incidents (
     incidenttype text,
@@ -149,8 +149,8 @@ CREATE TABLE incidents (
     status text,
     type text,
     author text,
- PRIMARY KEY ((incidenttype,createdby),  createdon)
-)WITH CLUSTERING ORDER BY (createdon DESC);
+ PRIMARY KEY (incidenttype, createdby,  createdon)
+)WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 
 CREATE TABLE states (
@@ -251,8 +251,8 @@ CREATE TABLE videos (
     createdon bigint,
     updatedon bigint,
     author text,
-    PRIMARY KEY ((category,createdby), createdon)
-) WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (category,createdby, createdon)
+) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE comments (
     service text,     
@@ -289,8 +289,8 @@ CREATE TABLE forum_topics (
     displayimage text,    
     rating bigint, 
     hits bigint,
-    PRIMARY KEY ((category,createdby), createdon)
-) WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (category,createdby, createdon)
+) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE forum_posts (
     topic text,
@@ -308,8 +308,8 @@ CREATE TABLE forum_posts (
     updatedby text,
     hits bigint,
     author text,
-    PRIMARY KEY ((topic,createdby), createdon)
-)WITH CLUSTERING ORDER BY (createdon DESC);
+    PRIMARY KEY (topic,createdby, createdon)
+)WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
 CREATE TABLE aliases (
     id text,
