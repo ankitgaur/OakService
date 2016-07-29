@@ -42,7 +42,7 @@ public class BlogPostsController {
 	
 	@Autowired
 	AliasService aliasService;
-
+	
 	@CrossOrigin
 	@RequestMapping(value = "/blog_entries/{id}", produces = "application/json", method = RequestMethod.GET)
 	public BlogPostVO getBlogEntryByID(@PathVariable("id") String id)
@@ -120,6 +120,7 @@ public class BlogPostsController {
 		System.out.println("Fetching & Deleting User with id " + id);
 		Alias alias = aliasService.getAliasById(id);		
 		BlogPostKey key = new BlogPostKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		
 		blogEntryService.deleteBlogEntryById(key);
 		return new ResponseEntity<BlogPostVO>(HttpStatus.NO_CONTENT);
 	}
@@ -140,7 +141,10 @@ public class BlogPostsController {
 		blogVO.setCreatedOn(dNow.getTime());
 		blogVO.setCreatedBy(email);
 		blogVO.setAuthor(user.getUsername());
-		blogEntryService.createBlogEntry(new BlogPost(blogVO));
+		
+		blogVO.getBlog();
+		blogEntryService.createBlogEntry(new BlogPost(blogVO));		
+		
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}

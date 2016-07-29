@@ -16,8 +16,7 @@ public class BlogCountVO {
 	public BlogCountVO(Blog blog) {
 		this.title = blog.getTitle();
 		this.displayimage = blog.getDisplayimage();
-		this.id = blog.getBlogKey().getCategory()
-				+ "_"+blog.getBlogKey().getCreatedOn();
+		this.id = blog.getAlias();
 	}
 
 	public String getTitle() {

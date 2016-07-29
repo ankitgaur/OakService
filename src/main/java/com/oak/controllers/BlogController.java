@@ -76,7 +76,7 @@ public class BlogController {
 		for (Blog blog : blogs) {
 			
 			BlogCountVO bcvo = new BlogCountVO(blog);	
-			bcvo.setCount(counterService.getCounterValue(blog.generateId()+"_count"));
+			bcvo.setCount(counterService.getCounterValue(blog.getAlias() + "_count"));
 			blogsVO.add(bcvo);
 		}
 
