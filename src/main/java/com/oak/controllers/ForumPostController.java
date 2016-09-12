@@ -59,14 +59,6 @@ public class ForumPostController {
 		
 		ForumPost forumPost = forumPostService.getForumPostById(key);
 		ForumPostVO forumPostVO = new ForumPostVO(forumPost);
-		Date createDate = new Date(forumPost.getPk().getCreatedOn());
-		Date updateDate = new Date(forumPost.getUpdatedOn());
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MM-yyyy HH:mm:ss");
-		String dateCreateText = dateFormatter.format(createDate);
-		String updateCreateText = dateFormatter.format(updateDate);
-		forumPostVO.setCreatedOnStr(dateCreateText);
-		forumPostVO.setUpdatedOnStr(updateCreateText);
 		return forumPostVO;
 	}
 
@@ -77,14 +69,6 @@ public class ForumPostController {
 		List<ForumPostVO> articleVO = new ArrayList<ForumPostVO>();
 		for (ForumPost forumPost : forumPostList) {
 			ForumPostVO vo = new ForumPostVO(forumPost);
-			Date createDate = new Date(forumPost.getPk().getCreatedOn());
-			Date updateDate = new Date(forumPost.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
 			articleVO.add(vo);
 		}
 		return articleVO;
@@ -102,14 +86,6 @@ public class ForumPostController {
 		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
 		for (ForumPost forumPost : forumPostList) {
 			ForumPostVO forumPostVo = new ForumPostVO(forumPost);
-			Date createDate = new Date(forumPost.getPk().getCreatedOn());
-			Date updateDate = new Date(forumPost.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			forumPostVo.setCreatedOnStr(dateCreateText);
-			forumPostVo.setUpdatedOnStr(updateCreateText);
 			forumPostVoList.add(forumPostVo);
 		}
 		return forumPostVoList;
@@ -126,14 +102,6 @@ public class ForumPostController {
 		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
 		for (ForumPost forumPost : forumPostList) {
 			ForumPostVO vo = new ForumPostVO(forumPost);
-			Date createDate = new Date(forumPost.getPk().getCreatedOn());
-			Date updateDate = new Date(forumPost.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
 			forumPostVoList.add(vo);
 		}
 		return forumPostVoList;
@@ -150,14 +118,6 @@ public class ForumPostController {
 		List<ForumPostVO> forumPostVoList = new ArrayList<ForumPostVO>();
 		for (ForumPost article : forumPostList) {
 			ForumPostVO forumPostVO = new ForumPostVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			forumPostVO.setCreatedOnStr(dateCreateText);
-			forumPostVO.setUpdatedOnStr(updateCreateText);
 			forumPostVoList.add(forumPostVO);
 		}
 		return forumPostVoList;

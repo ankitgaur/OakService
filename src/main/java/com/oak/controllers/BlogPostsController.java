@@ -94,7 +94,7 @@ public class BlogPostsController {
 		return blogVO;
 
 	}
-
+	
 	@CrossOrigin
 	@RequestMapping(value = "/blog_entries", produces = "application/json", method = RequestMethod.GET)
 	public List<BlogPostVO> getBlogEntries() throws JsonProcessingException {

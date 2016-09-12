@@ -82,14 +82,6 @@ public class ForumTopicsController {
 			ForumTopicsVO forumTopicsVo = new ForumTopicsVO(article);
 			long cnt = counterService.getCounterValue(forumTopicsVo.getId());
 			forumTopicsVo.setPstCount(cnt);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			forumTopicsVo.setCreatedOnStr(dateCreateText);
-			forumTopicsVo.setUpdatedOnStr(updateCreateText);
 			forumTopicsVoList.add(forumTopicsVo);
 		}
 		return forumTopicsVoList;
@@ -108,14 +100,6 @@ public class ForumTopicsController {
 			ForumTopicsVO forumTopicsVO = new ForumTopicsVO(article);
 			long cnt = counterService.getCounterValue(forumTopicsVO.getId());
 			forumTopicsVO.setPstCount(cnt);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			forumTopicsVO.setCreatedOnStr(dateCreateText);
-			forumTopicsVO.setUpdatedOnStr(updateCreateText);
 			forumTopicsListVO.add(forumTopicsVO);
 		}
 		return forumTopicsListVO;
@@ -132,14 +116,6 @@ public class ForumTopicsController {
 		List<ForumTopicsVO> articleVO = new ArrayList<ForumTopicsVO>();
 		for (ForumTopics article : forum_topics) {
 			ForumTopicsVO vo = new ForumTopicsVO(article);
-			Date createDate = new Date(article.getPk().getCreatedOn());
-			Date updateDate = new Date(article.getUpdatedOn());
-			SimpleDateFormat dateFormatter = new SimpleDateFormat(
-					"dd-MM-yyyy HH:mm:ss");
-			String dateCreateText = dateFormatter.format(createDate);
-			String updateCreateText = dateFormatter.format(updateDate);
-			vo.setCreatedOnStr(dateCreateText);
-			vo.setUpdatedOnStr(updateCreateText);
 			articleVO.add(vo);
 		}
 		return articleVO;

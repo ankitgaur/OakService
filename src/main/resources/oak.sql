@@ -24,6 +24,17 @@ DROP TABLE IF EXISTS forum_topics;
 DROP TABLE IF EXISTS forum_posts;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS aliases;
+DROP TABLE IF EXISTS incident_statistics;
+
+CREATE TABLE incident_statistics(
+ name text,
+ state text,
+ type text,
+ cat text,
+ govt text,
+ val counter,
+ PRIMARY KEY (name,state,type,cat,govt)
+)WITH CLUSTERING ORDER BY (state DESC,type DESC,cat DESC,govt DESC);
 
 CREATE TABLE article_categories(
 	id bigint PRIMARY KEY,
@@ -154,12 +165,11 @@ CREATE TABLE incidents (
 
 
 CREATE TABLE states (
-    id bigint PRIMARY KEY,
+    name text PRIMARY KEY,
     createdby text,
     createdon bigint,
     currgovt text,
     govts text,
-    name text,
     abbr text,
     updatedby text,
     updatedon bigint

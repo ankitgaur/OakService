@@ -21,7 +21,7 @@ public class StateRepo {
 		return states;
 	}
 
-	public States getStateById(long id) {
+	public States getStateById(String id) {
 		States state = oakCassandraTemplate.findById(id, States.class);
 		return state;
 	}
@@ -38,7 +38,7 @@ public class StateRepo {
 
 	}
 
-	public void deleteStateById(long id) {
+	public void deleteStateById(String id) {
 
 		oakCassandraTemplate.deleteById(id, States.class);
 

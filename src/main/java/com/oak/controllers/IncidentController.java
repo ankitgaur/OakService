@@ -22,15 +22,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oak.entities.Alias;
 import com.oak.entities.Incident;
 import com.oak.entities.IncidentKey;
 import com.oak.entities.User;
 import com.oak.service.AliasService;
+import com.oak.service.ImageService;
 import com.oak.service.IncidentService;
 import com.oak.service.UsersService;
 import com.oak.vo.IncidentVO;
@@ -46,6 +49,9 @@ public class IncidentController {
 	
 	@Autowired
 	AliasService aliasService;
+	
+	@Autowired
+	ImageService imageService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/incidents", produces = "application/json", method = RequestMethod.GET)
@@ -193,9 +199,10 @@ public class IncidentController {
 	
 	@CrossOrigin
 	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createIncident(
+	public IncidentVO createIncident(
 			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
 			JsonMappingException, IOException, ParseException {
+		System.out.println("inside create incident");
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		User user = usersService.getUserById(email);
@@ -206,9 +213,38 @@ public class IncidentController {
 		incidentVO.setCreatedBy(email);
 		incidentVO.setAuthor(user.getUsername());
 		
-		incidentService.createIncident(new Incident(incidentVO));
-		HttpHeaders headers = new HttpHeaders();
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		Incident i = new Incident(incidentVO);
+		
+		incidentService.createIncident(i);
+		return new IncidentVO(i);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/incidents/image/{id}", method = RequestMethod.POST)
+	public String uploadImage(@RequestParam("file") MultipartFile image,
+			@PathVariable String id) throws IOException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		
+		
+		Alias alias = aliasService.getAliasById(id);		
+		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		Incident incident = incidentService.getIncidentById(key);
+		
+		String prefix = email;
+		//System.out.println(image.getSize() + image.getOriginalFilename());
+		//System.out.println(Arrays.toString(image.getBytes()));	
+				
+		//TODO : Get username from session
+		String iid = imageService.saveImage(prefix, image.getOriginalFilename(),
+				image.getSize(), image.getBytes(),email);
+		
+		
+		incident.setImage(iid);
+		incidentService.updateIncident(incident);
+		
+		return id;
 	}
 
 	@CrossOrigin
@@ -235,7 +271,7 @@ public class IncidentController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.DELETE)
-	public void deleteIncidentType(@PathVariable("incidentID") String incidentID) {
+	public void deleteIncidentType(@PathVariable("incidentID") String incidentID) throws JsonParseException, JsonMappingException, IOException {
 		Alias alias = aliasService.getAliasById(incidentID);		
 		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		incidentService.deleteIncidentById(key);

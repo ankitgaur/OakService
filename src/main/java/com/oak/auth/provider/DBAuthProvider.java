@@ -26,8 +26,8 @@ public class DBAuthProvider implements AuthenticationProvider {
 		String id = authentication.getName();
 		String password = authentication.getCredentials().toString();
 
-		//System.out.println(id);
-		//System.out.println(password);
+		System.out.println("Authenticating "+id+":"+password);
+		
 		try {
 			
 			User user = usersService.getUserById(id);

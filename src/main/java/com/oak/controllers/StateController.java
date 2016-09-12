@@ -2,7 +2,6 @@ package com.oak.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -55,7 +54,7 @@ public class StateController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/states/{stateId}", produces = "application/json", method = RequestMethod.GET)
-	public StatesVO getStateById(@PathVariable("stateId") long id)
+	public StatesVO getStateById(@PathVariable("stateId") String id)
 			throws JsonParseException, JsonMappingException, IOException {
 		States state = stateService.getStateById(id);
 		if (state == null) {
@@ -89,7 +88,6 @@ public class StateController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 
-		stateVO.setId(new Date().getTime());
 		stateVO.setCreatedby(email);
 		stateService.createState(new States(stateVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -98,7 +96,7 @@ public class StateController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/states/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<StatesVO> updateStates(@PathVariable("id") long id,
+	public ResponseEntity<StatesVO> updateStates(@PathVariable("id") String id,
 			@RequestBody StatesVO stateVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -111,7 +109,7 @@ public class StateController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/states/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<StatesVO> deleteState(@PathVariable("id") long id) {
+	public ResponseEntity<StatesVO> deleteState(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 
 		States state = stateService.getStateById(id);

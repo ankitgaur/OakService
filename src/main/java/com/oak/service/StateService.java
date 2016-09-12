@@ -18,7 +18,7 @@ public class StateService {
 		return statesRepo.getStates();
 	}
 
-	public States getStateById(long id) {
+	public States getStateById(String id) {
 		return statesRepo.getStateById(id);
 	}
 
@@ -34,7 +34,7 @@ public class StateService {
 
 	}
 
-	public void deleteStateById(long id) {
+	public void deleteStateById(String id) {
 
 		statesRepo.deleteStateById(id);
 

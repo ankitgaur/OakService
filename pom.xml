@@ -156,7 +156,7 @@
 
 	<build>
 		<finalName>oakservices_1_0</finalName>
-		<resources>
+		<!-- <resources>
 			<resource>
 				<targetPath>/webapp</targetPath>
 				<directory>src/main/webapp</directory>
@@ -164,7 +164,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-		</resources>
+		</resources> -->
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -16,7 +16,7 @@ import com.oak.entities.States;
 
 public class StatesVO {
 
-	private Long id;
+	private String id;
 	private String name;
 	private String abbr;
 	private String currGovt;
@@ -36,7 +36,7 @@ public class StatesVO {
 			JsonMappingException, IOException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat(OakConstants.DATE_FORMAT);
-		id = state.getId();
+		id = state.getName();
 		name = state.getName();
 		currGovt = state.getCurrGovt();
 		createdby = state.getCreatedby();
@@ -61,11 +61,11 @@ public class StatesVO {
 		}
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

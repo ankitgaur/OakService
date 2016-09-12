@@ -18,6 +18,7 @@ public class IncidentVO {
 
 	private String id;
 	private String type;
+	private String image;
 	private String state;
 	private String govt;
 	private String description;
@@ -54,7 +55,7 @@ public class IncidentVO {
 			JsonMappingException, IOException {
 		id = incident.getAlias();
 		type = incident.getType();
-
+		image=incident.getImage();
 		state = incident.getState();
 		govt = incident.getGovt();
 		description = incident.getDescription();
@@ -166,6 +167,14 @@ public class IncidentVO {
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

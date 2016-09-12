@@ -15,7 +15,6 @@ import com.oak.vo.StatesVO;
 public class States {
 
 	@PrimaryKey
-	private Long id;
 	private String name;
 	private String abbr;
 	private String currGovt;
@@ -32,7 +31,6 @@ public class States {
 	public States(StatesVO stateVO) throws JsonGenerationException,
 			JsonMappingException, IOException {
 
-		id = stateVO.getId();
 		name = stateVO.getName();
 		currGovt = stateVO.getCurrGovt();
 
@@ -48,15 +46,7 @@ public class States {
 		updatedon = stateVO.getUpdatedOn();
 		abbr = stateVO.getAbbr();
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
