@@ -1,6 +1,8 @@
 package com.oak.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,16 +59,19 @@ public class BlogPostService {
 	}
 
 	public void createBlogEntry(BlogPost blog) {
-
+		SimpleDateFormat sdf  = new SimpleDateFormat("MMyy");
+		int monyear = Integer.parseInt(sdf.format(new Date()));
 		UUID uuid = UUID.randomUUID();
 		Alias alias = new Alias();
 		alias.setId(uuid.toString());
 		alias.setCategory(blog.getBlogKey().getBlog());
 		alias.setCreatedby(blog.getBlogKey().getCreatedBy());
 		alias.setCreatedon(blog.getBlogKey().getCreatedOn());
+		alias.setMonyear(monyear);
 		aliasService.createAlias(alias);
 			
 		blog.setAlias(alias.getId());
+		blog.getBlogKey().setMonyear(monyear);
 		blogEntryRepo.createBlogEntry(blog);
 
 	}
@@ -75,6 +80,10 @@ public class BlogPostService {
 
 		blogEntryRepo.updateBlogEntry(blog);
 
+	}
+
+	public List<BlogPost> getTopBlogEntriesByUser(String user, int limit) {
+		return blogEntryRepo.getTopBlogEntriesByUser(user, limit);
 	}
 
 }

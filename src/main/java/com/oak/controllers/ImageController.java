@@ -66,9 +66,9 @@ public class ImageController {
 		return id;
 	}
 	
-	@CrossOrigin
+	@CrossOrigin//(methods={RequestMethod.POST,RequestMethod.OPTIONS,RequestMethod.GET})
 	@RequestMapping(value = "/ckimages/{prefix}", method = RequestMethod.POST)
-	public ImageUploadResponse uploadCKImage(@RequestParam("upload") MultipartFile image,
+	public String uploadCKImage(@RequestParam("upload") MultipartFile image,
 			@PathVariable String prefix) throws IOException {
 
 		//System.out.println(image.getSize() + image.getOriginalFilename());
@@ -81,8 +81,8 @@ public class ImageController {
 		ImageUploadResponse response = new ImageUploadResponse();
 		response.setUploaded(1);
 		response.setFilename(fname);
-		response.setUrl("http://localhost:6767/image/"+id);
-		return response;
+		response.setUrl("http://dev.insodel.com:6767/image/"+id);
+		return "http://dev.insodel.com:6767/image/"+id;
 	}
 	
 	@CrossOrigin

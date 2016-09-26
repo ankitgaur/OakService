@@ -33,6 +33,14 @@ public class UsersService {
 		userRepo.updateUser(user);
 
 	}
+	
+	public void activateUser(String id){
+		
+		User user = getUserById(id);
+		user.setActivated(true);
+		updateUser(user);
+		
+	}
 
 	public void deleteUserById(String id) {
 

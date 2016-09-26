@@ -15,14 +15,17 @@ public class BlogPostKey implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKeyColumn(name = "blog", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-	private String blog;
-
-	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-	private String createdBy;
+	@PrimaryKeyColumn(name = "monyear", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	private int monyear;
 	
 	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
+	
+	@PrimaryKeyColumn(name = "createdby", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	private String createdBy;
+	
+	@PrimaryKeyColumn(name = "blog", ordinal = 3, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	private String blog;
 
 	public String getBlog() {
 		return blog;
@@ -52,11 +55,20 @@ public class BlogPostKey implements Serializable {
 		super();
 	}
 
-	public BlogPostKey(String category, String createdBy, Long createdOn) {
+	public BlogPostKey(int monyear,String category, String createdBy, Long createdOn) {
 		super();
+		this.monyear = monyear;
 		this.blog = category;
 		this.createdOn = createdOn;
 		this.createdBy = createdBy;
+	}
+
+	public int getMonyear() {
+		return monyear;
+	}
+
+	public void setMonyear(int monyear) {
+		this.monyear = monyear;
 	}
 
 	@Override

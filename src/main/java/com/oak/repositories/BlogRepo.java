@@ -45,4 +45,15 @@ public class BlogRepo {
 
 	}
 
+	public List<Blog> getBlogsForUser(String user) {
+		String blogs_by_user_qry = "SELECT * FROM blogs WHERE createdby=";
+		blogs_by_user_qry = blogs_by_user_qry + "'" + user + "'"
+				+ " allow filtering";
+		System.out
+				.println("BLOGS_FOR_USER_QRY ::: " + blogs_by_user_qry);
+		List<Blog> blogs = oakCassandraTemplate.findByPartitionKey(
+				blogs_by_user_qry, Blog.class);
+		return blogs;
+	}
+
 }

@@ -55,4 +55,9 @@ public class BlogService {
 
 	}
 
+	public List<Blog> getBlogsForUser(String email) {
+		
+		return blogRepo.getBlogsForUser(email);
+	}
+
 }

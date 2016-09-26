@@ -11,6 +11,7 @@ public class Alias {
 	private String category;
 	private String createdby;
 	private Long createdon;
+	private int monyear;
 
 	public String getId() {
 		return id;
@@ -42,6 +43,14 @@ public class Alias {
 
 	public void setCreatedon(Long createdon) {
 		this.createdon = createdon;
+	}
+
+	public int getMonyear() {
+		return monyear;
+	}
+
+	public void setMonyear(int monyear) {
+		this.monyear = monyear;
 	}
 
 }

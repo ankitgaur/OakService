@@ -22,6 +22,7 @@ public class UsersVO {
 	private String updatedOnStr;
 	private Long createdOn;
 	private Long updatedOn;
+	private String grecaptcharesponse;
 
 	public UsersVO() {
 		super();
@@ -33,7 +34,7 @@ public class UsersVO {
 		this.email = user.getEmail();
 		this.name = user.getName();
 		this.username = user.getUsername();
-		this.password = user.getPassword();
+		//this.password = user.getPassword();
 		this.groups = user.getGroups();
 		this.activated = user.isActivated();
 		this.forgotpassword = user.isForgotpassword();
@@ -160,6 +161,14 @@ public class UsersVO {
 
 	public void setUpdatedOn(Long updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public String getGrecaptcharesponse() {
+		return grecaptcharesponse;
+	}
+
+	public void setGrecaptcharesponse(String grecaptcharesponse) {
+		this.grecaptcharesponse = grecaptcharesponse;
 	}
 
 	

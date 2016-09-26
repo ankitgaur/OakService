@@ -13,11 +13,11 @@ import com.oak.entities.User;
 import com.oak.service.UsersService;
 
 @Component
-public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
-	
+public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
+
 	@Autowired
 	UsersService userService;
-	
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 		throws Exception {
@@ -46,8 +46,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 			User user = userService.getUserById(email);		
 			
 			if(password.equals(user.getPassword())){	
-				request.setAttribute("user", email);
-				return true;
+				if(user.isActivated()){
+					request.setAttribute("user", email);
+					return true;
+				}
+				else{
+					
+					response.sendError(401, "User exists but is not activated. Please check your mailbox for an activation mail.");
+					return false;
+				}
 			}			
 		}else{
 			//Users user = userService.getUserById(email);
@@ -57,7 +64,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 			
 		}		
 		
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.sendError(401, "Email or password is invalid.");
 		return false;
 		
 	}

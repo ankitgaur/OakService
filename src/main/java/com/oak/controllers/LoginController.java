@@ -27,16 +27,20 @@ public class LoginController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		User user = usersService.getUserById(email);
-		UsersVO uvo = new UsersVO();
-		uvo.setName(user.getName());
-		uvo.setUsername(user.getUsername());
-		//UUID uuid = UUID.randomUUID();
-		//session.setAttribute("sessionToken", uuid.toString());
 		
-		//lvo.setToken(uuid.toString());
+		if(user!=null && user.isActivated()){
+			UsersVO uvo = new UsersVO();
+			uvo.setName(user.getName());
+			uvo.setUsername(user.getUsername());
+			//UUID uuid = UUID.randomUUID();
+			//session.setAttribute("sessionToken", uuid.toString());
+			
+			//lvo.setToken(uuid.toString());
+			
+			return uvo;
+		}
 		
-		return uvo;
-		
+		return null;
 	}
 
 }

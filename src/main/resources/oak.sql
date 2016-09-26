@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS forum_posts;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS aliases;
 DROP TABLE IF EXISTS incident_statistics;
+DROP TABLE IF EXISTS activation_codes;
 
 CREATE TABLE incident_statistics(
  name text,
@@ -124,9 +125,9 @@ CREATE TABLE blogs (
     PRIMARY KEY (category,createdby, createdon)
 ) WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
 
-
 CREATE TABLE blog_posts (
-    blog text,
+    monyear int,
+	blog text,
     blogname text,
     alias text,
     updatedon bigint,
@@ -142,8 +143,11 @@ CREATE TABLE blog_posts (
     updatedby text,
     hits bigint,
     author text,
-    PRIMARY KEY (blog, createdby, createdon)
-)WITH CLUSTERING ORDER BY (createdby DESC, createdon DESC);
+    PRIMARY KEY (monyear,createdon,createdby,blog)
+)WITH CLUSTERING ORDER BY (createdon DESC,createdby DESC,blog DESC);
+
+CREATE INDEX blog_posts_createdby_idx ON blog_posts (createdby);
+CREATE INDEX blog_posts_blog_idx ON blog_posts (blog);
 
 CREATE TABLE incidents (
     incidenttype text,
@@ -325,6 +329,18 @@ CREATE TABLE aliases (
     id text,
     category text,
     createdby text,    
-    createdon bigint,    
+    createdon bigint,
+    monyear int,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE activation_codes (
+    email text,
+    code text,
+    PRIMARY KEY (email)
+);
+
+
+
+
+

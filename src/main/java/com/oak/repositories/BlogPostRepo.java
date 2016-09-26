@@ -87,4 +87,15 @@ public class BlogPostRepo {
 
 	}
 
+	public List<BlogPost> getTopBlogEntriesByUser(String user, int limit) {
+		String blogs_by_category_qry = "SELECT * FROM blog_posts WHERE createdby=";
+		blogs_by_category_qry = blogs_by_category_qry + "'" + user + "'"
+				+ " LIMIT " + limit+" allow filtering";
+		System.out
+				.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
+		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(
+				blogs_by_category_qry, BlogPost.class);
+		return blogs;
+	}
+
 }

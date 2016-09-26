@@ -49,7 +49,7 @@ public class BlogPostsController {
 			throws JsonProcessingException {
 		
 		Alias alias = aliasService.getAliasById(id);		
-		BlogPostKey key = new BlogPostKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		BlogPostKey key = new BlogPostKey(alias.getMonyear(),alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 
 		BlogPost blog = blogEntryService.getBlogEntryById(key);
 		BlogPostVO blogVO = new BlogPostVO(blog);
@@ -66,6 +66,27 @@ public class BlogPostsController {
 
 		int limit = 500;
 		List<BlogPost> blogs = blogEntryService.getTopBlogEntriesByBlog(blog,
+				limit);
+
+		List<BlogPostVO> blogVO = new ArrayList<BlogPostVO>();
+		for (BlogPost blogEntry : blogs) {
+			BlogPostVO vo = new BlogPostVO(blogEntry);			
+			blogVO.add(vo);
+		}
+
+		return blogVO;
+
+	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/blog_entries/user", produces = "application/json", method = RequestMethod.GET)
+	public List<BlogPostVO> getBlogEntriesForUser() throws JsonProcessingException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String user = authentication.getName();
+		
+		int limit = 500;
+		List<BlogPost> blogs = blogEntryService.getTopBlogEntriesByUser(user,
 				limit);
 
 		List<BlogPostVO> blogVO = new ArrayList<BlogPostVO>();
@@ -119,7 +140,7 @@ public class BlogPostsController {
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
 		Alias alias = aliasService.getAliasById(id);		
-		BlogPostKey key = new BlogPostKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		BlogPostKey key = new BlogPostKey(alias.getMonyear(),alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		
 		blogEntryService.deleteBlogEntryById(key);
 		return new ResponseEntity<BlogPostVO>(HttpStatus.NO_CONTENT);
@@ -160,7 +181,7 @@ public class BlogPostsController {
 		
 		System.out.println("Updating User " + id);
 		Alias alias = aliasService.getAliasById(id);		
-		BlogPostKey key = new BlogPostKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		BlogPostKey key = new BlogPostKey(alias.getMonyear(),alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
 		BlogPost currentBlog = blogEntryService.getBlogEntryById(key);
 		if (currentBlog == null) {
 			System.out.println("Blogs with id " + id + " not found");
