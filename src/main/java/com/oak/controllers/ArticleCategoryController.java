@@ -20,13 +20,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oak.entities.ArticleCategory;
 import com.oak.service.ArticleCategoryService;
+import com.oak.service.ImageService;
 import com.oak.vo.ArticleCategoryVO;
 
 @RestController
@@ -34,12 +36,16 @@ public class ArticleCategoryController {
 
 	@Autowired
 	ArticleCategoryService articleCategoryService;
-	
+
+	@Autowired
+	ImageService imageService;
+
 	@CrossOrigin
 	@RequestMapping(value = "/article_categories", produces = "application/json", method = RequestMethod.GET)
-	public List<ArticleCategoryVO> getAllArticleCategories() throws JsonParseException,
-			JsonMappingException, IOException {
-		List<ArticleCategory> categories = articleCategoryService.getArticleCategories();
+	public List<ArticleCategoryVO> getAllArticleCategories()
+			throws JsonParseException, JsonMappingException, IOException {
+		List<ArticleCategory> categories = articleCategoryService
+				.getArticleCategories();
 		if (categories == null || categories.isEmpty()) {
 			return null;
 		}
@@ -57,7 +63,8 @@ public class ArticleCategoryController {
 	@RequestMapping(value = "/article_categories/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ArticleCategoryVO getArticleCategoryById(@PathVariable("id") long id)
 			throws JsonParseException, JsonMappingException, IOException {
-		ArticleCategory category = articleCategoryService.getArticleCategoryById(id);
+		ArticleCategory category = articleCategoryService
+				.getArticleCategoryById(id);
 		if (category == null) {
 			return null;
 		}
@@ -65,46 +72,70 @@ public class ArticleCategoryController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/article_categories", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createArticleCategory(@RequestBody ArticleCategoryVO categoryVO,
-			UriComponentsBuilder ucBuilder) throws JsonParseException,
-			JsonMappingException, IOException {
+	@RequestMapping(value = "/article_categories", method = RequestMethod.POST)
+	public ResponseEntity<Void> createArticleCategory(
+			@RequestParam("name") String name,
+			@RequestParam("description") String description,
+			@RequestParam(name = "displayImage", required = false) MultipartFile displayImage)
+			throws JsonParseException, JsonMappingException, IOException {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
-				
+		String id = null;
+		try {
+			byte[] imgbytes = displayImage.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage",
+						displayImage.getOriginalFilename(),
+						displayImage.getSize(), displayImage.getBytes(), email);
+			}
+		} catch (NullPointerException npe) {
+			// do nothing
+		}
+		ArticleCategoryVO categoryVO = new ArticleCategoryVO();
 		categoryVO.setId(new Date().getTime());
 		categoryVO.setCreatedby(email);
 		categoryVO.setCreatedon(new Date().getTime());
-		articleCategoryService.createArticleCategory(new ArticleCategory(categoryVO));
+		categoryVO.setName(name);
+		categoryVO.setDescription(description);
+		categoryVO.setDisplayimage("http://dev.insodel.com:6767/image/" + id);
+		articleCategoryService.createArticleCategory(new ArticleCategory(
+				categoryVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/article_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<ArticleCategoryVO> updateArticleCategory(@PathVariable("id") long id,
-			@RequestBody ArticleCategoryVO categoryVO) throws JsonGenerationException,
-			JsonMappingException, IOException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	public ResponseEntity<ArticleCategoryVO> updateArticleCategory(
+			@PathVariable("id") long id,
+			@RequestBody ArticleCategoryVO categoryVO)
+			throws JsonGenerationException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
-				
+
 		categoryVO.setUpdatedby(email);
 		categoryVO.setUpdatedon(new Date().getTime());
-		articleCategoryService.updateArticleCategory(new ArticleCategory(categoryVO));
+		articleCategoryService.updateArticleCategory(new ArticleCategory(
+				categoryVO));
 		return new ResponseEntity<ArticleCategoryVO>(categoryVO, HttpStatus.OK);
 
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/article_categories/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<ArticleCategoryVO> deleteArticleCategory(@PathVariable("id") long id) {
-		System.out.println("Fetching & Deleting Article Category with id " + id);
+	public ResponseEntity<ArticleCategoryVO> deleteArticleCategory(
+			@PathVariable("id") long id) {
+		System.out
+				.println("Fetching & Deleting Article Category with id " + id);
 
-		ArticleCategory category = articleCategoryService.getArticleCategoryById(id);
+		ArticleCategory category = articleCategoryService
+				.getArticleCategoryById(id);
 		if (category == null) {
-			System.out.println("Unable to delete. Article Category with id " + id
-					+ " not found");
+			System.out.println("Unable to delete. Article Category with id "
+					+ id + " not found");
 			return new ResponseEntity<ArticleCategoryVO>(HttpStatus.NOT_FOUND);
 		}
 		articleCategoryService.deleteArticleCategoryById(id);
