@@ -25,8 +25,8 @@ public class IncidentVO {
 	private Map<String, String> questions;
 	private String status;
 	private Long reportDate;
-	private String createdBy;	
-	private String author;	
+	private String createdBy;
+	private String author;
 	private Long createdOn;
 	private String createdOnStr;
 	private String reportDateStr;
@@ -55,7 +55,7 @@ public class IncidentVO {
 			JsonMappingException, IOException {
 		id = incident.getAlias();
 		type = incident.getType();
-		image=incident.getImage();
+		image = incident.getImage();
 		state = incident.getState();
 		govt = incident.getGovt();
 		description = incident.getDescription();
@@ -74,11 +74,11 @@ public class IncidentVO {
 					});
 			questions = map;
 		}
-		
+
 		if (createdOn != null) {
 			this.createdOnStr = sdf.format(new Date(createdOn));
 		}
-		
+
 	}
 
 	public String getType() {

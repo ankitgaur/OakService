@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
@@ -43,13 +45,13 @@ public class IncidentController {
 
 	@Autowired
 	IncidentService incidentService;
-	
+
 	@Autowired
 	UsersService usersService;
-	
+
 	@Autowired
 	AliasService aliasService;
-	
+
 	@Autowired
 	ImageService imageService;
 
@@ -105,11 +107,11 @@ public class IncidentController {
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/page/{createdOn}", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getTopIncidentsByPage(
-			@PathVariable("createdOn") long createdOn) throws JsonGenerationException,
-			JsonMappingException, IOException {
+			@PathVariable("createdOn") long createdOn)
+			throws JsonGenerationException, JsonMappingException, IOException {
 		int limit = 20;
-		List<Incident> incidents = incidentService
-				.getIncidentsAfterId(createdOn,limit);
+		List<Incident> incidents = incidentService.getIncidentsAfterId(
+				createdOn, limit);
 
 		List<IncidentVO> incidentVO = new ArrayList<IncidentVO>();
 		for (Incident incident : incidents) {
@@ -127,7 +129,7 @@ public class IncidentController {
 
 		return incidentVO;
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/limit/{limit}", produces = "application/json", method = RequestMethod.GET)
 	public List<IncidentVO> getTopIncidentsByLimit(
@@ -159,8 +161,9 @@ public class IncidentController {
 			@PathVariable("incidentID") String incidentID)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		Alias alias = aliasService.getAliasById(incidentID);		
-		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		Alias alias = aliasService.getAliasById(incidentID);
+		IncidentKey key = new IncidentKey(alias.getCategory(),
+				alias.getCreatedby(), alias.getCreatedon());
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
@@ -177,73 +180,111 @@ public class IncidentController {
 
 		return incidentVO;
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/bulk", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncidentBulk(
-			@RequestBody List<IncidentVO> incidentVOs) throws JsonGenerationException,
-			JsonMappingException, IOException, ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			@RequestBody List<IncidentVO> incidentVOs)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			ParseException {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
 		User user = usersService.getUserById(email);
-		
-		for(IncidentVO incidentVO : incidentVOs){
+
+		for (IncidentVO incidentVO : incidentVOs) {
 			incidentVO.setCreatedBy(email);
 			incidentVO.setAuthor(user.getUsername());
 			incidentService.createIncident(new Incident(incidentVO));
-		}	
-		
+		}
+
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-	
+
 	@CrossOrigin
-	@RequestMapping(value = "/incidents", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/incidents", method = RequestMethod.POST)
 	public IncidentVO createIncident(
-			@RequestBody IncidentVO incidentVO) throws JsonGenerationException,
-			JsonMappingException, IOException, ParseException {
-		System.out.println("inside create incident");
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			@RequestParam("type") String type,
+			@RequestParam("state") String state,
+			@RequestParam("govt") String govt,
+			@RequestParam(name = "displayImage", required = false) MultipartFile displayImage,
+			@RequestParam("category") String category,
+			@RequestParam("description") String description,
+			@RequestParam("questions") String questions,
+			@RequestParam("status") String status)
+			throws JsonGenerationException, JsonMappingException, IOException,
+			ParseException {
+
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
+		String id = null;
+		try {
+			byte[] imgbytes = displayImage.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage",
+						displayImage.getOriginalFilename(),
+						displayImage.getSize(), displayImage.getBytes(), email);
+			}
+		} catch (NullPointerException npe) {
+			// do nothing
+		}
+
+		IncidentVO incidentVO = new IncidentVO();
 		User user = usersService.getUserById(email);
 		Date dNow = new Date();
-		
 		incidentVO.setCreatedOn(dNow.getTime());
 		incidentVO.setReportDate(dNow.getTime());
 		incidentVO.setCreatedBy(email);
 		incidentVO.setAuthor(user.getUsername());
-		
-		Incident i = new Incident(incidentVO);
-		
-		incidentService.createIncident(i);
-		return new IncidentVO(i);
+		incidentVO.setType(type);
+		incidentVO.setState(state);
+		incidentVO.setGovt(govt);
+		incidentVO.setDescription(description);
+		incidentVO.setStatus(status);
+		Map<String, String> questionsMap = new HashMap<String, String>();
+		/*
+		 * String[] pairs = questions.split(","); for (int i = 0; i <
+		 * pairs.length; i++) { String pair = pairs[i]; String[] keyValue =
+		 * pair.split(":"); if (keyValue.length >= 1)
+		 * questionsMap.put(keyValue[0], keyValue[1]); }
+		 */
+		incidentVO.setQuestions(questionsMap);
+		if (id != null)
+			incidentVO.setImage("http://dev.insodel.com:6767/image/" + id);
+		Incident incident = new Incident(incidentVO);
+
+		incidentService.createIncident(incident);
+		return new IncidentVO(incident);
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/image/{id}", method = RequestMethod.POST)
 	public String uploadImage(@RequestParam("file") MultipartFile image,
 			@PathVariable String id) throws IOException {
-		
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
-		
-		
-		Alias alias = aliasService.getAliasById(id);		
-		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+
+		Alias alias = aliasService.getAliasById(id);
+		IncidentKey key = new IncidentKey(alias.getCategory(),
+				alias.getCreatedby(), alias.getCreatedon());
 		Incident incident = incidentService.getIncidentById(key);
-		
+
 		String prefix = email;
-		//System.out.println(image.getSize() + image.getOriginalFilename());
-		//System.out.println(Arrays.toString(image.getBytes()));	
-				
-		//TODO : Get username from session
-		String iid = imageService.saveImage(prefix, image.getOriginalFilename(),
-				image.getSize(), image.getBytes(),email);
-		
-		
+		// System.out.println(image.getSize() + image.getOriginalFilename());
+		// System.out.println(Arrays.toString(image.getBytes()));
+
+		// TODO : Get username from session
+		String iid = imageService.saveImage(prefix,
+				image.getOriginalFilename(), image.getSize(), image.getBytes(),
+				email);
+
 		incident.setImage(iid);
 		incidentService.updateIncident(incident);
-		
+
 		return id;
 	}
 
@@ -252,28 +293,32 @@ public class IncidentController {
 	public ResponseEntity<IncidentVO> updateIncident(
 			@RequestBody IncidentVO incidentVO, @PathVariable("id") String id)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
 
 		System.out.println("Updating User " + id);
-		Alias alias = aliasService.getAliasById(id);		
-		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+		Alias alias = aliasService.getAliasById(id);
+		IncidentKey key = new IncidentKey(alias.getCategory(),
+				alias.getCreatedby(), alias.getCreatedon());
 		Incident incident = incidentService.getIncidentById(key);
 		if (incident == null) {
 			return null;
 		}
-		//incidentVO.setUpdatedOn(alias.getCreatedon());
-		//incidentVO.setCreatedBy(alias.getCreatedby());
-		//incidentVO.setType(alias.getCategory());
+		// incidentVO.setUpdatedOn(alias.getCreatedon());
+		// incidentVO.setCreatedBy(alias.getCreatedby());
+		// incidentVO.setType(alias.getCategory());
 		incidentService.updateIncident(new Incident(incidentVO));
 		return new ResponseEntity<IncidentVO>(incidentVO, HttpStatus.OK);
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.DELETE)
-	public void deleteIncidentType(@PathVariable("incidentID") String incidentID) throws JsonParseException, JsonMappingException, IOException {
-		Alias alias = aliasService.getAliasById(incidentID);		
-		IncidentKey key = new IncidentKey(alias.getCategory(), alias.getCreatedby(),alias.getCreatedon());
+	public void deleteIncidentType(@PathVariable("incidentID") String incidentID)
+			throws JsonParseException, JsonMappingException, IOException {
+		Alias alias = aliasService.getAliasById(incidentID);
+		IncidentKey key = new IncidentKey(alias.getCategory(),
+				alias.getCreatedby(), alias.getCreatedon());
 		incidentService.deleteIncidentById(key);
 	}
 
