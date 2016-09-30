@@ -244,12 +244,16 @@ public class IncidentController {
 		incidentVO.setDescription(description);
 		incidentVO.setStatus(status);
 		Map<String, String> questionsMap = new HashMap<String, String>();
-		/*
-		 * String[] pairs = questions.split(","); for (int i = 0; i <
-		 * pairs.length; i++) { String pair = pairs[i]; String[] keyValue =
-		 * pair.split(":"); if (keyValue.length >= 1)
-		 * questionsMap.put(keyValue[0], keyValue[1]); }
-		 */
+
+		String[] pairs = questions.split(",");
+		for (int i = 0; i < pairs.length; i++) {
+			String pair = pairs[i];
+			String[] keyValue = pair.split(":");
+			System.out.println(keyValue.length);
+			if (keyValue.length > 1)
+				questionsMap.put(keyValue[0], keyValue[1]);
+		}
+
 		incidentVO.setQuestions(questionsMap);
 		if (id != null)
 			incidentVO.setImage("http://dev.insodel.com:6767/image/" + id);
