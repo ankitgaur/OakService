@@ -1,5 +1,6 @@
 package com.oak.controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.Alias;
@@ -28,6 +31,7 @@ import com.oak.entities.ForumTopicsKey;
 import com.oak.service.AliasService;
 import com.oak.service.CounterService;
 import com.oak.service.ForumTopicsService;
+import com.oak.service.ImageService;
 import com.oak.vo.ForumTopicsVO;
 
 @RestController
@@ -38,21 +42,24 @@ public class ForumTopicsController {
 
 	@Autowired
 	CounterService counterService;
-	
+
 	@Autowired
 	AliasService aliasService;
-	
+
+	@Autowired
+	ImageService imageService;
+
 	@CrossOrigin
 	@RequestMapping(value = "/forum_topics/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ForumTopicsVO getSticleById(@PathVariable String id)
 			throws JsonProcessingException, ParseException {
-		Alias alias = aliasService.getAliasById(id);		
-		
+		Alias alias = aliasService.getAliasById(id);
+
 		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
-				alias.getCreatedby(),alias.getCreatedon());
+				alias.getCreatedby(), alias.getCreatedon());
 		ForumTopics forumTopics = forumTopicsService.getForumTopicsById(key);
 		ForumTopicsVO forumTopicsVO = new ForumTopicsVO(forumTopics);
-		
+
 		return forumTopicsVO;
 	}
 
@@ -62,7 +69,7 @@ public class ForumTopicsController {
 		List<ForumTopics> forum_topics = forumTopicsService.getForumTopics();
 		List<ForumTopicsVO> forumTopicsVO = new ArrayList<ForumTopicsVO>();
 		for (ForumTopics article : forum_topics) {
-			ForumTopicsVO vo = new ForumTopicsVO(article);			
+			ForumTopicsVO vo = new ForumTopicsVO(article);
 			forumTopicsVO.add(vo);
 		}
 		return forumTopicsVO;
@@ -127,23 +134,45 @@ public class ForumTopicsController {
 	public ResponseEntity<ForumTopicsVO> deleteRticle(
 			@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
-		Alias alias = aliasService.getAliasById(id);		
-		
+		Alias alias = aliasService.getAliasById(id);
+
 		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
-				alias.getCreatedby(),alias.getCreatedon());
+				alias.getCreatedby(), alias.getCreatedon());
 		forumTopicsService.deleteForumTopicsById(key);
 		counterService.decrementCounter(key.getCategory());
 		return new ResponseEntity<ForumTopicsVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/forum_topics", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/forum_topics", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumTopics(
-			@RequestBody ForumTopicsVO forumTopicsVO) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			@RequestParam("title") String title,
+			@RequestParam("category") String category,
+			@RequestParam(name = "displayImage", required = false) MultipartFile displayImage)
+			throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
-		Date dNow = new Date();			
-		
+
+		ForumTopicsVO forumTopicsVO = new ForumTopicsVO();
+		String id = null;
+		try {
+			byte[] imgbytes = displayImage.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage",
+						displayImage.getOriginalFilename(),
+						displayImage.getSize(), displayImage.getBytes(), email);
+			}
+		} catch (IOException npe) {
+			// do nothing
+		}
+		forumTopicsVO.setCategory(category);
+		forumTopicsVO
+				.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+		forumTopicsVO.setTitle(title);
+
+		Date dNow = new Date();
+
 		forumTopicsVO.setCreatedOn(dNow.getTime());
 		forumTopicsVO.setCreatedBy(email);
 		forumTopicsService.createForumTopics(new ForumTopics(forumTopicsVO));
@@ -156,14 +185,15 @@ public class ForumTopicsController {
 	public ResponseEntity<ForumTopicsVO> updateForumTopics(
 			@PathVariable("id") String articleID,
 			@RequestBody ForumTopicsVO articleVO) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
 
 		System.out.println("Updating User " + articleID);
-		Alias alias = aliasService.getAliasById(articleID);		
-		
+		Alias alias = aliasService.getAliasById(articleID);
+
 		ForumTopicsKey key = new ForumTopicsKey(alias.getCategory(),
-				alias.getCreatedby(),alias.getCreatedon());
+				alias.getCreatedby(), alias.getCreatedon());
 		ForumTopics article = forumTopicsService.getForumTopicsById(key);
 		if (article == null) {
 			System.out.println("ForumTopics with id " + articleID

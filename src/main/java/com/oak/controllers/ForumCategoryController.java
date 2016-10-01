@@ -20,14 +20,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oak.entities.ForumCategory;
 import com.oak.service.CounterService;
 import com.oak.service.ForumCategoryService;
+import com.oak.service.ImageService;
 import com.oak.vo.ForumCategoryVO;
 
 @RestController
@@ -35,9 +37,12 @@ public class ForumCategoryController {
 
 	@Autowired
 	ForumCategoryService forumCategoryService;
-	
+
 	@Autowired
 	CounterService counterService;
+
+	@Autowired
+	ImageService imageService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/forum_categories", produces = "application/json", method = RequestMethod.GET)
@@ -65,8 +70,7 @@ public class ForumCategoryController {
 	@RequestMapping(value = "/forum_categories/{id}", produces = "application/json", method = RequestMethod.GET)
 	public ForumCategoryVO getForumCategoryById(@PathVariable("id") long id)
 			throws JsonParseException, JsonMappingException, IOException {
-		ForumCategory category = forumCategoryService
-				.getForumCategoryById(id);
+		ForumCategory category = forumCategoryService.getForumCategoryById(id);
 		if (category == null) {
 			return null;
 		}
@@ -74,21 +78,39 @@ public class ForumCategoryController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/forum_categories", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/forum_categories", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumCategory(
-			@RequestBody ForumCategoryVO categoryVO,
-			UriComponentsBuilder ucBuilder) throws JsonParseException,
-			JsonMappingException, IOException {
+			@RequestParam("name") String name,
+			@RequestParam("description") String description,
+			@RequestParam(name = "displayImage", required = false) MultipartFile displayImage)
+			throws JsonParseException, JsonMappingException, IOException {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
+
+		ForumCategoryVO categoryVO = new ForumCategoryVO();
+
+		String id = null;
+		try {
+			byte[] imgbytes = displayImage.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage",
+						displayImage.getOriginalFilename(),
+						displayImage.getSize(), displayImage.getBytes(), email);
+			}
+		} catch (NullPointerException npe) {
+			// do nothing
+		}
+		categoryVO.setName(name);
+		categoryVO.setDisplayimage("http://dev.insodel.com:6767/image/" + id);
+		categoryVO.setDescription(description);
 		categoryVO.setId(new Date().getTime());
 		// TODO : Change to the name of logged in User
 		categoryVO.setCreatedby("test");
 		categoryVO.setCreatedon(new Date().getTime());
 		categoryVO.setCreatedby(email);
-		forumCategoryService
-				.createForumCategory(new ForumCategory(categoryVO));
+		forumCategoryService.createForumCategory(new ForumCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
@@ -98,14 +120,14 @@ public class ForumCategoryController {
 	public ResponseEntity<ForumCategoryVO> updateForumCategory(
 			@PathVariable("id") long id, @RequestBody ForumCategoryVO categoryVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
 		// TODO : Change to the name of logged in User
 		categoryVO.setUpdatedby("test");
 		categoryVO.setUpdatedon(new Date().getTime());
 		categoryVO.setUpdatedby(email);
-		forumCategoryService
-				.updateForumCategory(new ForumCategory(categoryVO));
+		forumCategoryService.updateForumCategory(new ForumCategory(categoryVO));
 		return new ResponseEntity<ForumCategoryVO>(categoryVO, HttpStatus.OK);
 
 	}
@@ -116,8 +138,7 @@ public class ForumCategoryController {
 			@PathVariable("id") long id) {
 		System.out.println("Fetching & Deleting Forum Category with id " + id);
 
-		ForumCategory category = forumCategoryService
-				.getForumCategoryById(id);
+		ForumCategory category = forumCategoryService.getForumCategoryById(id);
 		if (category == null) {
 			System.out.println("Unable to delete. Forum Category with id " + id
 					+ " not found");
