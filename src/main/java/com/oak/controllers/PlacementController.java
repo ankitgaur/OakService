@@ -1,5 +1,6 @@
 package com.oak.controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,12 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.Placement;
+import com.oak.service.ImageService;
 import com.oak.service.PlacementService;
 import com.oak.vo.PlacementVO;
 
@@ -30,6 +34,9 @@ public class PlacementController {
 
 	@Autowired
 	PlacementService placementService;
+
+	@Autowired
+	ImageService imageService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/placements/{id}", produces = "application/json", method = RequestMethod.GET)
@@ -48,7 +55,8 @@ public class PlacementController {
 
 	@CrossOrigin
 	@RequestMapping(value = "/placements/section/{id}", produces = "application/json", method = RequestMethod.GET)
-	public List<PlacementVO> getPlacementForSection(@PathVariable String id) throws JsonProcessingException {
+	public List<PlacementVO> getPlacementForSection(@PathVariable String id)
+			throws JsonProcessingException {
 		List<Placement> placements = placementService.findBySection(id);
 		List<PlacementVO> placementVO = new ArrayList<PlacementVO>();
 		for (Placement placement : placements) {
@@ -57,7 +65,7 @@ public class PlacementController {
 		}
 		return placementVO;
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/placements", produces = "application/json", method = RequestMethod.GET)
 	public List<PlacementVO> getPlacement() throws JsonProcessingException {
@@ -82,11 +90,38 @@ public class PlacementController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/placements", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/placements", method = RequestMethod.POST)
 	public ResponseEntity<Void> createPlacement(
-			@RequestBody PlacementVO placementVO) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			@RequestParam("page") String page,
+			@RequestParam("section") String section,
+			@RequestParam("position") String position,
+			@RequestParam("title") String title,
+			@RequestParam("link") String link,
+			@RequestParam("intro") String intro,
+			@RequestParam(name = "image", required = false) MultipartFile image)
+			throws ParseException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
+		PlacementVO placementVO = new PlacementVO();
+		placementVO.setPage(page);
+		placementVO.setSection(section);
+		placementVO.setPosition(Integer.valueOf(position));
+		placementVO.setTitle(title);
+		placementVO.setIntro(intro);
+		String id = null;
+		try {
+			byte[] imgbytes = image.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage",
+						image.getOriginalFilename(), image.getSize(),
+						image.getBytes(), email);
+			}
+		} catch (NullPointerException npe) {
+			// do nothing
+		}
+		if (id != null)
+			placementVO.setImg("http://dev.insodel.com:6767/image/" + id);
 
 		Placement placement = new Placement(placementVO);
 		// TODO: Get user name from session
@@ -103,13 +138,10 @@ public class PlacementController {
 	public ResponseEntity<PlacementVO> updatePlacement(
 			@PathVariable("id") String placementID,
 			@RequestBody PlacementVO placementVO) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		String email = authentication.getName();
-
-		System.out.println("Updating User " + placementID);
-
 		Placement placement = new Placement(placementVO);
-		// TODO: Get user name from session
 		placement.setCreatedby("plcmntctrl");
 		placement.setCreatedon(new Date().getTime());
 		placement.setUpdatedby(email);
