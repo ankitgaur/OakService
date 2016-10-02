@@ -1,5 +1,6 @@
 package com.oak.controllers;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.oak.entities.Alias;
@@ -28,6 +31,7 @@ import com.oak.entities.BlogPostKey;
 import com.oak.entities.User;
 import com.oak.service.AliasService;
 import com.oak.service.BlogPostService;
+import com.oak.service.ImageService;
 import com.oak.service.UsersService;
 import com.oak.vo.BlogPostVO;
 
@@ -42,6 +46,9 @@ public class BlogPostsController {
 	
 	@Autowired
 	AliasService aliasService;
+	
+	@Autowired
+	ImageService imageService;
 	
 	@CrossOrigin
 	@RequestMapping(value = "/blog_entries/{id}", produces = "application/json", method = RequestMethod.GET)
@@ -147,13 +154,34 @@ public class BlogPostsController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/blog_entries", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createBlogEntry(@RequestBody BlogPostVO blogVO)
-			throws ParseException {
+	@RequestMapping(value = "/blog_entries", method = RequestMethod.POST)
+	public ResponseEntity<Void> createBlogEntry(@RequestParam("blog") String blog,@RequestParam("blogname") String blogname,
+			@RequestParam("title") String title, @RequestParam("content") String content,
+			@RequestParam(name = "displayImage", required = false) MultipartFile displayImage)
+			throws ParseException, IOException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		User user = usersService.getUserById(email);
+		
+		
+		String id = null;
+		try {
+			byte[] imgbytes = displayImage.getBytes();
+			if (imgbytes != null) {
+				id = imageService.saveImage("blogimage", displayImage.getOriginalFilename(), displayImage.getSize(),
+						displayImage.getBytes(), email);
+			}
+		} catch (NullPointerException npe) {
+			//do nothing
+		}
+		
+		BlogPostVO blogVO = new BlogPostVO();
+		blogVO.setBlog(blog);
+		blogVO.setBlogname(blogname);
+		blogVO.setTitle(title);
+		blogVO.setContent(content);
+		
 		Date dNow = new Date();
 		/*
 		 * SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -163,7 +191,10 @@ public class BlogPostsController {
 		blogVO.setCreatedBy(email);
 		blogVO.setAuthor(user.getUsername());
 		
-		blogVO.getBlog();
+		if (id != null) {
+			blogVO.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+		}
+		
 		blogEntryService.createBlogEntry(new BlogPost(blogVO));		
 		
 		HttpHeaders headers = new HttpHeaders();

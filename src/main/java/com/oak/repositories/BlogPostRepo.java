@@ -1,5 +1,7 @@
 package com.oak.repositories;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,15 @@ public class BlogPostRepo {
 	private CountersRepo countersRepo;
 
 	public List<BlogPost> getBlogEntries() {
-		//List<BlogEntry> blogs = oakCassendraTemplate.findAll(BlogEntry.class);
-		//return blogs;
+		// List<BlogEntry> blogs =
+		// oakCassendraTemplate.findAll(BlogEntry.class);
+		// return blogs;
 		List<BlogPost> posts = getTopBlogEntriesByLimit(100);
 		return posts;
 	}
 
 	public void incrementHits(String blog, long createdOn) {
-		
+
 		BlogPostKey id = new BlogPostKey();
 		id.setBlog(blog);
 		id.setCreatedOn(createdOn);
@@ -36,30 +39,39 @@ public class BlogPostRepo {
 		long hits = getBlogEntryById(id).getHits();
 		long hitsnew = hits + 1;
 
-		String sql = "update oak.blog_posts set hits=" + hitsnew
-				+ " where blog='" + blog + "' and createdon='" + createdOn
-				+ "'";
+		String sql = "update oak.blog_posts set hits=" + hitsnew + " where blog='" + blog + "' and createdon='"
+				+ createdOn + "'";
 		oakCassendraTemplate.executeQuery(sql);
 	}
 
-	public List<BlogPost> getTopBlogEntriesByCategory(String category,
-			int limit) {
+	public List<BlogPost> getTopBlogEntriesByCategory(String category, int limit) {
 		String blogs_by_category_qry = "SELECT * FROM blog_posts WHERE blog=";
-		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'"
-				+ " LIMIT " + limit;
-		System.out
-				.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
-		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(
-				blogs_by_category_qry, BlogPost.class);
+		blogs_by_category_qry = blogs_by_category_qry + "'" + category + "'" + " LIMIT " + limit;
+		System.out.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
+		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(blogs_by_category_qry, BlogPost.class);
 		return blogs;
 	}
 
 	public List<BlogPost> getTopBlogEntriesByLimit(int limit) {
-		String blogs_by_limit_qry = "SELECT * FROM blog_posts LIMIT ";
+
+		String monyears = "";
+		SimpleDateFormat sdf = new SimpleDateFormat("MMyyyy");
+		long today = new Date().getTime();
+		for (int i = 1; i <= 12; i++) {
+			int monyear = Integer.parseInt(sdf.format(new Date(today)));
+			if (!monyears.contains("" + monyear)) {
+				monyears = monyears + monyear;
+			}
+			if(i<12){
+				monyears = monyears + ",";
+			}
+			today = today - (1000L * 60L * 60L * 24L * 31L);
+		}
+
+		String blogs_by_limit_qry = "Select * from blog_posts where monyear in (" + monyears + ") limit ";
 		blogs_by_limit_qry = blogs_by_limit_qry + limit;
 		System.out.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_limit_qry);
-		List<BlogPost> articles = oakCassendraTemplate.findByLimit(
-				blogs_by_limit_qry, BlogPost.class);
+		List<BlogPost> articles = oakCassendraTemplate.findByLimit(blogs_by_limit_qry, BlogPost.class);
 		return articles;
 	}
 
@@ -89,12 +101,9 @@ public class BlogPostRepo {
 
 	public List<BlogPost> getTopBlogEntriesByUser(String user, int limit) {
 		String blogs_by_category_qry = "SELECT * FROM blog_posts WHERE createdby=";
-		blogs_by_category_qry = blogs_by_category_qry + "'" + user + "'"
-				+ " LIMIT " + limit+" allow filtering";
-		System.out
-				.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
-		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(
-				blogs_by_category_qry, BlogPost.class);
+		blogs_by_category_qry = blogs_by_category_qry + "'" + user + "'" + " LIMIT " + limit + " allow filtering";
+		System.out.println("BLOGS_BY_CATEGORY_QRY ::: " + blogs_by_category_qry);
+		List<BlogPost> blogs = oakCassendraTemplate.findByPartitionKey(blogs_by_category_qry, BlogPost.class);
 		return blogs;
 	}
 

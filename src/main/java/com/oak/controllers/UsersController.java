@@ -147,6 +147,25 @@ public class UsersController {
 		
 		return new ResponseEntity<UsersVO>(HttpStatus.BAD_REQUEST);
 	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/forgotPassword/{emailID:.+}", method = RequestMethod.GET)
+	public ResponseEntity<UsersVO> forgotPassword(@PathVariable("emailID") String emailID) throws URISyntaxException {
+		
+		User user = userService.getUserById(emailID);
+		if (user != null) {
+			
+			String sub = "Your Ipledge2nigeria.com password";
+
+			String mailbody = "Hi,<br>Your Password is :- " + user.getPassword();
+
+			MailUtil.sendMail(user.getEmail(), sub, mailbody);
+			
+			return new ResponseEntity<UsersVO>(HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<UsersVO>(HttpStatus.NOT_FOUND);
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

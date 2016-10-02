@@ -54,12 +54,12 @@ public class BlogPostService {
 
 	public void deleteBlogEntryById(BlogPostKey id) {
 		
-		blogEntryRepo.deleteBlogEntryById(id);;
+		blogEntryRepo.deleteBlogEntryById(id);
 
 	}
 
 	public void createBlogEntry(BlogPost blog) {
-		SimpleDateFormat sdf  = new SimpleDateFormat("MMyy");
+		SimpleDateFormat sdf  = new SimpleDateFormat("MMyyyy");
 		int monyear = Integer.parseInt(sdf.format(new Date()));
 		UUID uuid = UUID.randomUUID();
 		Alias alias = new Alias();
