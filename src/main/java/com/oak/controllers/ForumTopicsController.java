@@ -168,7 +168,7 @@ public class ForumTopicsController {
 		}
 		forumTopicsVO.setCategory(category);
 		forumTopicsVO
-				.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+				.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
 		forumTopicsVO.setTitle(title);
 
 		Date dNow = new Date();

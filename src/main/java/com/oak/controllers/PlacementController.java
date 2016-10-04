@@ -121,7 +121,7 @@ public class PlacementController {
 			// do nothing
 		}
 		if (id != null)
-			placementVO.setImg("http://dev.insodel.com:6767/image/" + id);
+			placementVO.setImg("http://www.ipledge2nieria.com/service/image/" + id);
 
 		Placement placement = new Placement(placementVO);
 		// TODO: Get user name from session

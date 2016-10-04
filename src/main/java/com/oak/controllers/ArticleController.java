@@ -167,7 +167,7 @@ public class ArticleController {
 		articleVO.setAuthor(user.getUsername());
 		articleVO.setIntro(intro);
 		articleVO.setTitle(title);
-		articleVO.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+		articleVO.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
 		articleVO.setCategory(category);
 		articleVO.setContent(content);
 

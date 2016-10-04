@@ -13,8 +13,8 @@ public class MailUtil {
 	
 	public static void sendMail(String to,String subject,String mailbody){
 
-	      String host="dev.insodel.com";
-	      String from="mailer@dev.insodel.com";
+	      String host="mail.ipledge2nigeria.com";
+	      String from="info@ipledge2nigeria.com";
 		
 		
 			// Get system properties

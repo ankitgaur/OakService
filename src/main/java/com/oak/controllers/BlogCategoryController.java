@@ -101,7 +101,7 @@ public class BlogCategoryController {
 		categoryVO.setCreatedon(new Date().getTime());
 		categoryVO.setName(name);
 		categoryVO.setDescription(description);
-		categoryVO.setDisplayimage("http://dev.insodel.com:6767/image/" + id);
+		categoryVO.setDisplayimage("http://www.ipledge2nieria.com/service/image/" + id);
 
 		blogCategoryService.createBlogCategory(new BlogCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();

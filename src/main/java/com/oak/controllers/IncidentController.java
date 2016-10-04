@@ -256,7 +256,7 @@ public class IncidentController {
 
 		incidentVO.setQuestions(questionsMap);
 		if (id != null)
-			incidentVO.setImage("http://dev.insodel.com:6767/image/" + id);
+			incidentVO.setImage("http://www.ipledge2nieria.com/service/image/" + id);
 		Incident incident = new Incident(incidentVO);
 
 		incidentService.createIncident(incident);

@@ -103,7 +103,7 @@ public class ForumCategoryController {
 			// do nothing
 		}
 		categoryVO.setName(name);
-		categoryVO.setDisplayimage("http://dev.insodel.com:6767/image/" + id);
+		categoryVO.setDisplayimage("http://www.ipledge2nieria.com/service/image/" + id);
 		categoryVO.setDescription(description);
 		categoryVO.setId(new Date().getTime());
 		// TODO : Change to the name of logged in User

@@ -81,8 +81,8 @@ public class ImageController {
 		ImageUploadResponse response = new ImageUploadResponse();
 		response.setUploaded(1);
 		response.setFilename(fname);
-		response.setUrl("http://dev.insodel.com:6767/image/"+id);
-		return "http://dev.insodel.com:6767/image/"+id;
+		response.setUrl("http://www.ipledge2nieria.com/service/image/"+id);
+		return "http://www.ipledge2nieria.com/service/image/"+id;
 	}
 	
 	@CrossOrigin

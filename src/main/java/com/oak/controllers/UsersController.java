@@ -90,7 +90,7 @@ public class UsersController {
 			activationCodeService.createActivationCode(code);
 
 			String sub = "Your Ipledge2nigeria.com account is created - Activation required";
-			String activationUrl = "http://dev.insodel.com:6767/activate/" + code.getEmail() + "/" + code.getCode();
+			String activationUrl = "http://www.ipledge2nigeria.com/service/activate/" + code.getEmail() + "/" + code.getCode();
 
 			String mailbody = "Hi,<br>Thank you for joining. Please click the below link to activate your account :- <br><a href='"
 					+ activationUrl + "'>" + activationUrl + "</a>";
@@ -141,7 +141,7 @@ public class UsersController {
 		if(ac.getCode().equals(code)){
 			userService.activateUser(emailID);
 			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(new URI("http://dev.insodel.com:8080/oak"));
+			headers.setLocation(new URI("http://www.ipledge2nigeria.com"));
 			return new ResponseEntity<UsersVO>(headers, HttpStatus.FOUND);
 		}
 		
@@ -150,7 +150,7 @@ public class UsersController {
 	
 	@CrossOrigin
 	@RequestMapping(value = "/forgotPassword/{emailID:.+}", method = RequestMethod.GET)
-	public ResponseEntity<UsersVO> forgotPassword(@PathVariable("emailID") String emailID) throws URISyntaxException {
+	public ResponseEntity<UsersVO> forgotPassword(@PathVariable("emailID") String emailID) throws URISyntaxException, IOException {
 		
 		User user = userService.getUserById(emailID);
 		if (user != null) {

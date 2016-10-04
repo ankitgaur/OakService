@@ -149,7 +149,7 @@ public class BlogController {
 		blog.setTitle(title);
 		blog.setDescription(description);
 		if (id != null) {
-			blog.setDisplayimage("http://dev.insodel.com:6767/image/" + id);
+			blog.setDisplayimage("http://www.ipledge2nieria.com/service/" + id);
 		}
 
 		blogService.createBlog(blog);

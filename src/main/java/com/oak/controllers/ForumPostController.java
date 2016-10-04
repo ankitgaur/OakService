@@ -178,7 +178,7 @@ public class ForumPostController {
 		forumPostVO.setAuthor(user.getUsername());
 		forumPostVO.setTitle(title);
 		forumPostVO.setTopic(topic);
-		forumPostVO.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+		forumPostVO.setDisplayImage("http://www.ipledge2nieria.com/service/" + id);
 		forumPostVO.setContent(content);
 		forumPostService.createForumPost(new ForumPost(forumPostVO));
 		counterService.incrementCounter(forumPostVO.getTopic());

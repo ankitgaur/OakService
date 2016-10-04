@@ -192,7 +192,7 @@ public class BlogPostsController {
 		blogVO.setAuthor(user.getUsername());
 		
 		if (id != null) {
-			blogVO.setDisplayImage("http://dev.insodel.com:6767/image/" + id);
+			blogVO.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
 		}
 		
 		blogEntryService.createBlogEntry(new BlogPost(blogVO));		
