@@ -90,7 +90,8 @@ public class UsersController {
 			activationCodeService.createActivationCode(code);
 
 			String sub = "Your Ipledge2nigeria.com account is created - Activation required";
-			String activationUrl = "http://www.ipledge2nigeria.com/service/activate/" + code.getEmail() + "/" + code.getCode();
+			String activationUrl = "http://www.ipledge2nigeria.com/service/activate/" + code.getEmail() + "/"
+					+ code.getCode();
 
 			String mailbody = "Hi,<br>Thank you for joining. Please click the below link to activate your account :- <br><a href='"
 					+ activationUrl + "'>" + activationUrl + "</a>";
@@ -106,11 +107,32 @@ public class UsersController {
 	}
 
 	@CrossOrigin
+	@RequestMapping(value = "/usersadmin", consumes = "application/json", method = RequestMethod.POST)
+	public ResponseEntity<Void> createUser(@RequestBody UsersVO userVO, UriComponentsBuilder ucBuilder)
+			throws JsonParseException, JsonMappingException, IOException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		userVO.setCreatedby(email);
+		userVO.setActivated(true);
+		userService.createUser(new User(userVO));
+		HttpHeaders headers = new HttpHeaders();
+
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
+	}
+
+	@CrossOrigin
 	@RequestMapping(value = "/users/{emialID:.+}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<UsersVO> updateRole(@PathVariable("emialID") String emailID, @RequestBody UsersVO usersVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
+		
+		if(usersVO.getPassword()==null || usersVO.getPassword().isEmpty()){
+			User old = userService.getUserById(emailID);
+			usersVO.setPassword(old.getPassword());
+		}
+		
 		usersVO.setUpdatedby(email);
 		userService.updateUser(new User(usersVO));
 		return new ResponseEntity<UsersVO>(usersVO, HttpStatus.OK);
@@ -135,35 +157,36 @@ public class UsersController {
 	@RequestMapping(value = "/activate/{emailID:.+}/{code}", method = RequestMethod.GET)
 	public ResponseEntity<UsersVO> activateUser(@PathVariable("emailID") String emailID,
 			@PathVariable("code") String code) throws URISyntaxException {
-		
+
 		ActivationCode ac = activationCodeService.getActivationCodeId(emailID);
-		System.out.println("Activating "+emailID+" "+code);
-		if(ac.getCode().equals(code)){
+		System.out.println("Activating " + emailID + " " + code);
+		if (ac.getCode().equals(code)) {
 			userService.activateUser(emailID);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(new URI("http://www.ipledge2nigeria.com"));
 			return new ResponseEntity<UsersVO>(headers, HttpStatus.FOUND);
 		}
-		
+
 		return new ResponseEntity<UsersVO>(HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(value = "/forgotPassword/{emailID:.+}", method = RequestMethod.GET)
-	public ResponseEntity<UsersVO> forgotPassword(@PathVariable("emailID") String emailID) throws URISyntaxException, IOException {
-		
+	public ResponseEntity<UsersVO> forgotPassword(@PathVariable("emailID") String emailID)
+			throws URISyntaxException, IOException {
+
 		User user = userService.getUserById(emailID);
 		if (user != null) {
-			
+
 			String sub = "Your Ipledge2nigeria.com password";
 
 			String mailbody = "Hi,<br>Your Password is :- " + user.getPassword();
 
 			MailUtil.sendMail(user.getEmail(), sub, mailbody);
-			
+
 			return new ResponseEntity<UsersVO>(HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<UsersVO>(HttpStatus.NOT_FOUND);
 	}
 
