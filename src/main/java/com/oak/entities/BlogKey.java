@@ -18,10 +18,10 @@ public class BlogKey implements Serializable {
 	@PrimaryKeyColumn(name = "category", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String category;
 
-	@PrimaryKeyColumn(name = "createdby", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+	@PrimaryKeyColumn(name = "createdby", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
 	private String createdby;
 	
-	@PrimaryKeyColumn(name = "createdOn", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+	@PrimaryKeyColumn(name = "createdOn", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private Long createdOn;
 
 	public String getCategory() {

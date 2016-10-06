@@ -31,7 +31,7 @@ public class CommentsVO {
 		this.comment = comments.getComment();
 		this.createdby = comments.getCreatedby();
 		this.updatedby = comments.getUpdatedby();
-		this.createdon = comments.getCreatedon();
+		this.createdon = comments.getCommentsKey().getCreatedon();
 		this.updatedon = comments.getUpdatedon();
 		this.author = comments.getAuthor();
 		if (createdon != null) {

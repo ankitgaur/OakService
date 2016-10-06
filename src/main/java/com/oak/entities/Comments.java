@@ -13,7 +13,7 @@ public class Comments {
 	private String comment;
 	private String createdby;
 	private String updatedby;
-	private Long createdon;
+	
 	private Long updatedon;
 	private String author;
 
@@ -26,11 +26,11 @@ public class Comments {
 		CommentsKey commentsKey = new CommentsKey();
 		commentsKey.setService(commentsVO.getService());
 		commentsKey.setService_id(commentsVO.getService_id());
+		commentsKey.setCreatedon(commentsVO.getCreatedon());
 		this.comment = commentsVO.getComment();
 		this.commentsKey = commentsKey;
 		this.createdby = commentsVO.getCreatedby();
 		this.updatedby = commentsVO.getUpdatedby();
-		this.createdon = commentsVO.getCreatedon();
 		this.updatedon = commentsVO.getUpdatedon();
 		this.author = commentsVO.getAuthor();
 	}
@@ -73,14 +73,6 @@ public class Comments {
 
 	public void setUpdatedby(String updatedby) {
 		this.updatedby = updatedby;
-	}
-
-	public Long getCreatedon() {
-		return createdon;
-	}
-
-	public void setCreatedon(Long createdon) {
-		this.createdon = createdon;
 	}
 
 	public Long getUpdatedon() {

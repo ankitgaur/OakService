@@ -25,7 +25,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oak.entities.Comments;
+import com.oak.entities.CommentsKey;
+import com.oak.entities.User;
+import com.oak.service.AliasService;
 import com.oak.service.CommentsService;
+import com.oak.service.UsersService;
 import com.oak.vo.CommentsVO;
 
 @RestController
@@ -34,54 +38,75 @@ public class CommentsController {
 	@Autowired
 	CommentsService commentsService;
 
+	@Autowired
+	AliasService aliasService;
+	
+	@Autowired
+	UsersService usersService;
+
 	@CrossOrigin
 	@RequestMapping(value = "/comments", produces = "application/json", method = RequestMethod.GET)
-	public List<CommentsVO> getAllComments() throws JsonParseException,
-			JsonMappingException, IOException {
+	public List<CommentsVO> getAllComments() throws JsonParseException, JsonMappingException, IOException {
 		List<Comments> comments = commentsService.getComments();
-		if (comments == null || comments.isEmpty()) {
-			return null;
+	
+		List<CommentsVO> commentsVO = new ArrayList<CommentsVO>();
+
+		if (comments != null) {
+
+			for (Comments comment : comments) {
+				commentsVO.add(new CommentsVO(comment));
+			}
+
 		}
 
-		List<CommentsVO> commentsVO = new ArrayList<CommentsVO>();
 		return commentsVO;
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/comments/{id}", produces = "application/json", method = RequestMethod.GET)
-	public CommentsVO getCommentsById(@PathVariable("id") long id)
+	@RequestMapping(value = "/comments/{service}/{id}", produces = "application/json", method = RequestMethod.GET)
+	public List<CommentsVO> getCommentsByServiceId(@PathVariable("service") String service, @PathVariable("id") String id)
 			throws JsonParseException, JsonMappingException, IOException {
-		Comments category = commentsService.getCommentsById(id);
-		if (category == null) {
-			return null;
+
+		List<CommentsVO> cvos = new ArrayList<CommentsVO>();
+
+		List<Comments> comments = commentsService.getCommentsByServiceId(service, id);
+		if (comments != null) {
+
+			for (Comments comment : comments) {
+				cvos.add(new CommentsVO(comment));
+			}
+
 		}
-		return new CommentsVO(category);
+		return cvos;
 	}
 
 	@CrossOrigin
 	@RequestMapping(value = "/comments", consumes = "application/json", method = RequestMethod.POST)
-	public ResponseEntity<Void> createComments(
-			@RequestBody CommentsVO commentsVO) throws JsonParseException,
-			JsonMappingException, IOException {
+	public ResponseEntity<Void> createComments(@RequestBody CommentsVO commentsVO)
+			throws JsonParseException, JsonMappingException, IOException {
 
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
-		commentsVO.setCreatedby("test");
-		commentsVO.setCreatedon(new Date().getTime());
+		
+		User user = usersService.getUserById(email);
+		
+		if(user!=null){
+			commentsVO.setAuthor(user.getUsername());
+		} 
+		
 		commentsVO.setCreatedby(email);
+		commentsVO.setCreatedon(new Date().getTime());
+		
 		commentsService.createComments(new Comments(commentsVO));
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/comments/{id}", consumes = "application/json", method = RequestMethod.PUT)
-	public ResponseEntity<CommentsVO> updateComments(
-			@PathVariable("id") long id, @RequestBody CommentsVO categoryVO)
+	@RequestMapping(value = "/comments", consumes = "application/json", method = RequestMethod.PUT)
+	public ResponseEntity<CommentsVO> updateComments(@RequestBody CommentsVO categoryVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		categoryVO.setUpdatedby("test");
 		categoryVO.setUpdatedon(new Date().getTime());
@@ -92,28 +117,24 @@ public class CommentsController {
 	}
 
 	@CrossOrigin
-	@RequestMapping(value = "/comments/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<CommentsVO> deleteComments(@PathVariable("id") long id) {
+	@RequestMapping(value = "/comments/{service}/{service_id}/{createdon}", method = RequestMethod.DELETE)
+	public ResponseEntity<CommentsVO> deleteComments(@PathVariable("service") String service,
+			@PathVariable("service_id") String service_id,
+			@PathVariable("createdon") long createdon) {
 
-		Comments category = commentsService.getCommentsById(id);
-		if (category == null) {
-			System.out.println("Unable to delete. Forum Category with id " + id
-					+ " not found");
-			return new ResponseEntity<CommentsVO>(HttpStatus.NOT_FOUND);
-		}
-		commentsService.deleteCommentById(id);
+		CommentsKey key = new CommentsKey(service,service_id,createdon);
+	
+		commentsService.deleteCommentById(key);
 		return new ResponseEntity<CommentsVO>(HttpStatus.NO_CONTENT);
 	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public @ResponseBody
-	String handleException(Exception ex) {
+	public @ResponseBody String handleException(Exception ex) {
 		if (ex.getMessage().contains("UNIQUE KEY"))
 			return "The submitted item already exists.";
 		else
-			System.out.println(this.getClass() + ": need handleException for: "
-					+ ex.getMessage());
+			System.out.println(this.getClass() + ": need handleException for: " + ex.getMessage());
 		return ex.getMessage();
 	}
 }
