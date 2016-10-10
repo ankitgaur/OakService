@@ -1,3 +1,7 @@
+drop keyspace oak;
+
+CREATE KEYSPACE oak WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+
 use oak;
 
 --DROP TABLE IF EXISTS keyspace_name.table_name;

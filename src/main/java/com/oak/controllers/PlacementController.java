@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -80,6 +81,7 @@ public class PlacementController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_placement_write")
 	@RequestMapping(value = "/placements/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<PlacementVO> deleteRticle(
 			@PathVariable("id") String id) {
@@ -90,6 +92,7 @@ public class PlacementController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_placement_write")
 	@RequestMapping(value = "/placements", method = RequestMethod.POST)
 	public ResponseEntity<Void> createPlacement(
 			@RequestParam("page") String page,
@@ -121,7 +124,7 @@ public class PlacementController {
 			// do nothing
 		}
 		if (id != null)
-			placementVO.setImg("http://www.ipledge2nieria.com/service/image/" + id);
+			placementVO.setImg("http://www.ipledge2nigeria.com/service/image/" + id);
 
 		Placement placement = new Placement(placementVO);
 		// TODO: Get user name from session
@@ -134,6 +137,7 @@ public class PlacementController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_placement_write")
 	@RequestMapping(value = "/placements/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<PlacementVO> updatePlacement(
 			@PathVariable("id") String placementID,

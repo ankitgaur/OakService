@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,6 +63,7 @@ public class SectionsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_sections_write")
 	@RequestMapping(value = "/sections", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createSection(@RequestBody SectionVO SectionVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -76,6 +78,7 @@ public class SectionsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_sections_write")
 	@RequestMapping(value = "/sections/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<SectionVO> updateSection(
 			@PathVariable("id") String id, @RequestBody SectionVO SectionsVO)
@@ -90,6 +93,7 @@ public class SectionsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_sections_write")
 	@RequestMapping(value = "/sections/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<SectionVO> deleteSection(
 			@PathVariable("id") String id) {

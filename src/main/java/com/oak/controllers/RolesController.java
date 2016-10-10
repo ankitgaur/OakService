@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,6 +65,7 @@ public class RolesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_roles_write")
 	@RequestMapping(value = "/roles", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createRole(@RequestBody RolesVO roleVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -78,6 +80,7 @@ public class RolesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_roles_write")
 	@RequestMapping(value = "/roles/{roleName}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<RolesVO> updateRole(
 			@PathVariable("roleName") String roleName,
@@ -92,6 +95,7 @@ public class RolesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_roles_write")
 	@RequestMapping(value = "/roles/{roleName}", method = RequestMethod.DELETE)
 	public ResponseEntity<RolesVO> deleteRole(
 			@PathVariable("roleName") String roleName) {

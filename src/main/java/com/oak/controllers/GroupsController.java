@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,6 +65,7 @@ public class GroupsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_groups_write")
 	@RequestMapping(value = "/groups", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createGroup(@RequestBody GroupsVO groupsVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -77,6 +79,7 @@ public class GroupsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_groups_write")
 	@RequestMapping(value = "/groups/{groupname}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<GroupsVO> updateGroup(
 			@PathVariable("groupname") String id, @RequestBody GroupsVO groupsVO)
@@ -90,6 +93,7 @@ public class GroupsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_groups_write")
 	@RequestMapping(value = "/groups/{groupname}", method = RequestMethod.DELETE)
 	public ResponseEntity<GroupsVO> deleteGroup(
 			@PathVariable("groupname") String id) {

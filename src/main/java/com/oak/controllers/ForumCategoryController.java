@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -78,6 +79,7 @@ public class ForumCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumcategory_write")
 	@RequestMapping(value = "/forum_categories", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumCategory(
 			@RequestParam("name") String name,
@@ -103,7 +105,7 @@ public class ForumCategoryController {
 			// do nothing
 		}
 		categoryVO.setName(name);
-		categoryVO.setDisplayimage("http://www.ipledge2nieria.com/service/image/" + id);
+		categoryVO.setDisplayimage("http://www.ipledge2nigeria.com/service/image/" + id);
 		categoryVO.setDescription(description);
 		categoryVO.setId(new Date().getTime());
 		// TODO : Change to the name of logged in User
@@ -116,6 +118,7 @@ public class ForumCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumcategory_write")
 	@RequestMapping(value = "/forum_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ForumCategoryVO> updateForumCategory(
 			@PathVariable("id") long id, @RequestBody ForumCategoryVO categoryVO)
@@ -133,6 +136,7 @@ public class ForumCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumcategory_write")
 	@RequestMapping(value = "/forum_categories/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ForumCategoryVO> deleteForumCategory(
 			@PathVariable("id") long id) {

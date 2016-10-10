@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,6 +63,7 @@ public class ArticleController {
 	}
 
 	@CrossOrigin
+	//@Secured({"ROLE_REGULAR_USER","ROLE_ADMIN"})
 	@RequestMapping(value = "/articles", produces = "application/json", method = RequestMethod.GET)
 	public List<ArticleVO> getArticle() throws JsonProcessingException {
 		List<Article> articles = articleService.getArticles();
@@ -123,6 +125,7 @@ public class ArticleController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_article_write")
 	@RequestMapping(value = "/articles/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ArticleVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
@@ -134,6 +137,7 @@ public class ArticleController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_article_write")
 	@RequestMapping(value = "/articles", method = RequestMethod.POST)
 	public ResponseEntity<Void> createArticle(
 			@RequestParam("category") String category,
@@ -167,7 +171,7 @@ public class ArticleController {
 		articleVO.setAuthor(user.getUsername());
 		articleVO.setIntro(intro);
 		articleVO.setTitle(title);
-		articleVO.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
+		articleVO.setDisplayImage("http://www.ipledge2nigeria.com/service/image/" + id);
 		articleVO.setCategory(category);
 		articleVO.setContent(content);
 
@@ -176,6 +180,7 @@ public class ArticleController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_article_write")
 	@RequestMapping(value = "/articles/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ArticleVO> updateArticle(
 			@PathVariable("id") String articleID,

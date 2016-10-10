@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -130,6 +131,7 @@ public class ForumTopicsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumtopics_write")
 	@RequestMapping(value = "/forum_topics/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ForumTopicsVO> deleteRticle(
 			@PathVariable("id") String id) {
@@ -144,6 +146,7 @@ public class ForumTopicsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumtopics_write")
 	@RequestMapping(value = "/forum_topics", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumTopics(
 			@RequestParam("title") String title,
@@ -168,7 +171,7 @@ public class ForumTopicsController {
 		}
 		forumTopicsVO.setCategory(category);
 		forumTopicsVO
-				.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
+				.setDisplayImage("http://www.ipledge2nigeria.com/service/image/" + id);
 		forumTopicsVO.setTitle(title);
 
 		Date dNow = new Date();
@@ -181,6 +184,7 @@ public class ForumTopicsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumtopics_write")
 	@RequestMapping(value = "/forum_topics/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ForumTopicsVO> updateForumTopics(
 			@PathVariable("id") String articleID,

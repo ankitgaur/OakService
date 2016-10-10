@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -121,6 +122,7 @@ public class BlogController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blog_write")
 	@RequestMapping(value = "/blogs", method = RequestMethod.POST)
 	public ResponseEntity<Void> createBlog(@RequestParam("category") String category,
 			@RequestParam("title") String title, @RequestParam("description") String description,
@@ -149,7 +151,7 @@ public class BlogController {
 		blog.setTitle(title);
 		blog.setDescription(description);
 		if (id != null) {
-			blog.setDisplayimage("http://www.ipledge2nieria.com/service/" + id);
+			blog.setDisplayimage("http://www.ipledge2nigeria.com/service/" + id);
 		}
 
 		blogService.createBlog(blog);
@@ -158,6 +160,7 @@ public class BlogController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blog_write")
 	@RequestMapping(value = "/blogs/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<BlogVO> updateBlog(@PathVariable("id") String id, @RequestBody BlogVO blogVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
@@ -174,6 +177,7 @@ public class BlogController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blog_write")
 	@RequestMapping(value = "/blogs/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogVO> deleteBlog(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting Blog with id " + id);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -70,6 +71,7 @@ public class BlogCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogcategory_write")
 	@RequestMapping(value = "/blog_categories", method = RequestMethod.POST)
 	public ResponseEntity<Void> createBlogCategory(
 			@RequestParam("name") String name,
@@ -101,7 +103,7 @@ public class BlogCategoryController {
 		categoryVO.setCreatedon(new Date().getTime());
 		categoryVO.setName(name);
 		categoryVO.setDescription(description);
-		categoryVO.setDisplayimage("http://www.ipledge2nieria.com/service/image/" + id);
+		categoryVO.setDisplayimage("http://www.ipledge2nigeria.com/service/image/" + id);
 
 		blogCategoryService.createBlogCategory(new BlogCategory(categoryVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -109,6 +111,7 @@ public class BlogCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogcategory_write")
 	@RequestMapping(value = "/blog_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<BlogCategoryVO> updateBlogCategory(
 			@PathVariable("id") long id, @RequestBody BlogCategoryVO categoryVO)
@@ -125,6 +128,7 @@ public class BlogCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogcategory_write")
 	@RequestMapping(value = "/blog_categories/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogCategoryVO> deleteBlogCategory(
 			@PathVariable("id") long id) {

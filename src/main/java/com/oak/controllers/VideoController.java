@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -102,6 +103,7 @@ public class VideoController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_video_write")
 	@RequestMapping(value = "/videos/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<VideoVO> deleteRticle(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);
@@ -112,6 +114,7 @@ public class VideoController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_video_write")
 	@RequestMapping(value = "/videos", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createVideo(@RequestBody VideoVO videoVO)
 			throws ParseException {
@@ -130,6 +133,7 @@ public class VideoController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_video_write")
 	@RequestMapping(value = "/videos/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<VideoVO> updateVideo(
 			@PathVariable("id") String videoID,

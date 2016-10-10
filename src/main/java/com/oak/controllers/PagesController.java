@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,6 +63,7 @@ public class PagesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_pages_write")
 	@RequestMapping(value = "/pages", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createPage(@RequestBody PageVO PageVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -77,6 +79,7 @@ public class PagesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_pages_write")
 	@RequestMapping(value = "/pages/{name}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<PageVO> updatePage(
 			@PathVariable("name") String pageName, @RequestBody PageVO PagesVO)
@@ -92,6 +95,7 @@ public class PagesController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_pages_write")
 	@RequestMapping(value = "/pages/{name}", method = RequestMethod.DELETE)
 	public ResponseEntity<PageVO> deletePage(
 			@PathVariable("name") String pageName) {

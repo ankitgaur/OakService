@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -131,6 +132,7 @@ public class ForumPostController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumpost_write")
 	@RequestMapping(value = "/forum_post/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ForumPostVO> deleteRticle(
 			@PathVariable("id") String id) {
@@ -145,6 +147,7 @@ public class ForumPostController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumpost_write")
 	@RequestMapping(value = "/forum_post", method = RequestMethod.POST)
 	public ResponseEntity<Void> createForumPost(
 			@RequestParam("topic") String topic,
@@ -178,7 +181,7 @@ public class ForumPostController {
 		forumPostVO.setAuthor(user.getUsername());
 		forumPostVO.setTitle(title);
 		forumPostVO.setTopic(topic);
-		forumPostVO.setDisplayImage("http://www.ipledge2nieria.com/service/" + id);
+		forumPostVO.setDisplayImage("http://www.ipledge2nigeria.com/service/" + id);
 		forumPostVO.setContent(content);
 		forumPostService.createForumPost(new ForumPost(forumPostVO));
 		counterService.incrementCounter(forumPostVO.getTopic());
@@ -186,6 +189,7 @@ public class ForumPostController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_forumpost_write")
 	@RequestMapping(value = "/forum_post/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ForumPostVO> updateForumPost(
 			@PathVariable("id") String postID,

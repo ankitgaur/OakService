@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -81,6 +82,7 @@ public class CommentsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_comments_write")
 	@RequestMapping(value = "/comments", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createComments(@RequestBody CommentsVO commentsVO)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -103,11 +105,14 @@ public class CommentsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_comments_write")
 	@RequestMapping(value = "/comments", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<CommentsVO> updateComments(@RequestBody CommentsVO categoryVO)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
+		
+		//TODO: Only user who created should be able to update
 		categoryVO.setUpdatedby("test");
 		categoryVO.setUpdatedon(new Date().getTime());
 		categoryVO.setUpdatedby(email);
@@ -117,11 +122,12 @@ public class CommentsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_comments_write")
 	@RequestMapping(value = "/comments/{service}/{service_id}/{createdon}", method = RequestMethod.DELETE)
 	public ResponseEntity<CommentsVO> deleteComments(@PathVariable("service") String service,
 			@PathVariable("service_id") String service_id,
 			@PathVariable("createdon") long createdon) {
-
+		//TODO: Only user who created should be able to update
 		CommentsKey key = new CommentsKey(service,service_id,createdon);
 	
 		commentsService.deleteCommentById(key);

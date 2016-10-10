@@ -38,7 +38,7 @@ public class DBAuthProvider implements AuthenticationProvider {
 			
 			if (user.isActivated() && user.getPassword().equals(password)) {
 				List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
-
+				//grantedAuths.add(new SimpleGrantedAuthority("ROLE_anonymous"));
 				
 				if (user.getGroups() != null && !user.getGroups().isEmpty()) {
 					String[] groups = user.getGroups().split(",");

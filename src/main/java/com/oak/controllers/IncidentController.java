@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -182,6 +183,7 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_incident_write")
 	@RequestMapping(value = "/incidents/bulk", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createIncidentBulk(
 			@RequestBody List<IncidentVO> incidentVOs)
@@ -203,6 +205,7 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_incident_write")
 	@RequestMapping(value = "/incidents", method = RequestMethod.POST)
 	public IncidentVO createIncident(
 			@RequestParam("type") String type,
@@ -256,7 +259,7 @@ public class IncidentController {
 
 		incidentVO.setQuestions(questionsMap);
 		if (id != null)
-			incidentVO.setImage("http://www.ipledge2nieria.com/service/image/" + id);
+			incidentVO.setImage("http://www.ipledge2nigeria.com/service/image/" + id);
 		Incident incident = new Incident(incidentVO);
 
 		incidentService.createIncident(incident);
@@ -264,6 +267,7 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_incident_write")
 	@RequestMapping(value = "/incidents/image/{id}", method = RequestMethod.POST)
 	public String uploadImage(@RequestParam("file") MultipartFile image,
 			@PathVariable String id) throws IOException {
@@ -293,6 +297,7 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_incident_write")
 	@RequestMapping(value = "/incidents/{id}", consumes = "application/json", produces = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<IncidentVO> updateIncident(
 			@RequestBody IncidentVO incidentVO, @PathVariable("id") String id)
@@ -317,6 +322,7 @@ public class IncidentController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_incident_write")
 	@RequestMapping(value = "/incidents/{incidentID}", produces = "application/json", method = RequestMethod.DELETE)
 	public void deleteIncidentType(@PathVariable("incidentID") String incidentID)
 			throws JsonParseException, JsonMappingException, IOException {

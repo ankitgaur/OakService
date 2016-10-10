@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,6 +65,7 @@ public class StateController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_state_write")
 	@RequestMapping(value = "/states/bulk", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createStateBulk(@RequestBody List<StatesVO> stateVOs,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -81,6 +83,7 @@ public class StateController {
 	}
 	
 	@CrossOrigin
+	@Secured("ROLE_state_write")
 	@RequestMapping(value = "/states", consumes = "application/json", method = RequestMethod.POST)
 	public ResponseEntity<Void> createState(@RequestBody StatesVO stateVO,
 			UriComponentsBuilder ucBuilder) throws JsonParseException,
@@ -95,6 +98,7 @@ public class StateController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_state_write")
 	@RequestMapping(value = "/states/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<StatesVO> updateStates(@PathVariable("id") String id,
 			@RequestBody StatesVO stateVO) throws JsonGenerationException,
@@ -108,6 +112,7 @@ public class StateController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_state_write")
 	@RequestMapping(value = "/states/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<StatesVO> deleteState(@PathVariable("id") String id) {
 		System.out.println("Fetching & Deleting User with id " + id);

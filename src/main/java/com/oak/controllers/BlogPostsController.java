@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -142,6 +143,7 @@ public class BlogPostsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogposts_write")
 	@RequestMapping(value = "/blog_entries/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<BlogPostVO> deleteBlogEntry(
 			@PathVariable("id") String id) {
@@ -154,6 +156,7 @@ public class BlogPostsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogposts_write")
 	@RequestMapping(value = "/blog_entries", method = RequestMethod.POST)
 	public ResponseEntity<Void> createBlogEntry(@RequestParam("blog") String blog,@RequestParam("blogname") String blogname,
 			@RequestParam("title") String title, @RequestParam("content") String content,
@@ -192,7 +195,7 @@ public class BlogPostsController {
 		blogVO.setAuthor(user.getUsername());
 		
 		if (id != null) {
-			blogVO.setDisplayImage("http://www.ipledge2nieria.com/service/image/" + id);
+			blogVO.setDisplayImage("http://www.ipledge2nigeria.com/service/image/" + id);
 		}
 		
 		blogEntryService.createBlogEntry(new BlogPost(blogVO));		
@@ -202,6 +205,7 @@ public class BlogPostsController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_blogposts_write")
 	@RequestMapping(value = "/blog_entries/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<BlogPostVO> updateBlogEntry(
 			@PathVariable("id") String id, @RequestBody BlogPostVO blogVO)

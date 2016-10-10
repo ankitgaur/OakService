@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -72,6 +73,7 @@ public class ArticleCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_articlecategory_write")
 	@RequestMapping(value = "/article_categories", method = RequestMethod.POST)
 	public ResponseEntity<Void> createArticleCategory(
 			@RequestParam("name") String name,
@@ -99,7 +101,7 @@ public class ArticleCategoryController {
 		categoryVO.setCreatedon(new Date().getTime());
 		categoryVO.setName(name);
 		categoryVO.setDescription(description);
-		categoryVO.setDisplayimage("http://www.ipledge2nieria.com/service/image/" + id);
+		categoryVO.setDisplayimage("http://www.ipledge2nigeria.com/service/image/" + id);
 		articleCategoryService.createArticleCategory(new ArticleCategory(
 				categoryVO));
 		HttpHeaders headers = new HttpHeaders();
@@ -107,6 +109,7 @@ public class ArticleCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_articlecategory_write")
 	@RequestMapping(value = "/article_categories/{id}", consumes = "application/json", method = RequestMethod.PUT)
 	public ResponseEntity<ArticleCategoryVO> updateArticleCategory(
 			@PathVariable("id") long id,
@@ -125,6 +128,7 @@ public class ArticleCategoryController {
 	}
 
 	@CrossOrigin
+	@Secured("ROLE_articlecategory_write")
 	@RequestMapping(value = "/article_categories/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ArticleCategoryVO> deleteArticleCategory(
 			@PathVariable("id") long id) {
