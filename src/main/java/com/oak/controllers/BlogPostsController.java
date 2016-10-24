@@ -229,7 +229,9 @@ public class BlogPostsController {
 		blogVO.setCreatedOn(currentBlog.getBlogKey().getCreatedOn());
 		blogVO.setUpdatedOn(dNow.getTime());
 		blogVO.setUpdatedBy(email);
-		blogEntryService.updateBlogEntry(new BlogPost(blogVO));
+		BlogPost bp = new BlogPost(blogVO);
+		bp.getBlogKey().setMonyear(alias.getMonyear());
+		blogEntryService.updateBlogEntry(bp);
 		return new ResponseEntity<BlogPostVO>(blogVO, HttpStatus.OK);
 
 	}

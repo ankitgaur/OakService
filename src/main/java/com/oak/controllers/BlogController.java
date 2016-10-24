@@ -30,10 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oak.entities.Alias;
 import com.oak.entities.Blog;
 import com.oak.entities.BlogKey;
+import com.oak.entities.User;
 import com.oak.service.AliasService;
 import com.oak.service.BlogService;
 import com.oak.service.CounterService;
 import com.oak.service.ImageService;
+import com.oak.service.UsersService;
 import com.oak.vo.BlogCountVO;
 import com.oak.vo.BlogVO;
 
@@ -51,6 +53,9 @@ public class BlogController {
 
 	@Autowired
 	ImageService imageService;
+	
+	@Autowired
+	UsersService userService;
 
 	@CrossOrigin
 	@RequestMapping(value = "/blogs", produces = "application/json", method = RequestMethod.GET)
@@ -74,6 +79,13 @@ public class BlogController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
+		
+		User user = userService.getUserById(email);
+		
+		if(user.getGroups().contains("author") || user.getGroups().contains("admin")){
+			
+			return getAllBlog();
+		}
 		
 		List<Blog> blogs = blogService.getBlogsForUser(email);
 		if (blogs == null || blogs.isEmpty()) {
