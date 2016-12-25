@@ -1,4 +1,4 @@
-package com.oak.auth.provider;
+package com.oak.auth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,36 +7,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.oak.entities.Groups;
+import com.oak.entities.Jwt;
 import com.oak.entities.User;
+import com.oak.repositories.JwtRepo;
 import com.oak.service.GroupsService;
 import com.oak.service.UsersService;
 
-@Component("dbAuthProvider")
-public class DBAuthProvider implements AuthenticationProvider {
 
+
+@Component("jwtAuthenticationProvider")
+public class JwtAuthenticationProvider implements AuthenticationProvider {
+	
+	@Autowired
+	JwtRepo jwtRepo;
+	
 	@Autowired
 	UsersService usersService;
-
+	
 	@Autowired
-	GroupsService groupService;
+	GroupsService groupsService;
 
 	@Override
-	public Authentication authenticate(Authentication authentication) {
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String id = authentication.getName();
-		String password = authentication.getCredentials().toString();
+		String token = authentication.getCredentials().toString();
 
-		System.out.println("Authenticating " + id + ":" + password);
+		//System.out.println("Authenticating " + id + ":" + token);
 
 		try {
 
 			User user = usersService.getUserById(id);
+			Jwt jwt = jwtRepo.findByToken(token);
 			
-			if (user.isActivated() && user.getPassword().equals(password)) {
+			if (user.isActivated() && jwt!=null && jwt.getEmail().equals(id)) {
 				List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
 				//grantedAuths.add(new SimpleGrantedAuthority("ROLE_anonymous"));
 				
@@ -44,7 +53,7 @@ public class DBAuthProvider implements AuthenticationProvider {
 					String[] groups = user.getGroups().split(",");
 					
 					for (String group : groups) {
-						Groups grp = groupService.getGroupById(group.trim());
+						Groups grp = groupsService.getGroupById(group.trim());
 						if (grp != null && grp.getRoles() != null && !grp.getRoles().isEmpty()) {
 							String[] roles = grp.getRoles().split(",");
 							for (String role : roles) {
@@ -55,7 +64,7 @@ public class DBAuthProvider implements AuthenticationProvider {
 					}
 				}
 
-				Authentication auth = new UsernamePasswordAuthenticationToken(id, password, grantedAuths);
+				Authentication auth = new UsernamePasswordAuthenticationToken(id, token, grantedAuths);
 
 				return auth;
 			}
@@ -68,7 +77,9 @@ public class DBAuthProvider implements AuthenticationProvider {
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
+		return authentication.equals(JwtAuthenticationToken.class);
 	}
+
+	
 
 }

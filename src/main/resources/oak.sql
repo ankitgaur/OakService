@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS aliases;
 DROP TABLE IF EXISTS incident_statistics;
 DROP TABLE IF EXISTS activation_codes;
+DROP TABLE IF EXISTS jwts;
 
 CREATE TABLE incident_statistics(
  name text,
@@ -343,6 +344,13 @@ CREATE TABLE activation_codes (
     code text,
     PRIMARY KEY (email)
 );
+
+CREATE TABLE jwts (
+    email text,
+    jwt text,
+    PRIMARY KEY (jwt)
+);
+
 
 
 
